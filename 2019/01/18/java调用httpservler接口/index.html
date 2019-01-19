@@ -1,219 +1,229 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
-  
-
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
   
   <title>java调用httpservler接口 | 徐子辉的个人博客</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="author" content="xuzh">
+  
   <meta name="description" content="写了一个简单的方法测试调用HttpServlet接口">
-<meta name="keywords" content="java,httpservlet">
-<meta property="og:type" content="article">
-<meta property="og:title" content="java调用httpservler接口">
-<meta property="og:url" content="http://yoursite.com/2019/01/18/java调用httpservler接口/index.html">
-<meta property="og:site_name" content="徐子辉的个人博客">
-<meta property="og:description" content="写了一个简单的方法测试调用HttpServlet接口">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-18T11:10:58.834Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java调用httpservler接口">
-<meta name="twitter:description" content="写了一个简单的方法测试调用HttpServlet接口">
-  
-    <link rel="alternate" href="/atom.xml" title="徐子辉的个人博客" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java调用httpservler接口">
+  <meta property="og:site_name" content="徐子辉的个人博客">
+
+  
+    <meta property="og:image" content="">
+  
+
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
 </head>
 </html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">徐子辉的个人博客</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		</ul>
       </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-java调用httpservler接口" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/01/18/java调用httpservler接口/" class="article-date">
-  <time datetime="2019-01-18T10:28:00.000Z" itemprop="datePublished">2019-01-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      java调用httpservler接口
-    </h1>
-  
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="写了一个简单的方法测试调用HttpServlet接口"><a href="#写了一个简单的方法测试调用HttpServlet接口" class="headerlink" title="写了一个简单的方法测试调用HttpServlet接口"></a>写了一个简单的方法测试调用HttpServlet接口</h4><a id="more"></a>
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> java调用httpservler接口</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h4 id="写了一个简单的方法测试调用HttpServlet接口"><a href="#写了一个简单的方法测试调用HttpServlet接口" class="headerlink" title="写了一个简单的方法测试调用HttpServlet接口"></a>写了一个简单的方法测试调用HttpServlet接口</h4><a id="more"></a>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testHttpPost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Date date = <span class="keyword">new</span> Date();</span><br><span class="line">	</span><br><span class="line">	String requestUrl = <span class="string">"http://ip_address/servlet/~rfffp/nc.rfffp.baseconfig.pub.servlet.CheckContractRefenForErpServlet"</span>;</span><br><span class="line">	String userid=<span class="string">"10015A1000000009QPTF"</span>;</span><br><span class="line">	String dataSource = <span class="string">"nc63pm"</span>;</span><br><span class="line">	String billcode = <span class="string">"G1-HO18120009"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">byte</span>[] parameter =</span><br><span class="line">		(<span class="string">"&#123;queryCode:\"1\",userid:\""</span>+userid+<span class="string">"\",dataSource:\""</span>+dataSource+<span class="string">"\",pk_group:\"0001A21000000000370V\",contractCode:\""</span>+billcode+<span class="string">"\"&#125;"</span>)</span><br><span class="line">		.getBytes();</span><br><span class="line">	String para = <span class="keyword">new</span> String(parameter);</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		String timestamp = String.valueOf(date.getTime()/<span class="number">1000</span>);</span><br><span class="line">		URL url = <span class="keyword">new</span> URL(requestUrl);</span><br><span class="line">		URLConnection http_url_connection = url.openConnection();</span><br><span class="line">		HttpURLConnection HttpUrlConnection = (HttpURLConnection) http_url_connection;</span><br><span class="line"></span><br><span class="line">		HttpUrlConnection.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line">		HttpUrlConnection.setDoInput(<span class="keyword">true</span>);</span><br><span class="line">		HttpUrlConnection.setRequestMethod(<span class="string">"POST"</span>);<span class="comment">//设置请求方式。可以是delete put post get</span></span><br><span class="line">		HttpUrlConnection.setRequestProperty(<span class="string">"Content-Length"</span>, String.valueOf(parameter.length));<span class="comment">//设置内容的长度</span></span><br><span class="line">		HttpUrlConnection.setRequestProperty(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=utf-8"</span>);<span class="comment">//设置编码格式</span></span><br><span class="line">		HttpUrlConnection.setRequestProperty(<span class="string">"accept"</span>, <span class="string">"application/json"</span>);<span class="comment">//设置接收返回参数格式</span></span><br><span class="line">		HttpUrlConnection.setRequestProperty(<span class="string">"timestamp"</span>,timestamp);</span><br><span class="line">		HttpUrlConnection.setUseCaches(<span class="keyword">false</span>);</span><br><span class="line">		</span><br><span class="line">		BufferedOutputStream output_stream = <span class="keyword">new</span> BufferedOutputStream(HttpUrlConnection.getOutputStream());</span><br><span class="line">		output_stream.write(parameter);</span><br><span class="line">		output_stream.flush();</span><br><span class="line">		output_stream.close();</span><br><span class="line">		output_stream = <span class="keyword">null</span>;</span><br><span class="line">		</span><br><span class="line">		InputStreamReader input_stream_reader = <span class="keyword">new</span> InputStreamReader(HttpUrlConnection.getInputStream(), <span class="string">"utf-8"</span>);</span><br><span class="line">		BufferedReader buffered_reader = <span class="keyword">new</span> BufferedReader(input_stream_reader);</span><br><span class="line">		</span><br><span class="line">		String line;</span><br><span class="line">		StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">		<span class="keyword">while</span> ((line = buffered_reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">			buffer.append(line);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(buffer.toString());</span><br><span class="line">		System.out.println(para);</span><br><span class="line">	&#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+	  
+	</div>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/18/java调用httpservler接口/" data-id="cjr1woqp50001ogfu99uezes2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/httpservlet/">httpservlet</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+	<div>
+  	<center>
+	<div class="pagination">
 
-    </footer>
-  </div>
-  
     
-<nav id="article-nav">
-  
-  
-    <a href="/2013/07/13/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
 
-  
-</article>
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2013/07/13/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
 
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
 </section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/lift/">lift</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello/">hello</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/httpservlet/">httpservlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/world/">world</a></li></ul>
-    </div>
-  </div>
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
 
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-18 
+	</div>
+	
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/hello/" style="font-size: 10px;">hello</a> <a href="/tags/httpservlet/" style="font-size: 10px;">httpservlet</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/world/" style="font-size: 10px;">world</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/01/18/java调用httpservler接口/">java调用httpservler接口</a>
-          </li>
-        
-          <li>
-            <a href="/2013/07/13/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 xuzh<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+	<!-- categories -->
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/java/">java<span>1</span></a></li> <li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
-
-<script src="/js/script.js"></script>
-
-
-
+	</div>
   </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
 </body>
-</html>
+   </html>
