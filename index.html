@@ -117,6 +117,73 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2019/01/21/Oracle触发器的实现/">Oracle触发器的实现</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-01-21  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>工作中又遇到这样的问题：</p>
+<blockquote>
+<p>一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）</p>
+</blockquote>
+<p>于是打算在表中设置一个触发器</p>
+<p>触发器实现：</p>
+<blockquote>
+<p>当表被更新时，判断如果vreserve14被更新为空值，则提示报错</p>
+</blockquote>
+	
+	</div>
+  <a type="button" href="/2019/01/21/Oracle触发器的实现/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/01/21/Oracle去重而保存时间最新的数据/">Oracle去重而保存时间最新的数据</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-01-21  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h4 id="Oracle去重而保存时间最新的数据"><a href="#Oracle去重而保存时间最新的数据" class="headerlink" title="Oracle去重而保存时间最新的数据"></a>Oracle去重而保存时间最新的数据</h4><blockquote>
+<p>本篇文章仅仅是我工作上的一个随笔记录，写的不是很详细，如果不了解我所做的工作的业务内容，可能会看的一头雾水。大家可以仅做为一种参考思路！</p>
+</blockquote>
+<p>场景描述：<br>    单据表 fdcpm_pay_apply 中的财务处理状态的值一直是从财务中间表 mid_fina_x 中获取的<br>现在我们在 fdcpm_pay_apply 中添加一个 ifinastatus 的字段用来直接存储财务处理状态的值，并且以后就按照这种方式存储，所以需要把财务中间表中已有的财务处理状态给刷到对应单据的 ifinastatus字段中。</p>
+<h5 id="查看表中重复的数据有哪些-去掉重复，只显示单据编码vbillcode"><a href="#查看表中重复的数据有哪些-去掉重复，只显示单据编码vbillcode" class="headerlink" title="查看表中重复的数据有哪些(去掉重复，只显示单据编码vbillcode)"></a>查看表中重复的数据有哪些(去掉重复，只显示单据编码vbillcode)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT vbillcode FROM mid_fina WHERE NVL(dr,0)=0 GROUP BY vbillcode HAVING COUNT(*)&gt;1;</span><br></pre></td></tr></table></figure>
+<h5 id="通过上步查询出来的vbillcode，可以查询出所有重复的数据"><a href="#通过上步查询出来的vbillcode，可以查询出所有重复的数据" class="headerlink" title="通过上步查询出来的vbillcode，可以查询出所有重复的数据"></a>通过上步查询出来的vbillcode，可以查询出所有重复的数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM mid_fina WHERE NVL(dr,0)=0 AND vbillcode IN(</span><br><span class="line">    SELECT vbillcode FROM mid_fina WHERE NVL(dr,0)=0 GROUP BY vbillcode HAVING COUNT(*)&gt;1</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2019/01/21/Oracle去重而保存时间最新的数据/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2019/01/18/java调用httpservler接口/">java调用httpservler接口</a>
 		</h3>
 		</div>
@@ -204,7 +271,11 @@ var _hmt = _hmt || [];
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/lift/">lift<span>1</span></a></li>
+			<li><a href="/categories/工具/">工具<span>1</span></a></li>
+		
+			<li><a href="/categories/数据库/">数据库<span>2</span></a></li>
+		
+			<li><a href="/categories/汇编语言/">汇编语言<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -215,13 +286,17 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/hello/">hello<span>1</span></a></li>
+			<li><a href="/tags/Oracle/">Oracle<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle-触发器/">Oracle 触发器<span>1</span></a></li>
+		
+			<li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
 		
 			<li><a href="/tags/java/">java<span>1</span></a></li>
 		
-			<li><a href="/tags/world/">world<span>1</span></a></li>
+			<li><a href="/tags/hello/">hello<span>1</span></a></li>
 		
-			<li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
+			<li><a href="/tags/world/">world<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -233,6 +308,14 @@ var _hmt = _hmt || [];
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/01/21/Oracle触发器的实现/"><i class="fa fa-file-o"></i>Oracle触发器的实现</a>
+      </li>
+    
+      <li>
+        <a href="/2019/01/21/Oracle去重而保存时间最新的数据/"><i class="fa fa-file-o"></i>Oracle去重而保存时间最新的数据</a>
+      </li>
     
       <li>
         <a href="/2019/01/18/java调用httpservler接口/"><i class="fa fa-file-o"></i>java调用httpservler接口</a>
