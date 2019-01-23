@@ -82,7 +82,25 @@ var _hmt = _hmt || [];
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
@@ -123,11 +141,9 @@ var _hmt = _hmt || [];
 <h5 id="查看表中重复的数据有哪些-去掉重复，只显示单据编码vbillcode"><a href="#查看表中重复的数据有哪些-去掉重复，只显示单据编码vbillcode" class="headerlink" title="查看表中重复的数据有哪些(去掉重复，只显示单据编码vbillcode)"></a>查看表中重复的数据有哪些(去掉重复，只显示单据编码vbillcode)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT vbillcode FROM mid_fina WHERE NVL(dr,0)=0 GROUP BY vbillcode HAVING COUNT(*)&gt;1;</span><br></pre></td></tr></table></figure>
 <h5 id="通过上步查询出来的vbillcode，可以查询出所有重复的数据"><a href="#通过上步查询出来的vbillcode，可以查询出所有重复的数据" class="headerlink" title="通过上步查询出来的vbillcode，可以查询出所有重复的数据"></a>通过上步查询出来的vbillcode，可以查询出所有重复的数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM mid_fina WHERE NVL(dr,0)=0 AND vbillcode IN(</span><br><span class="line">    SELECT vbillcode FROM mid_fina WHERE NVL(dr,0)=0 GROUP BY vbillcode HAVING COUNT(*)&gt;1</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>那么我们为了以防万一，复制一张一模一样的表来进行下一步的处理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE mid_fina_x AS (SELECT * FROM mid_fina WHERE NVL(dr,0)=0);</span><br></pre></td></tr></table></figure>
-<p>查询数据中vbillcode相等，但是修改时间比较早的数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM mid_fina_x mf WHERE mf.ts &lt; (</span><br><span class="line">   SELECT MAX(mx.ts) FROM mid_fina_x mx WHERE mf.vbillcode=mx.vbillcode AND NVL(mx.dr,0)=0</span><br><span class="line">) AND NVL(mf.dr,0)=0;</span><br></pre></td></tr></table></figure>
-<p>删除这些重复数据中的旧数据，只保留最新的那一条<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM mid_fina_x mf WHERE mf.ts &lt; (</span><br><span class="line">   SELECT MAX(mx.ts) FROM mid_fina_x mx WHERE mf.vbillcode=mx.vbillcode AND NVL(mx.dr,0)=0</span><br><span class="line">) AND NVL(mf.dr,0)=0;</span><br></pre></td></tr></table></figure></p>
+<h5 id="那么我们为了以防万一，复制一张一模一样的表来进行下一步的处理"><a href="#那么我们为了以防万一，复制一张一模一样的表来进行下一步的处理" class="headerlink" title="那么我们为了以防万一，复制一张一模一样的表来进行下一步的处理"></a>那么我们为了以防万一，复制一张一模一样的表来进行下一步的处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE mid_fina_x AS (SELECT * FROM mid_fina WHERE NVL(dr,0)=0);</span><br></pre></td></tr></table></figure>
+<h5 id="查询数据中vbillcode相等，但是修改时间比较早的数据"><a href="#查询数据中vbillcode相等，但是修改时间比较早的数据" class="headerlink" title="查询数据中vbillcode相等，但是修改时间比较早的数据"></a>查询数据中vbillcode相等，但是修改时间比较早的数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM mid_fina_x mf WHERE mf.ts &lt; (</span><br><span class="line">   SELECT MAX(mx.ts) FROM mid_fina_x mx WHERE mf.vbillcode=mx.vbillcode AND NVL(mx.dr,0)=0</span><br><span class="line">) AND NVL(mf.dr,0)=0;</span><br></pre></td></tr></table></figure>
+<h5 id="删除这些重复数据中的旧数据，只保留最新的那一条"><a href="#删除这些重复数据中的旧数据，只保留最新的那一条" class="headerlink" title="删除这些重复数据中的旧数据，只保留最新的那一条"></a>删除这些重复数据中的旧数据，只保留最新的那一条</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM mid_fina_x mf WHERE mf.ts &lt; (</span><br><span class="line">   SELECT MAX(mx.ts) FROM mid_fina_x mx WHERE mf.vbillcode=mx.vbillcode AND NVL(mx.dr,0)=0</span><br><span class="line">) AND NVL(mf.dr,0)=0;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>需要注意的是，按上述方法删除重复数据，只会删除时间比最新时间早的数据，如果有两条数据，他们的vbillcode和ts修改时间都是一样的，那么这两条数据都不会被删除，因此我们需要再次过来一次重复数据</p>
 </blockquote>
@@ -145,7 +161,7 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2019/01/21/Oracle触发器的实现/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2019/01/22/通过SQL修改报表模板/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
@@ -189,7 +205,7 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>2</span></a></li>
+    </li><li><a href="/categories/数据库/">数据库<span>4</span></a></li>
   
 
     </ul>
@@ -202,7 +218,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/Oracle/">Oracle<span>1</span></a></li>
+  <li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
     </ul>
 	</div>
 		

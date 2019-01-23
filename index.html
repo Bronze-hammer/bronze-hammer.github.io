@@ -75,7 +75,25 @@ var _hmt = _hmt || [];
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
@@ -88,7 +106,7 @@ var _hmt = _hmt || [];
   <div class="container">
   	<div class="content">
     	 <div class="page-header logo">
-  <h1>吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？<span class="blink-fast">∎</span></h1>
+  <h1>徐子辉的个人博客<span class="blink-fast">∎</span></h1>
 </div>
 
 <div class="row page">
@@ -117,11 +135,11 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2019/01/21/Oracle触发器的实现/">Oracle触发器的实现</a>
+			<a href="/2019/01/22/重写合同台账（部分）/">重写合同台账（部分）</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2019-01-21  </div>
+		<div class="date">post @ 2019-01-22  </div>
 		</div>
 	</div>
 	
@@ -131,18 +149,42 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p>工作中又遇到这样的问题：</p>
-<blockquote>
-<p>一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）</p>
-</blockquote>
-<p>于是打算在表中设置一个触发器</p>
-<p>触发器实现：</p>
-<blockquote>
-<p>当表被更新时，判断如果vreserve14被更新为空值，则提示报错</p>
-</blockquote>
+		<h3 id="重写了部分合并情况的SQL语句"><a href="#重写了部分合并情况的SQL语句" class="headerlink" title="重写了部分合并情况的SQL语句"></a>重写了部分合并情况的SQL语句</h3><p>原SQL语句由四部分组成，通过 UNION ALL 连接起来，SQL也并没有说明为什么要那样写，所以我根据自己的理解重写了一段SQL</p>
 	
 	</div>
-  <a type="button" href="/2019/01/21/Oracle触发器的实现/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2019/01/22/重写合同台账（部分）/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/01/22/通过SQL修改报表模板/">通过SQL修改报表模板</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-01-22  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>本文档为工作随笔，所以请大家略过</p>
+</blockquote>
+<p>报表模板数据表为  pub_report_templet</p>
+<p>通过报表编码查询报表的主体内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM pub_report_templet WHERE NVL(dr,0)=0;</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2019/01/22/通过SQL修改报表模板/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -202,6 +244,41 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2019/01/18/java调用httpservler接口/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/01/03/Oracle触发器的实现/">Oracle触发器的实现</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-01-03  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>工作中又遇到这样的问题：</p>
+<blockquote>
+<p>一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）</p>
+</blockquote>
+<p>于是打算在表中设置一个触发器</p>
+<p>触发器实现：</p>
+<blockquote>
+<p>当表被更新时，判断如果vreserve14被更新为空值，则提示报错</p>
+</blockquote>
+	
+	</div>
+  <a type="button" href="/2019/01/03/Oracle触发器的实现/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -273,7 +350,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/工具/">工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>2</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>4</span></a></li>
 		
 			<li><a href="/categories/汇编语言/">汇编语言<span>1</span></a></li>
 		
@@ -286,17 +363,19 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/NC报表/">NC报表<span>1</span></a></li>
+		
 			<li><a href="/tags/Oracle-触发器/">Oracle 触发器<span>1</span></a></li>
 		
-			<li><a href="/tags/Oracle/">Oracle<span>1</span></a></li>
-		
-			<li><a href="/tags/java/">java<span>1</span></a></li>
+			<li><a href="/tags/world/">world<span>1</span></a></li>
 		
 			<li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
 		
 			<li><a href="/tags/hello/">hello<span>1</span></a></li>
 		
-			<li><a href="/tags/world/">world<span>1</span></a></li>
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/java/">java<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -310,7 +389,11 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2019/01/21/Oracle触发器的实现/"><i class="fa fa-file-o"></i>Oracle触发器的实现</a>
+        <a href="/2019/01/22/重写合同台账（部分）/"><i class="fa fa-file-o"></i>重写合同台账（部分）</a>
+      </li>
+    
+      <li>
+        <a href="/2019/01/22/通过SQL修改报表模板/"><i class="fa fa-file-o"></i>通过SQL修改报表模板</a>
       </li>
     
       <li>
@@ -322,7 +405,7 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2013/07/13/hello-world/"><i class="fa fa-file-o"></i>Hello World</a>
+        <a href="/2019/01/03/Oracle触发器的实现/"><i class="fa fa-file-o"></i>Oracle触发器的实现</a>
       </li>
     
   </ul>
