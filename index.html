@@ -6,14 +6,14 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>徐子辉的个人博客</title>
+  <title>徐子辉的个人站点</title>
   <meta name="author" content="xuzh">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="徐子辉的个人博客">
+  <meta property="og:site_name" content="徐子辉的个人站点">
 
   
     <meta property="og:image" content="">
@@ -69,7 +69,7 @@ var _hmt = _hmt || [];
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-	  <a class="navbar-brand" href="/">徐子辉的个人博客</a>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
       <div class="collapse navbar-collapse nav-menu">
 		<ul class="nav navbar-nav">
 		  
@@ -106,7 +106,7 @@ var _hmt = _hmt || [];
   <div class="container">
   	<div class="content">
     	 <div class="page-header logo">
-  <h1>徐子辉的个人博客<span class="blink-fast">∎</span></h1>
+  <h1>徐子辉的个人站点<span class="blink-fast">∎</span></h1>
 </div>
 
 <div class="row page">
@@ -267,18 +267,64 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p>工作中又遇到这样的问题：</p>
-<blockquote>
-<p>一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）</p>
-</blockquote>
-<p>于是打算在表中设置一个触发器</p>
-<p>触发器实现：</p>
-<blockquote>
-<p>当表被更新时，判断如果vreserve14被更新为空值，则提示报错</p>
-</blockquote>
+		<p>触发器的定义就是说某个条件成立的时候，触发器里面所定义的语句就会被自动的执行。因此触发器不需要人为的去调用，也不能调用。触发器分为语句级触发器和行级触发器。语句级触发器可以在某些语句执行前或者执行后触发，而行级触发器是定义指定表中行数据改变时的触发器。</p>
 	
 	</div>
   <a type="button" href="/2019/01/03/Oracle触发器的实现/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/03/03/Oracle存储过程的实现/">Oracle存储过程的实现</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-03-03  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>Oracle存储过程是一组为了完成特定功能的SQL语句集，经编译后存储在数据库中。用户通过指定存储过程的名字并给出参数（是否给参数要看该存储过程定义的过程中是否设置了参数）来执行它。</p>
+	
+	</div>
+  <a type="button" href="/2018/03/03/Oracle存储过程的实现/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/03/01/Linux的ps命令解析/">Linux的ps命令解析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-03-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h4 id="Linux的ps命令解析"><a href="#Linux的ps命令解析" class="headerlink" title="Linux的ps命令解析"></a>Linux的ps命令解析</h4><p>Linux ps命令用于显示当前进程 (process) 的状态。要对进程进行监测和控制,首先必须要了解当前进程的情况,也就是需要查看当前进程,ps命令就是最基本进程查看命令。使用该命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵尸、哪些进程占用了过多的资源等等.总之大部分信息都是可以通过执行该命令得到。ps是显示瞬间进程的状态，并不动态连续；如果想对进程进行实时监控应该用top命令。</p>
+	
+	</div>
+  <a type="button" href="/2018/03/01/Linux的ps命令解析/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -350,9 +396,11 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/工具/">工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>4</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>5</span></a></li>
 		
 			<li><a href="/categories/汇编语言/">汇编语言<span>1</span></a></li>
+		
+			<li><a href="/categories/运维/">运维<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -363,19 +411,25 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/NC报表/">NC报表<span>1</span></a></li>
-		
-			<li><a href="/tags/Oracle-触发器/">Oracle 触发器<span>1</span></a></li>
-		
-			<li><a href="/tags/world/">world<span>1</span></a></li>
-		
-			<li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
-		
-			<li><a href="/tags/hello/">hello<span>1</span></a></li>
+			<li><a href="/tags/ps命令/">ps命令<span>1</span></a></li>
 		
 			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
 		
+			<li><a href="/tags/world/">world<span>1</span></a></li>
+		
 			<li><a href="/tags/java/">java<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle-触发器/">Oracle 触发器<span>1</span></a></li>
+		
+			<li><a href="/tags/NC报表/">NC报表<span>1</span></a></li>
+		
+			<li><a href="/tags/hello/">hello<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle-存储过程/">Oracle 存储过程<span>1</span></a></li>
+		
+			<li><a href="/tags/httpservlet/">httpservlet<span>1</span></a></li>
 		
 		 
 		</ul>

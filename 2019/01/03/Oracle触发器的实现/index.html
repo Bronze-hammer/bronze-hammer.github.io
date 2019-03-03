@@ -6,23 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Oracle触发器的实现 | 徐子辉的个人博客</title>
+  <title>Oracle触发器的实现 | 徐子辉的个人站点</title>
   <meta name="author" content="xuzh">
   
-  <meta name="description" content="工作中又遇到这样的问题：
-
-一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）
-
-于是打算在表中设置一个触发器
-触发器实现：
-
-当表被更新时，判断如果vreserve14被更新为空值，则提示报错">
+  <meta name="description" content="触发器的定义就是说某个条件成立的时候，触发器里面所定义的语句就会被自动的执行。因此触发器不需要人为的去调用，也不能调用。触发器分为语句级触发器和行级触发器。语句级触发器可以在某些语句执行前或者执行后触发，而行级触发器是定义指定表中行数据改变时的触发器。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <meta property="og:title" content="Oracle触发器的实现">
-  <meta property="og:site_name" content="徐子辉的个人博客">
+  <meta property="og:site_name" content="徐子辉的个人站点">
 
   
     <meta property="og:image" content="">
@@ -78,7 +71,7 @@ var _hmt = _hmt || [];
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-	  <a class="navbar-brand" href="/">徐子辉的个人博客</a>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
       <div class="collapse navbar-collapse nav-menu">
 		<ul class="nav navbar-nav">
 		  
@@ -136,7 +129,9 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>工作中又遇到这样的问题：</p>
+	  <p>触发器的定义就是说某个条件成立的时候，触发器里面所定义的语句就会被自动的执行。因此触发器不需要人为的去调用，也不能调用。触发器分为语句级触发器和行级触发器。语句级触发器可以在某些语句执行前或者执行后触发，而行级触发器是定义指定表中行数据改变时的触发器。</p>
+<a id="more"></a>
+<p>工作中又遇到这样的问题：</p>
 <blockquote>
 <p>一张表pm_cm_payapply中的vreserve14字段，总是不知道在哪步操作中被致为空（原来的值不为空）</p>
 </blockquote>
@@ -145,7 +140,6 @@ var _hmt = _hmt || [];
 <blockquote>
 <p>当表被更新时，判断如果vreserve14被更新为空值，则提示报错</p>
 </blockquote>
-<a id="more"></a>
 <p>触发器内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CREATE OR REPLACE TRIGGER tri_vreserve</span><br><span class="line">AFTER UPDATE OF vreserve14 ON pm_pa_payapply</span><br><span class="line">DECLARE</span><br><span class="line">  myexp exception</span><br><span class="line">BEGIN</span><br><span class="line">  IF old.vreserve14 != &apos;&apos; AND new.vreserve14 == &apos;&apos; THEN</span><br><span class="line">    RAISE myexp;</span><br><span class="line">  END IF;</span><br><span class="line">  EXCEPTION_INIT</span><br><span class="line">    WHEN myexp THEN raise_application_error(&apos;-20002&apos;,&apos;vreserve14字段的值被设置为空&apos;)；</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
 <p>测试：<br><img src="https://img-blog.csdnimg.cn/20190103133038329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Jyb256ZWhhbW1lcg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
@@ -174,7 +168,7 @@ var _hmt = _hmt || [];
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2013/07/13/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2018/03/03/Oracle存储过程的实现/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -213,7 +207,7 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>4</span></a></li>
+    </li><li><a href="/categories/数据库/">数据库<span>5</span></a></li>
   
 
     </ul>

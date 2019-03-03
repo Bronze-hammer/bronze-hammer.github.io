@@ -6,17 +6,15 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Hello World | 徐子辉的个人站点</title>
+  <title>Linux的ps命令解析 | 徐子辉的个人站点</title>
   <meta name="author" content="xuzh">
   
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new &#34;My New Post&#34;
-More info: Writing">
+  <meta name="description" content="Linux的ps命令解析Linux ps命令用于显示当前进程 (process) 的状态。要对进程进行监测和控制,首先必须要了解当前进程的情况,也就是需要查看当前进程,ps命令就是最基本进程查看命令。使用该命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵尸、哪些进程占用了过多的资源等等.总之大部分信息都是可以通过执行该命令得到。ps是显示瞬间进程的状态，并不动态连续；如果想对进程进行实时监控应该用top命令。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Hello World">
+  <meta property="og:title" content="Linux的ps命令解析">
   <meta property="og:site_name" content="徐子辉的个人站点">
 
   
@@ -114,7 +112,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Hello World</h1>
+			<h1> Linux的ps命令解析</h1>
 		</div>
 	
 
@@ -131,15 +129,28 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a><br><a id="more"></a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+	  <h4 id="Linux的ps命令解析"><a href="#Linux的ps命令解析" class="headerlink" title="Linux的ps命令解析"></a>Linux的ps命令解析</h4><p>Linux ps命令用于显示当前进程 (process) 的状态。要对进程进行监测和控制,首先必须要了解当前进程的情况,也就是需要查看当前进程,ps命令就是最基本进程查看命令。使用该命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵尸、哪些进程占用了过多的资源等等.总之大部分信息都是可以通过执行该命令得到。ps是显示瞬间进程的状态，并不动态连续；如果想对进程进行实时监控应该用top命令。</p>
+<a id="more"></a>
+<h5 id="列出目前所有的正在内存当中的程序"><a href="#列出目前所有的正在内存当中的程序" class="headerlink" title="列出目前所有的正在内存当中的程序"></a>列出目前所有的正在内存当中的程序</h5><p>输入命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ps aux</span><br></pre></td></tr></table></figure>
+<p><img src="TIM20190301191424.png" alt="列出目前所有的正在内存当中的程序"></p>
+<p>USER：该进程属于那个使用者账号。</p>
+<p>PID ：该进程的进程ID号。</p>
+<p>%CPU：该进程使用掉的 CPU 资源百分比；</p>
+<p>%MEM：该进程所占用的物理内存百分比；</p>
+<p>VSZ ：该进程使用掉的虚拟内存量 (Kbytes)</p>
+<p>RSS ：该进程占用的固定的内存量 (Kbytes)</p>
+<p>TTY ：该进程是在那个终端机上面运作，若与终端机无关，则显示 ?。另外， tty1-tty6 是本机上面的登入者程序，若为 pts/0 等等的，则表示为由网络连接进主机的程序。</p>
+<p>STAT：该程序目前的状态，主要的状态有：</p>
+<ul>
+<li>R ：该程序目前正在运作，或者是可被运作；</li>
+<li>S ：该程序目前正在睡眠当中，但可被某些讯号(signal) 唤醒。</li>
+<li>T ：该程序目前正在侦测或者是停止了；</li>
+<li>Z ：该程序应该已经终止，但是其父程序却无法正常的终止他，造成 zombie (疆尸) 程序的状态</li>
+<li>START：该进程被触发启动的时间；</li>
+<li>TIME ：该进程实际使用 CPU 运作的时间。</li>
+<li>COMMAND：该程序的实际指令。</li>
+</ul>
 	  
 	</div>
 
@@ -149,12 +160,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2018/03/01/Linux的ps命令解析/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2018/03/03/Oracle存储过程的实现/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2013/07/13/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -182,7 +193,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2013-07-13 
+	2018-03-01 
 	</div>
 	
 
@@ -193,7 +204,7 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/工具/">工具<span>1</span></a></li>
+    </li><li><a href="/categories/运维/">运维<span>1</span></a></li>
   
 
     </ul>
@@ -206,7 +217,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/hello/">hello<span>1</span></a></li> <li><a href="/tags/world/">world<span>1</span></a></li>
+  <li><a href="/tags/Linux/">Linux<span>1</span></a></li> <li><a href="/tags/ps命令/">ps命令<span>1</span></a></li>
     </ul>
 	</div>
 		
