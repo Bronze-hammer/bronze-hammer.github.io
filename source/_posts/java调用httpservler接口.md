@@ -1,6 +1,6 @@
 ---
-title: java调用httpservler接口
-date: 2019-01-18 18:28:00
+title: Java调用HttpServleT接口
+date: 2018-01-18 18:28:00
 tags:
 - java
 - httpservlet
