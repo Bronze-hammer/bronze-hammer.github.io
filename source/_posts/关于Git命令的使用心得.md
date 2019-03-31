@@ -98,6 +98,8 @@ $ git push origin :mybranch
 
 #### ⚪ Git比较本地仓库和远程仓库的差异
 
+假设本地分支为hexo，远程仓库origin的分支为master
+
 首先更新本地的远程分支
 
 ```
@@ -107,16 +109,40 @@ $ git fetch origin
 然后我们可以查看一下远程仓库有而本地仓库没有的commit信息
 
 ```
-$ git log master..origin/master
+$ git log hexo..origin/master
 ```
 
 最后查看具体文件差异（改动的地方）
 
 ```
-$ git diff --stat master origin/master
+$ git diff --stat hexo origin/master
 ```
 
-> 上述的操作我们默认本地的分支是master，远程仓库名origin，远程仓库origin的分支是master
+将远程存储库中的更改合并到当前分支中
+
+```
+$ git pull origin master:hexo
+```
+
+如果当前分支已经是hexo，那么可以简写成
+
+```
+$ git pull origin master
+```
+
+在某些场合，Git会自动在本地分支与远程分支之间，建立一种追踪关系(tracking)。比如，在git clone的时候，所有本地分支默认与远程主机的同名分支，建立追踪关系，也就是说，本地的master分支自动”追踪”origin/master分支。
+
+Git允许手动建立追踪关系
+
+```
+$ git branch --set-upstream hexo origin/master
+```
+
+如果当前分支与远程分支存在追踪关系，git pull 可以简写成
+
+```
+$ git pull origin
+```
 
 
 #### ⚪ Git创建新分支并把新分支上传到Github远程仓库

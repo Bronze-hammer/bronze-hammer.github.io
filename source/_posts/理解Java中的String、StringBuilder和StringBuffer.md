@@ -10,9 +10,13 @@ categoties:
 - 编程语言
 ---
 
+String是我们学习和使用Java最常用的类之一，我们经常在网上看一些Java的面试题，大多数都也会提到关于String、StringBuilder、StringBuffer的区别，因此我们有理由要好好了解了解。而想要了解一个类，最好的办法就是看这个类的实现源代码。
+
+<!-- more -->
+
 #### ⚪ 理解String
 
-想要了解一个类，最好的办法就是看这个类的实现源代码，String类的实现在`jdk1.6.0_14srcjavalangString.java`文件中。
+String类的实现在`jdk1.6.0_14srcjavalangString.java`文件中。
 
 打开这个类文件就会发现String类是被final修饰的：
 
