@@ -75,7 +75,8 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 ## theme: landscape
 ## theme: hipaper
-theme: freemind
+## theme: freemind
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
