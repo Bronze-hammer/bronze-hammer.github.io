@@ -5,6 +5,7 @@ tags:
 - oracle
 categories:
 - 数据库
+comments: true
 ---
 
 这里汇总了一些在使用Oracle过程中遇到的问题及解决办法，一方面做为笔记帮助自己以后更快速处理问题，一方面分享处理供大家互相学习。
