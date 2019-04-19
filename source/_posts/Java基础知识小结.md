@@ -63,15 +63,77 @@ finalize是在Object类中定义的，因此，所有的类都继承了它。子
 
 ### 6.HashMap
 
-#### 什么是HashMap？为什么要用HashMap？
+#### HashMap的特点
 
-- HashMap是一个散列桶（数组和链表），它存储的内容是键值对(key-value)映射
-- HashMap采用了数组和链表的数据结构，能在查询和修改方便继承了数组的线性查找和链表的寻址修改
-- HashMap是非synchronized，所以HashMap很快
-- HashMap可以接受null键和值，而Hashtable则不能（原因就是equlas()方法需要对象，因为HashMap是后出的API经过处理才可以）
+- HashMap是基于哈希表的Map接口实现的。
+- HashMap底层采用的是Entry数组和链表实现的。
+- HashMap是采用key-value形式存储，其中key是可以允许为null，但是只能有一个，并且key不允许重复（如果重复则新值会覆盖旧值）。
+- HashMap是线程不安全的。
+- HashMap存入的顺序和遍历的顺序可能不一致（无序）。
+- HashMap保存数据的时候通过计算key的hash值来决定存储的位置。
 
 #### HashMap的工作原理是什么？
 
 HashMap是基于hashing的原理，我们使用put(key, value)存储对象到HashMap中，使用get(key)从HashMap中获取对象。当我们给put()方法传递键和值时，我们先对键调用hashCode()方法，计算并返回的hashCode是用于找到Map数组的bucket位置来储存Node 对象。这里关键点在于指出，HashMap是在bucket中储存键对象和值对象，作为Map.Node 。
+
+#### HashMap源代码
+
+要看HashMap的源代码，我们还是从HashMap的构造方法开始一步一步的讲解。
+
+> 小总结：可以看出HashMap构造的时候会初始化16个容量，并且负载因子是0.75。负载因子是什么呢？我们后面讲。
+
+![](20190419001.jpg)
+
+> 小总结：这个构造方法没有什么可说的，只是多了些验证。在这里呢？构造方法就算初始化完毕了。
+
+我们知道HashMap最常用的方法也就是put方法了，那么下面我们就着重去探究一下put方法的实现原理，也就是对HashMap的一个透彻理解。
+
+![put方法注释说明](20190419002.jpg)
+
+![](20190419003.jpg)
+
+这段代码好好的研读，请仔细往下看：
+
+**第一步：** 直接判断 table==EMPTY_TABLE ，那么这个table是什么呢？看下图：
+
+![](20190419004.jpg)
+
+那么这个Entry又是说什么东东呢？
+
+![](20190419005.jpg)
+
+这个Entry是Map的一个静态内部类，里面最重要的属性有key、value和next三个属性值，在这里，我想大家已经猜到了，这个key和value是不是我们put的时候的key和value呢？答案是的，这个next又是干嘛用的呢？实际上这个Entry的的数据结构是一个单链表，这个next的属性的值还是这个Entry，表示的是当前的节点的下一个节点是哪个Entry。
+
+好啦，源代码看到这里，我们知道，在put方法中，直接判断table是否为null，那么很显然到目前为止我们的table肯定是为null的，那么继续看如果table为null则要执行的代码。看下图：
+
+![](20190419006.jpg)
+
+哇塞，可以很直观的看到，我们实际上是初始化了一个Entry数组，而我们HashMap中的数据都是保存在了Entry[]里面了。
+
+> 小总结：HashMap其实就是一个线性的Entry数组，而在Entry这个对象中保存了key和value，至于Entry对象中的next的具体作用是干嘛的，稍等做介绍哦。
+
+**第二步：** 判断key是否为null。从这里可以看出，当判断key如果为null的话，并没有抛出什么异常错误，很显然HashMap是支持key为null的。那么就来看看key如果为null，会怎么处理呢？
+
+![](20190419007.jpg)
+
+> 小总结：首先去循环遍历这个Entry数组，判断是否有key为null的情况，如果有则新值覆盖掉旧值。如果没有key为null的情况，则hash值为0，数据存储在这个Entry数组的第0个位置，也就是table[0]，具体方法可以查看addEntry方法，在这里呢，我就不再演示了。
+
+**第三步：** 通过hash方法对key进行计算hash散列值，并且根据这个散列值查找这个要保存的值应该存储到table这个数组中的哪个索引位置。
+
+![](20190419008.jpg)
+
+**第四步：** 循环变量这个Entry数组，并且判断是否有重复的元素添加进去。
+
+![](20190419009.jpg)
+
+> 小总结：当去变量这个Entry数组的时候，去判断两个Entry对象的key的hash是否相同则仅仅表示它们的存储位置是相同的，然后继续判断两个Entry的key是否相等或者equals是否相等，如果条件都满足，则表示要添加的元素，key已经重复，则直接将新值覆盖掉旧值，并且return返回，一旦条件不满足，则直接将添加的元素添加到Entry对象中。
+
+好啦，这个就是整个HashMap的底层原理。现在有的朋友可能会有产生这样的问题：如果计算的key的hash值相等，但是equals方法不相等，那么计算出来的要存储的位置不就冲突了吗？那么如果保存呢？
+
+解决：实际上这种担忧是有必要的，因为我们完全有可能就是说计算的key的hash值和另一个key的hash值是相等的，那么这个时候呢，如果key的equals方法又不相等，那么这个时候我要保存的value值应该存储到table中的哪个索引上呢？实际上，这种情况叫做hash冲突，学习过数据结构的朋友应该都知道，解决hash冲突的方法有很多，但是在Java中，解决冲突的办法是采用的是链表来解决的。还记得这个Entry的next属性吗？对了，这个next属性就是用来记录这个链表上的下一个Entry。
+
+![](20190419010.jpg)
+
+> HashMap的内容摘自[http://baijiahao.baidu.com/s?id=1601416041995350500&wfr=spider&for=pc](http://baijiahao.baidu.com/s?id=1601416041995350500&wfr=spider&for=pc)
 
 未完待续...
