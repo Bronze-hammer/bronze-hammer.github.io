@@ -58,3 +58,55 @@ export ORACLE_SID=erp
 ![](TIM20190408122811.png)
 
 ![](TIM20190408122556.png)
+
+
+### ⚪ORA-04021: timeout occurred while waiting to lock object
+
+#### 情景描述:
+
+Oracle中本来有个用户NC63PM_PEIXUN1，我把这个用户名更改为了NC63PM_PEIXUN2（更改方法请参考[【Oracle更改用户名和密码】](/2019/04/19/Oracle更改用户名和密码)），之后我想按照旧的用户名再创建一个用户，但是创建的用户的SQL语句执行了十五分钟还没执行完，并报如下的错误：
+
+![ORA-04021: timeout occurred while waiting to lock object](TIM20190420145348.png)
+
+#### 解决办法
+
+查看是否被锁表了
+
+```
+> SELECT object_name,machine,s.sid,s.serial#
+> FROM v$locked_object l,dba_objects o ,v$session s
+> WHERE l.object_id=o.object_id AND l.session_id=s.sid;
+```
+
+发现没有被锁表
+
+![查看锁表](TIM20190420145700.png)
+
+使用 DBA_DDL_LOCKS视图获得DDL锁定信息
+
+```
+> SELECT * FROM dba_ddl_locks;
+```
+
+发现有两条关于 NC63PM_PEIXUN1 用户的锁定信息
+
+![](TIM20190420150236.png)
+
+通过 session_id 找到对应的锁表信息
+
+```
+> SELECT sid,serial#,status FROM v$session a WHERE a.sid in (829,392);
+```
+
+![](TIM20190420150455.png)
+
+注：因我是kill掉这两条信息后才截的图，所以 STATUS 才为 KILLED 的。
+
+kill这两条锁表
+
+```
+> ALTER SYSTEM KILL SESSION '392, 5049';
+> ALTER SYSTEM KILL SESSION '829, 25287';
+```
+
+再次执行创建用户的脚本就能顺利执行。
