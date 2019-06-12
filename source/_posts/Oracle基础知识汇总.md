@@ -196,3 +196,10 @@ DROP TABLESPACE tablespace_name [INCLUDING CONTENTS];
 用于定义主表和从表之间的关系，外键约束要定义在从表上，主要则必须具有主键约束或是unique约束，当定义外键约束后，要求外键列数据必须在主表的主键列存在或是为NULL。
 - check
 用于强制行数据必须满足的条件，假定在sal列上定义了check约束，并要求sal列值在1000～2000之间，如果不在1000～2000之间就会提示出错。
+
+
+##### ⚪修改表名
+
+```
+ALTER TABLE 旧表名 RENAME TO 新表名;
+```
