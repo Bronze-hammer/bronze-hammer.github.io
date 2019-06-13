@@ -35,7 +35,7 @@ insert into STUDENTS (id, name, age, school, grade, address, remarks, ts)
 values ('8A17DE17428E45D6E0530100007FABEB', 'xiaoming', 20, 'Changchun University of Architecture', 'Junior', 'Changchun, Jilin', null, '2019-06-12 11:07:57');
 ```
 
-#### 第一个简单的存储过程
+### 第一个简单的存储过程
 
 ```sql
 CREATE OR REPLACE PROCEDURE stu_school
@@ -59,6 +59,8 @@ CALL stu_school();
 在SQL窗口输出页签中可以看到正确的输出内容
 
 ![输出](TIM20190612114535.png)
+
+### 四种存储过程
 
 **存储过程有一下四种情况**
 - 无参数存储过程
@@ -109,11 +111,7 @@ BEGIN
 END;
 ```
 
-需要注意的是，此种存储过程不能直接通过call来调用，不然会出现下面的错误
-
-![](TIM20190612142651.png)
-
-可以通过一下方式执行
+需要注意的是，此种存储过程不能直接通过call来调用，需要通过一下方式执行
 
 > 注意，如果通过这种方式执行存储过程，要记得在存储过程中添加输出语句，不然的话，纵然执行成功，也没有结果输出。
 > `dbms_output.put_line(stu_age);`
@@ -174,6 +172,137 @@ DECLARE
 BEGIN
   dbms_output.put_line('The student name is:' || get_stuname('8A17DE17428E45D6E0530100007FABEB', stuname));
 END;
+```
+
+### Java调用存储过程
+
+#### Java调用仅有输出参数的存储过程
+
+针对存储过程 `stu_age`
+
+```sql
+CREATE OR REPLACE PROCEDURE stu_age(stu_age OUT students.age%TYPE)
+AS
+BEGIN
+  SELECT age INTO stu_age FROM students WHERE ID='8A17DE17428E45D6E0530100007FABEB';
+END;
 
 ```
+
+Java代码如下：
+
+```java
+private void OnlyOutputProcedure() {
+    try {
+        Class.forName(DRVIER);
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        String sql = "{call stu_age(?)}";
+        CallableStatement statement = connection.prepareCall(sql);
+        statement.registerOutParameter(1, OracleTypes.NUMBER);
+        statement.execute();
+        System.out.println(statement.getInt(1));
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+#### Java调用既有输入参数又有输出参数的存储过程
+
+针对存储过程 `stu_name`
+
+```sql
+CREATE OR REPLACE PROCEDURE stu_name(stuid IN students.id%TYPE, stuname OUT students.name%TYPE)
+AS
+BEGIN
+  SELECT NAME INTO stuname FROM students WHERE ID=stuid;
+END;
+
+```
+
+Java代码如下：
+
+```java
+private void InAndOutputProcedure() {
+    try {
+        Class.forName(DRVIER);
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        String sql = "{call stu_name(?,?)}";
+        CallableStatement statement = connection.prepareCall(sql);
+        statement.setString(1, "8A17DE17428E45D6E0530100007FABEB");
+        statement.registerOutParameter(2, OracleTypes.VARCHAR);
+        statement.execute();
+        System.out.println(statement.getString(2));
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+> 以上是有OUT输出参数的存储过程，Java在调用存储过程后还会获得存储过程返回的参数。那么如果存储过程没有OUT输出参数怎么办？
+
+#### Java调用仅有输入参数的存储过程
+
+```java
+private void OnlyInputProcedure() {
+    try {
+        Class.forName(DRVIER);
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        String sql = "{call stu_address(?)}";
+        CallableStatement statement = connection.prepareCall(sql);
+        statement.setString(1, "8A17DE17428E45D6E0530100007FABEB");
+        statement.execute();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+#### Java调用无参的存储过程
+
+```java
+private void NoParameterProcedure() {
+    try {
+        Class.forName(DRVIER);
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        String sql = "{call stu_school()}";
+        CallableStatement statement = connection.prepareCall(sql);
+        statement.execute();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+### Java调用存储函数
+
+以 `get_stuname` 存储过程为例
+
+```sql
+CREATE OR REPLACE PROCEDURE stu_name(stuid IN students.id%TYPE, stuname OUT students.name%TYPE)
+AS
+BEGIN
+  SELECT NAME INTO stuname FROM students WHERE ID=stuid;
+END;
+```
+
+存储函数 `get_stuname` 调用
+
+```sql
+CREATE OR REPLACE FUNCTION get_stuname(stuid IN students.id%TYPE, stuname OUT students.name%TYPE) RETURN VARCHAR2 IS
+BEGIN
+  stu_name(stuid, stuname);
+  RETURN stuname;
+END;
+```
+
+
 这里有一个关于Oracle存储过程的PPT文档，供大家下载学习[点击下载](oracle存储过程.ppt)
