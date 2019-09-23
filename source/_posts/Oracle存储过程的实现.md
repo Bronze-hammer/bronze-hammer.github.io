@@ -284,24 +284,37 @@ private void NoParameterProcedure() {
 
 ### Java调用存储函数
 
-以 `get_stuname` 存储过程为例
+创建一个存储函数 `get_address` 调用
 
 ```sql
-CREATE OR REPLACE PROCEDURE stu_name(stuid IN students.id%TYPE, stuname OUT students.name%TYPE)
-AS
-BEGIN
-  SELECT NAME INTO stuname FROM students WHERE ID=stuid;
-END;
+create or replace function get_address(stuid in students.id%type) return varchar2 is
+stuaddress students.address%type;
+begin
+  select address into stuaddress from students where id=stuid;
+  return stuaddress;
+end;
+
 ```
 
-存储函数 `get_stuname` 调用
+Java调用存储过程：
 
-```sql
-CREATE OR REPLACE FUNCTION get_stuname(stuid IN students.id%TYPE, stuname OUT students.name%TYPE) RETURN VARCHAR2 IS
-BEGIN
-  stu_name(stuid, stuname);
-  RETURN stuname;
-END;
+```java
+private void NoParameterProcedure() {
+    try {
+        Class.forName(DRVIER);
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        String sql = "{?=call get_address(?)}";
+        CallableStatement statement = connection.prepareCall(sql);
+        statement.registerOutParameter(1, Types.VARCHAR);
+        statement.setString(2, "8A17DE17428E45D6E0530100007FABEB");
+        statement.execute();
+        System.out.println(statement.getString(1));
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
 ```
 
 
