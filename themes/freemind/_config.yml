@@ -21,10 +21,10 @@ menu:
     url: about
     intro: "About me."
     icon: "fa fa-user"
-  # - title: RSS
-  #   url: atom.xml
-  #   intro: "Subscribe me."
-  #   # icon: "fa fa-user"
+  - title: RSS
+    url: atom.xml
+    intro: "Subscribe me."
+    icon: "fa fa-user"
 
 links:
   # - title: Freemind
@@ -43,10 +43,10 @@ links:
     url: https://github.com/Bronze-hammer
     intro: "My Github account."
     icon: "fa fa-github"
-  # - title: "My LinkedIn"
-  #   url: http://www.linkedin.com/in/xxx
-  #   intro: "My Linkin account."
-  #   icon: "fa fa-linkedin"
+  - title: "My CSDN"
+    url: https://blog.csdn.net/Bronzehammer
+    intro: "My CSDN account."
+    icon: "fa fa-file-text"
 
 widgets:
 - search
