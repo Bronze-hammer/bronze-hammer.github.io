@@ -89,5 +89,5 @@ search:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: https://github.com/Bronze-hammer/bronze-hammer.github.io.git
+  repository: https://github.com/xbronze/xbronze.github.io.git
   branch: master
