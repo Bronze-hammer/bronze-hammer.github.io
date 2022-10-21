@@ -2,9 +2,9 @@
 title: Oracle的一些故障处理
 date: 2019-04-08 13:17:55
 tags:
-- oracle
+	- oracle
 categories:
-- 数据库
+	- 数据库
 comments: true
 ---
 

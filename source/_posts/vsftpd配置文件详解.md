@@ -2,10 +2,9 @@
 title: vsftpd配置文件详解
 date: 2020-04-02 09:31:10
 tags:
-    - Linux
     - vsftpd
 categories:
-    - 运维
+    - Linux
 ---
 
 

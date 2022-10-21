@@ -2,10 +2,10 @@
 title: 面试官邪魅一笑：MySQL千万级别大表，你要如何优化？
 date: 2020-04-09 09:13:07
 tags:
-    - mysql
+    - MySQL
     - 优化
 categories:
-    - MySQL
+    - 数据库
 ---
 
 当MySQL单表记录数过大时，增删改查性能都会急剧下降，可以参考以下步骤来优化：

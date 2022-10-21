@@ -2,10 +2,10 @@
 title: 不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤
 date: 2020-03-26 17:38:21
 tags:
-- oracle
-- COUNT
+	- Oracle
+	- COUNT
 categories:
-- 数据库
+	- 数据库
 ---
 
 > 文章来自 [Hollis](http://www.hollischuang.com/archives/4057)

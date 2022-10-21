@@ -2,10 +2,10 @@
 title: Linux定时任务
 date: 2019-04-28 16:12:54
 tags:
-- Linux
-- 定时任务
+    - crontab
+    - 定时任务
 categories:
-- 运维
+    - Linux
 ---
 
 > 文章转自 [菜鸟教程](https://www.runoob.com/w3cnote/linux-crontab-tasks.html)
