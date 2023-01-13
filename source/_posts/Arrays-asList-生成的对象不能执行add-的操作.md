@@ -168,7 +168,24 @@ ArrayList 继承自 AbstractList，而 AbstractList 的 add() 方法抛出 Unsup
     }
 ```
 
-所以也可以使用其他方式创建List集合对象
+当然，AbstractList 的 remove() 方法也是一样的
+
+```java
+/**
+     * {@inheritDoc}
+     *
+     * <p>This implementation always throws an
+     * {@code UnsupportedOperationException}.
+     *
+     * @throws UnsupportedOperationException {@inheritDoc}
+     * @throws IndexOutOfBoundsException     {@inheritDoc}
+     */
+    public E remove(int index) {
+        throw new UnsupportedOperationException();
+    }
+```
+
+所以可以使用其他方式创建List集合对象
 
 方法1：
 
