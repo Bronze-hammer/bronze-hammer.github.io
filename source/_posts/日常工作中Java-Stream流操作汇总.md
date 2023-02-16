@@ -21,8 +21,7 @@ Java 8 API添加了一个新的抽象称为流Stream，以一种声明的方式�
 
 ```java
 // List<User> userList;
-List<String> userNameList = userList.stream.map(User::getUserName)
-	.collect(Collectors.toList);
+List<String> userNameList = userList.stream.map(User::getUserName).collect(Collectors.toList);
 ```
 
 ## 2.去重
@@ -30,8 +29,7 @@ List<String> userNameList = userList.stream.map(User::getUserName)
 对集合 List<User> userList 内的对象去重（实体类User 使用Lombok 插件的@Data 注解，自动覆写 equals 和 hashCode 方法）
 ```java
 // List<User> userList;
-List<User> newUserList = userList.stream().distinct()
-	.collect(Collectors.toList());
+List<User> newUserList = userList.stream().distinct().collect(Collectors.toList());
 ```
 
 ## 3.过滤
@@ -52,12 +50,10 @@ List<SysOptionData> resultList = optionDataList.stream().filter(
 
 ```java
 // List<User> 包含User实体的集合，只提取username拼成一个字符串，以“，”隔开
-String username = userList.stream().map(User::getUsername())
-	.collect(Collectors.joining(","));  
+String username = userList.stream().map(User::getUsername()).collect(Collectors.joining(","));  
 
 // List<String> usernameList
-String username = usernameList.stream()
-	.collect(Collectors.joining(","));   
+String username = usernameList.stream().collect(Collectors.joining(","));   
 ```
 
 ## 5.匹配两个List集合，返回新的List集合
@@ -136,9 +132,7 @@ Tom, welcome
 
 ```java
 List<String> nameList = Stream.of("ZhangSan", "Tom").collect(Collectors.toList());
-List<String[]> list = nameList.stream()
-		.map(n -> n.split(""))
-		.collect(Collectors.toList());
+List<String[]> list = nameList.stream().map(n -> n.split("")).collect(Collectors.toList());
 for (String[] strings : list) {
 	for (int i = 0; i < strings.length; i++) {
 		System.out.print(strings[i] + " ");
@@ -189,6 +183,36 @@ System.out.println(list.toString());
 
 ```java
 Map<String, User> userMap = userList.stream()
-		.collect(Collectors.toMap(User::getName, Function.identity()));
+	.collect(Collectors.toMap(User::getName, Function.identity()));
 
+```
+
+## 8.针对List列表，按照指定元素分组，生成新的Map集合
+
+例如对下面List列表的数据做分组
+
+```java
+new User("zhangsan", 12, "Guangzhou");
+new User("lisi", 13, "Shenzhen");
+new User("tom", 12, "Beijing");
+```
+
+分组操作
+
+```java
+Map<Integer, List<User>> map = userList.stream().collect(Collectors.groupingBy(User::getAge));
+```
+
+分组结果
+
+```
+{
+	12=[
+		User [name=zhangsan, age=12, address=Guangzhou], 
+		User [name=tom, age=12, address=Beijing]
+	], 
+	13=[
+		User [name=lisi, age=13, address=Shenzhen]
+	]
+}
 ```
