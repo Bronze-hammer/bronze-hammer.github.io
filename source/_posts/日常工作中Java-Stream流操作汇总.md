@@ -34,7 +34,7 @@ List<User> newUserList = userList.stream().distinct().collect(Collectors.toList(
 
 ## 3.过滤
 
-过滤集合 `List<SysOptionData>  optionDataList` 对象label为 "zhangsan" 的数据
+过滤集合 List\<SysOptionData\>  optionDataList 对象label为 "zhangsan" 的数据
 ```java
 List<SysOptionData> resultList = optionDataList.stream().filter(
 	optionData -> "zhangsan".equals(optionData.getOptionLabel())
@@ -58,9 +58,9 @@ String username = usernameList.stream().collect(Collectors.joining(","));
 
 ## 5.匹配两个List集合，返回新的List集合
 
-比如有两个集合，`List<User>、 List<Address>`
+比如有两个集合，List\<User\>、 List\<Address\>
 
-`List<User>` 集合的数据
+List\<User\> 集合的数据
 
 |  name   | age  | address |
 |  ----  | ----  | ---- |
@@ -69,7 +69,7 @@ String username = usernameList.stream().collect(Collectors.joining(","));
 | jom  | 20 | null |
 
 
-`List<Address>` 集合的数据
+List\<Address\> 集合的数据
 
 |  name   | address  | 
 |  ----  | ----  | 
@@ -77,7 +77,7 @@ String username = usernameList.stream().collect(Collectors.joining(","));
 | tom  | USA |
 | jary  | Japan |
 
-对比着两个集合，以`List<User>`为主体，按照name字段匹配`List<Address>`集合，把匹配到的Address对象的address字段的值设置到User对象的address字段
+对比着两个集合，以List\<User\>为主体，按照name字段匹配List\<Address\>集合，把匹配到的Address对象的address字段的值设置到User对象的address字段
 
 ```java
 List<User> list = userList.stream()
@@ -148,7 +148,7 @@ Z  h  a  n  g  S  a  n
 T  o  m  
 ```
 
-> map操作就是把一种操作运算，映射到一个序列的每一个元素上。以每个元素为一个单位，运算的结果也是相互独立的，所以返回的是`List<String[]>`，而不是`List<String>`
+> map操作就是把一种操作运算，映射到一个序列的每一个元素上。以每个元素为一个单位，运算的结果也是相互独立的，所以返回的是List\<String[]\>，而不是List\<String\>
 
 ### 6.2 stream.flatMap
 
@@ -179,13 +179,14 @@ System.out.println(list.toString());
 
 ## 7.List集合转Map
 
-`List<User>` 集合，设置 User.name 作为Map的key，User对象作为value，转换为Map集合
+List\<User\> 集合，设置 User.name 作为Map的key，User对象作为value，转换为Map集合
 
 ```java
 Map<String, User> userMap = userList.stream()
 	.collect(Collectors.toMap(User::getName, Function.identity()));
 
 ```
+
 
 ## 8.针对List列表，按照指定元素分组，生成新的Map集合
 
