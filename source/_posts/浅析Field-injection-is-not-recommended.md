@@ -102,6 +102,27 @@ public class ConstructorBasedInjection {
 我们已经看到应该尽可能避免基于字段的注入，因为它有许多缺点，无论它看起来多么优雅。推荐的方法是使用基于构造函数和基于设置器的依赖注入。对于必需的依赖项，建议使用基于构造函数的注入，以允许它们不可变并防止它们为空。对于可选的依赖项，建议使用基于 Setter 的注入。
 
 
-[^1]:《Spring Framework Documentation 1.4.1. Dependency Injection》 [https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-collaborators](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-collaborators)
-[^2]:《Field injection is not recommended – Spring IOC》  [https://blog.marcnuri.com/field-injection-is-not-recommended#eases-single-responsibility-principle-violation](https://blog.marcnuri.com/field-injection-is-not-recommended#eases-single-responsibility-principle-violation)
-[^3]:《Wiki SOLID》 [https://en.wikipedia.org/wiki/SOLID](https://en.wikipedia.org/wiki/SOLID)
+---
+
+补充 2023-02-27
+
+1. 构造器依赖注入，如果要注入的属性太多，构造方法会很臃肿，可以在类上加 `@RequiredArgsConstructor` 注解，这个注解会把final修饰的（或者@NonNull注解的）属性构建默认的构造方法。
+
+```java
+@RequiredArgsConstructor
+public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on a MovieFinder
+    private final MovieFinder movieFinder;
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+}
+```
+
+2. 从Spring Framework 4.3开始，如果目标bean只定义了一个构造函数，则不再需要在这样的构造函数上使用@Autowired注释。但是，如果有几个可用的构造函数，至少必须用@Autowired注释其中一个，以便指示容器使用哪个构造函数[^4]。
+
+
+[^1]:[《Spring Framework Documentation 1.4.1. Dependency Injection》](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-collaborators)
+[^2]:[《Field injection is not recommended – Spring IOC》](https://blog.marcnuri.com/field-injection-is-not-recommended#eases-single-responsibility-principle-violation)
+[^3]:[《Wiki SOLID》](https://en.wikipedia.org/wiki/SOLID)
+[^4]:[《Core Technology:1.9.2. Using @Autowired》](https://docs.spring.io/spring-framework/docs/5.2.3.RELEASE/spring-framework-reference/core.html#beans-autowired-annotation)
