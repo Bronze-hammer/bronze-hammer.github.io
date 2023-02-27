@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Oracle的一些故障处理 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="这里汇总了一些在使用Oracle过程中遇到的问题及解决办法，一方面做为笔记帮助自己以后更快速处理问题，一方面分享处理供大家互相学习。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Oracle的一些故障处理">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Oracle的一些故障处理</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>这里汇总了一些在使用Oracle过程中遇到的问题及解决办法，一方面做为笔记帮助自己以后更快速处理问题，一方面分享处理供大家互相学习。</p>
+<a id="more"></a>
+<h3 id="sp2-0667-message-file-sp1.msb-not-found">⚪SP2-0667: Message
+file sp1<lang>.msb not found</lang></h3>
+<p><img src="TIM20190408103118.png"></p>
+<p>出错原因：
+crontab里面的脚本，通常读取的是默认的环境变量，PATH里面不包含oracle数据库的路径。</p>
+<p>解决办法： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure></p>
+<p>把一下内容填写其中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export ORACLE_HOME=/u01/app/oracle/product/11.2.0/dbhome_1</span><br><span class="line">export PATH=$ORACLE_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，ORACLE_HOME的路径要是你计算机中oracle真实的安装地址</p>
+</blockquote>
+<p>环境变量设置完成，执行 <code>source ~/.bashrc</code> 使其生效。</p>
+<p><img src="TIM20190408122029.png"></p>
+<h3 id="ora-12162-tnsnet-service-name-is-incorrectly-specified">⚪ORA-12162:
+TNS:net service name is incorrectly specified</h3>
+<p><img src="TIM20190408121707.png"></p>
+<p>一般出现这种错误，基本都是环境变量配置有问题，要么是没有配置正确的ORACLE_SID、ORACLE_HOME，要么是监听配置环境变量和.bash_profile环境变量配置不一致。</p>
+<p>这里检查发现，是操作系统环境变量没有配置ORACLE_SID</p>
+<p><img src="TIM20190408122343.png"></p>
+<p>因此，我们配置一下 ~/.bashrc ，在其中添加ORACLE_SID</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export ORACLE_SID=erp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：ORACLE_SID的值要根据自己安装oracle时设置的为准</p>
+</blockquote>
+<p><img src="TIM20190408122811.png"></p>
+<p><img src="TIM20190408122556.png"></p>
+<h3 id="ora-04021-timeout-occurred-while-waiting-to-lock-object">⚪ORA-04021:
+timeout occurred while waiting to lock object</h3>
+<h4 id="情景描述">情景描述:</h4>
+<p>Oracle中本来有个用户NC63PM_PEIXUN1，我把这个用户名更改为了NC63PM_PEIXUN2（更改方法请参考<a href="/2019/04/19/Oracle更改用户名和密码">【Oracle更改用户名和密码】</a>），之后我想按照旧的用户名再创建一个用户，但是创建的用户的SQL语句执行了十五分钟还没执行完，并报如下的错误：</p>
+<figure>
+<img src="TIM20190420145348.png" alt="ORA-04021: timeout occurred while waiting to lock object">
+<figcaption aria-hidden="true">ORA-04021: timeout occurred while waiting
+to lock object</figcaption>
+</figure>
+<h4 id="解决办法">解决办法</h4>
+<p>查看是否被锁表了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT object_name,machine,s.sid,s.serial#</span><br><span class="line">&gt; FROM v$locked_object l,dba_objects o ,v$session s</span><br><span class="line">&gt; WHERE l.object_id=o.object_id AND l.session_id=s.sid;</span><br></pre></td></tr></table></figure>
+<p>发现没有被锁表</p>
+<figure>
+<img src="TIM20190420145700.png" alt="查看锁表">
+<figcaption aria-hidden="true">查看锁表</figcaption>
+</figure>
+<p>使用 DBA_DDL_LOCKS视图获得DDL锁定信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT * FROM dba_ddl_locks;</span><br></pre></td></tr></table></figure>
+<p>发现有两条关于 NC63PM_PEIXUN1 用户的锁定信息</p>
+<p><img src="TIM20190420150236.png"></p>
+<p>通过 session_id 找到对应的锁表信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; SELECT sid,serial#,status FROM v$session a WHERE a.sid in (829,392);</span><br></pre></td></tr></table></figure>
+<p><img src="TIM20190420150455.png"></p>
+<p>注：因我是kill掉这两条信息后才截的图，所以 STATUS 才为 KILLED
+的。</p>
+<p>kill这两条锁表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; ALTER SYSTEM KILL SESSION &apos;392, 5049&apos;;</span><br><span class="line">&gt; ALTER SYSTEM KILL SESSION &apos;829, 25287&apos;;</span><br></pre></td></tr></table></figure>
+<p>再次执行创建用户的脚本就能顺利执行。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2019/04/28/Linux定时任务/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/03/26/Java基础知识小结/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-04-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/数据库/">数据库<span>8</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/oracle/">oracle<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

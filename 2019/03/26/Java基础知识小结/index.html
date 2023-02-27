@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Java基础知识小结 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="写这篇文章是为了记录一下学习中被忽略的知识点，这些知识点虽然知道听说过，但对它们的概念和作用都很模糊，如果别人问起为什么，自己还真解释不上来，因此做个记录，方便以后回顾以及大家一起学习。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Java基础知识小结">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Java基础知识小结</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>写这篇文章是为了记录一下学习中被忽略的知识点，这些知识点虽然知道听说过，但对它们的概念和作用都很模糊，如果别人问起为什么，自己还真解释不上来，因此做个记录，方便以后回顾以及大家一起学习。</p>
+<a id="more"></a>
+<h3 id="一个类的构造方法的作用是什么-若一个类没有声明构造方法该程序能正确执行吗-为什么">一个类的构造方法的作用是什么
+若一个类没有声明构造方法,该程序能正确执行吗 ?为什么?</h3>
+<p>主要作用是完成对类对象的初始化工作。可以执行。因为一个类即使没有声明构造方法也会默认生成一个不带参数且没有任何执行动作的构造方法。
+<br></p>
+<h3 id="在java中定义一个不做任何事且没有参数的构造方法的作用">在Java中定义一个不做任何事且没有参数的构造方法的作用</h3>
+<p>Java程序在执行子类的构造方法之前，如果没有用super()来调用父类特定的构造方法，则系统会自动调用父类中没有参数的构造方法。当此时父类中只定义了有参数的构造方法而没有定义无参数的构造方法，然后在子类的构造方法中又没有使用super()来调用父类中特定的构造方法，则编译时将发生错误，因为Java程序在父类中找不到无参数的构造方法可供执行。所以我们要在父类里加上一个不做任何事且没有参数的构造方法。
+<br></p>
+<h3 id="重载和重写的区别">重载和重写的区别</h3>
+<p>重载：发生在同一个类中，方法名必须相同，参数类型不同、个数不同、顺序不同，方法返回值和访问修饰符可以不同，发生在编译时。</p>
+<p>重写：发生在父子类中，方法名、参数列表必须相同，返回值范围小于等于父类，抛出的异常范围小于等于父类，访问修饰符范围大于等于父类；如果父类方法访问修饰符为<code>private</code>则子类就不能重写该方法。
+<br></p>
+<h3 id="try-catch-finally">try-catch-finally</h3>
+<ul>
+<li>try块：用于捕获异常。其后可跟零个或多个catch块，如果没有catch块，则必须跟一个finally块。</li>
+<li>catch块： 用于处理try捕获的异常。</li>
+<li>finally块：无论是否捕获或者处理异常，finally块里的语句都会被执行。当在try块或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。</li>
+</ul>
+<p>注意，一下几种情况finally块不会被执行：
+1.在finally语句块中发生了异常；
+2.在前面的代码中用了<code>System.exit()</code>退出；
+3.程序所有的线程死亡； 4.关闭CPU。 <br></p>
+<h3 id="finalfinallyfinalize的区别">final/finally/finalize的区别</h3>
+<h4 id="final">final</h4>
+<p>Java中，final关键字可以用来修饰类、方法和变量（包括成员变量和局部变量）</p>
+<ul>
+<li>当用final修饰一个类时，表明这个类不能被继承</li>
+<li>当final修饰一个类中的某个方法，这个类的子类不能重写覆盖这个被修饰的类，也就是说子类是不能够存在和父类一模一样的方法。</li>
+<li>final修饰变量，该变量表示常量，只能被赋值一次，赋值后值不能被修改。</li>
+</ul>
+<h4 id="finally">finally</h4>
+<p>在异常处理时提供finally块来执行清楚操作。论是否捕获或者处理异常，finally块里的语句都会被执行。当在try块或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。</p>
+<h4 id="finalize">finalize</h4>
+<p>是方法名。java技术允许使用finalize()方法在垃圾收集器将对象从内存中清除之前做必要的清理工作。这个方法是在垃圾收集器在确定了，被清理对象没有被引用的情况下调用的。</p>
+<p>finalize是在Object类中定义的，因此，所有的类都继承了它。子类可以覆盖finalize()方法，来整理系统资源或者执行其他清理工作。</p>
+<h3 id="hashmap">HashMap</h3>
+<h4 id="hashmap的特点">HashMap的特点</h4>
+<ul>
+<li>HashMap是基于哈希表的Map接口实现的。</li>
+<li>HashMap底层采用的是Entry数组和链表实现的。</li>
+<li>HashMap是采用key-value形式存储，其中key是可以允许为null，但是只能有一个，并且key不允许重复（如果重复则新值会覆盖旧值）。</li>
+<li>HashMap是线程不安全的。</li>
+<li>HashMap存入的顺序和遍历的顺序可能不一致（无序）。</li>
+<li>HashMap保存数据的时候通过计算key的hash值来决定存储的位置。</li>
+</ul>
+<h4 id="hashmap的工作原理是什么">HashMap的工作原理是什么？</h4>
+<p>HashMap是基于hashing的原理，我们使用put(key,
+value)存储对象到HashMap中，使用get(key)从HashMap中获取对象。当我们给put()方法传递键和值时，我们先对键调用hashCode()方法，计算并返回的hashCode是用于找到Map数组的bucket位置来储存Node
+对象。这里关键点在于指出，HashMap是在bucket中储存键对象和值对象，作为Map.Node
+。</p>
+<h4 id="hashmap源代码">HashMap源代码</h4>
+<p>要看HashMap的源代码，我们还是从HashMap的构造方法开始一步一步的讲解。</p>
+<blockquote>
+<p>小总结：可以看出HashMap构造的时候会初始化16个容量，并且负载因子是0.75。负载因子是什么呢？我们后面讲。</p>
+</blockquote>
+<p><img src="20190419001.jpg"></p>
+<blockquote>
+<p>小总结：这个构造方法没有什么可说的，只是多了些验证。在这里呢？构造方法就算初始化完毕了。</p>
+</blockquote>
+<p>我们知道HashMap最常用的方法也就是put方法了，那么下面我们就着重去探究一下put方法的实现原理，也就是对HashMap的一个透彻理解。</p>
+<figure>
+<img src="20190419002.jpg" alt="put方法注释说明">
+<figcaption aria-hidden="true">put方法注释说明</figcaption>
+</figure>
+<p><img src="20190419003.jpg"></p>
+<p>这段代码好好的研读，请仔细往下看：</p>
+<p><strong>第一步：</strong> 直接判断 table==EMPTY_TABLE
+，那么这个table是什么呢？看下图：</p>
+<p><img src="20190419004.jpg"></p>
+<p>那么这个Entry又是说什么东东呢？</p>
+<p><img src="20190419005.jpg"></p>
+<p>这个Entry是Map的一个静态内部类，里面最重要的属性有key、value和next三个属性值，在这里，我想大家已经猜到了，这个key和value是不是我们put的时候的key和value呢？答案是的，这个next又是干嘛用的呢？实际上这个Entry的的数据结构是一个单链表，这个next的属性的值还是这个Entry，表示的是当前的节点的下一个节点是哪个Entry。</p>
+<p>好啦，源代码看到这里，我们知道，在put方法中，直接判断table是否为null，那么很显然到目前为止我们的table肯定是为null的，那么继续看如果table为null则要执行的代码。看下图：</p>
+<p><img src="20190419006.jpg"></p>
+<p>哇塞，可以很直观的看到，我们实际上是初始化了一个Entry数组，而我们HashMap中的数据都是保存在了Entry[]里面了。</p>
+<blockquote>
+<p>小总结：HashMap其实就是一个线性的Entry数组，而在Entry这个对象中保存了key和value，至于Entry对象中的next的具体作用是干嘛的，稍等做介绍哦。</p>
+</blockquote>
+<p><strong>第二步：</strong>
+判断key是否为null。从这里可以看出，当判断key如果为null的话，并没有抛出什么异常错误，很显然HashMap是支持key为null的。那么就来看看key如果为null，会怎么处理呢？</p>
+<p><img src="20190419007.jpg"></p>
+<blockquote>
+<p>小总结：首先去循环遍历这个Entry数组，判断是否有key为null的情况，如果有则新值覆盖掉旧值。如果没有key为null的情况，则hash值为0，数据存储在这个Entry数组的第0个位置，也就是table[0]，具体方法可以查看addEntry方法，在这里呢，我就不再演示了。</p>
+</blockquote>
+<p><strong>第三步：</strong>
+通过hash方法对key进行计算hash散列值，并且根据这个散列值查找这个要保存的值应该存储到table这个数组中的哪个索引位置。</p>
+<p><img src="20190419008.jpg"></p>
+<p><strong>第四步：</strong>
+循环变量这个Entry数组，并且判断是否有重复的元素添加进去。</p>
+<p><img src="20190419009.jpg"></p>
+<blockquote>
+<p>小总结：当去变量这个Entry数组的时候，去判断两个Entry对象的key的hash是否相同则仅仅表示它们的存储位置是相同的，然后继续判断两个Entry的key是否相等或者equals是否相等，如果条件都满足，则表示要添加的元素，key已经重复，则直接将新值覆盖掉旧值，并且return返回，一旦条件不满足，则直接将添加的元素添加到Entry对象中。</p>
+</blockquote>
+<p>好啦，这个就是整个HashMap的底层原理。现在有的朋友可能会有产生这样的问题：如果计算的key的hash值相等，但是equals方法不相等，那么计算出来的要存储的位置不就冲突了吗？那么如果保存呢？</p>
+<p>解决：实际上这种担忧是有必要的，因为我们完全有可能就是说计算的key的hash值和另一个key的hash值是相等的，那么这个时候呢，如果key的equals方法又不相等，那么这个时候我要保存的value值应该存储到table中的哪个索引上呢？实际上，这种情况叫做hash冲突，学习过数据结构的朋友应该都知道，解决hash冲突的方法有很多，但是在Java中，解决冲突的办法是采用的是链表来解决的。还记得这个Entry的next属性吗？对了，这个next属性就是用来记录这个链表上的下一个Entry。</p>
+<p><img src="20190419010.jpg"></p>
+<blockquote>
+<p>HashMap的内容摘自<a href="http://baijiahao.baidu.com/s?id=1601416041995350500&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">http://baijiahao.baidu.com/s?id=1601416041995350500&amp;wfr=spider&amp;for=pc</a></p>
+</blockquote>
+<h3 id="volatile关键字的基本作用和原理">volatile关键字的基本作用和原理</h3>
+<p>volatile关键字可以实现线程间的可见性，之所以可以实现这一点，原因在于JVM会保证被volatile修饰的变量，在线程栈中被线程使用时都会主动从共享内存(堆内存/主内存)中以实时的方式同步一次；另一方面，如果线程在工作内存中修改了volatile修饰的变量，也会被JVM要求立马刷新到共享内存中去。因此，即便某个线程修改了该变量，其他线程也可以立马感知到变化从而实现可见性.</p>
+<p>未完待续...</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2019/04/08/Oracle的一些故障处理/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2018/03/03/Oracle存储过程的实现/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-03-26 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Java/">Java<span>6</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

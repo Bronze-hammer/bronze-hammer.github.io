@@ -1,0 +1,404 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>日常工作中Java.Stream流操作汇总 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="Java 8
+API添加了一个新的抽象称为流Stream，以一种声明的方式处理数据。Stream
+使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java
+集合运算和表达的高阶抽象。Stream
+API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。这种风格将要处理的元素集合看作一种流，
+流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选，
+排序，聚合等。元素流在管道中经过中间操作（intermediate
+operation）的处理，最后由最终操作(terminal
+operation)得到前面处理的结果。
+————《菜鸟教程》
+本片文章记录了工作中常用的Stream流操作，方便之后回顾。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="日常工作中Java.Stream流操作汇总">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 日常工作中Java.Stream流操作汇总</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>Java 8
+API添加了一个新的抽象称为流Stream，以一种声明的方式处理数据。Stream
+使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java
+集合运算和表达的高阶抽象。Stream
+API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。这种风格将要处理的元素集合看作一种流，
+流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选，
+排序，聚合等。元素流在管道中经过中间操作（intermediate
+operation）的处理，最后由最终操作(terminal
+operation)得到前面处理的结果。</p>
+<p>————《菜鸟教程》</p>
+<p>本片文章记录了工作中常用的Stream流操作，方便之后回顾。</p>
+<a id="more"></a>
+<h2 id="对list集合取user中的一个元素形成新的list集合">1.对List<user>集合，取User中的一个元素，形成新的List<string>集合</string></user></h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; userList;</span></span><br><span class="line">List&lt;String&gt; userNameList = userList.stream.map(User::getUserName).collect(Collectors.toList);</span><br></pre></td></tr></table></figure>
+<h2 id="去重">2.去重</h2>
+<p>对集合 List<user> userList 内的对象去重（实体类User 使用Lombok
+插件的@Data 注解，自动覆写 equals 和 hashCode 方法） <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; userList;</span></span><br><span class="line">List&lt;User&gt; newUserList = userList.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure></user></p>
+<h2 id="过滤">3.过滤</h2>
+<p>过滤集合 List&lt;SysOptionData&gt; optionDataList 对象label为
+"zhangsan" 的数据 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">"zhangsan"</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回过滤后的集合第一条数据</span></span><br><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">"zhangsan"</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).findFirst();</span><br></pre></td></tr></table></figure></p>
+<h2 id="list集合转string字符串">4.List集合转String字符串</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; 包含User实体的集合，只提取username拼成一个字符串，以“，”隔开</span></span><br><span class="line">String username = userList.stream().map(User::getUsername()).collect(Collectors.joining(<span class="string">","</span>));  </span><br><span class="line"></span><br><span class="line"><span class="comment">// List&lt;String&gt; usernameList</span></span><br><span class="line">String username = usernameList.stream().collect(Collectors.joining(<span class="string">","</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="匹配两个list集合返回新的list集合">5.匹配两个List集合，返回新的List集合</h2>
+<p>比如有两个集合，List&lt;User&gt;、 List&lt;Address&gt;</p>
+<p>List&lt;User&gt; 集合的数据</p>
+<table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>age</th>
+<th>address</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>zhangsan</td>
+<td>15</td>
+<td>null</td>
+</tr>
+<tr class="even">
+<td>tom</td>
+<td>16</td>
+<td>null</td>
+</tr>
+<tr class="odd">
+<td>jom</td>
+<td>20</td>
+<td>null</td>
+</tr>
+</tbody>
+</table>
+<p>List&lt;Address&gt; 集合的数据</p>
+<table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>address</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>zhangsan</td>
+<td>China</td>
+</tr>
+<tr class="even">
+<td>tom</td>
+<td>USA</td>
+</tr>
+<tr class="odd">
+<td>jary</td>
+<td>Japan</td>
+</tr>
+</tbody>
+</table>
+<p>对比着两个集合，以List&lt;User&gt;为主体，按照name字段匹配List&lt;Address&gt;集合，把匹配到的Address对象的address字段的值设置到User对象的address字段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; list = userList.stream()</span><br><span class="line">	.map(u -&gt; &#123;</span><br><span class="line">		<span class="keyword">return</span> addrList.stream()</span><br><span class="line">				.filter(a -&gt; &#123;</span><br><span class="line">					<span class="keyword">return</span> a.getName().equals(u.getName());</span><br><span class="line">				&#125;).map(a -&gt; &#123;</span><br><span class="line">					u.setAddress(a.getAddress());</span><br><span class="line">					<span class="keyword">return</span> u;</span><br><span class="line">				&#125;).collect(Collectors.toList());</span><br><span class="line">	&#125;)</span><br><span class="line">	.flatMap(List::stream)</span><br><span class="line">	.collect(Collectors.toList());</span><br><span class="line"><span class="keyword">for</span> (User user : list) &#123;</span><br><span class="line">	System.out.println(user.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User [name=zhangsan, age=15, address=China]</span><br><span class="line">User [name=tom, age=16, address=USA]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是，结果只会返回匹配到的数据</p>
+</blockquote>
+<h2 id="stream-map和flatmap的区别">6.Stream map和flatMap的区别</h2>
+<h3 id="stream.map">6.1 stream.map</h3>
+<p><em>Returns a stream consisting of the results of applying the
+givenfunction to the elements of this stream.</em></p>
+<p>返回一个流，由将给定函数应用于该流的元素的结果组成。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">nameList.stream().map(n -&gt; n + <span class="string">", welcome"</span>).forEach(e -&gt; System.out.println(e));</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZhangSan, welcome</span><br><span class="line">Tom, welcome</span><br></pre></td></tr></table></figure>
+<p>请注意另一种情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String[]&gt; list = nameList.stream().map(n -&gt; n.split(<span class="string">""</span>)).collect(Collectors.toList());</span><br><span class="line"><span class="keyword">for</span> (String[] strings : list) &#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strings.length; i++) &#123;</span><br><span class="line">		System.out.print(strings[i] + <span class="string">" "</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Z  h  a  n  g  S  a  n  </span><br><span class="line">T  o  m</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>map操作就是把一种操作运算，映射到一个序列的每一个元素上。以每个元素为一个单位，运算的结果也是相互独立的，所以返回的是List&lt;String[]&gt;，而不是List&lt;String&gt;</p>
+</blockquote>
+<h3 id="stream.flatmap">6.2 stream.flatMap</h3>
+<p><em>Returns a stream consisting of the results of replacing each
+element ofthis stream with the contents of a mapped stream produced by
+applyingthe provided mapping function to each element. Each mapped
+stream is closed after its contentshave been placed into this stream.
+(If a mapped stream is nullan empty stream is used, instead.)</em></p>
+<p>返回一个流，由将提供的映射函数应用到每个元素所产生的映射流的内容替换此流中的每个元素的结果组成。每个映射的流在其内容被放入该流后将被关闭。(如果映射流为null，则使用空流。)</p>
+<p><em>The flatMap() operation has the effect of applying a
+one-to-manytransformation to the elements of the stream, and then
+flattening theresulting elements into a new stream.</em></p>
+<p>flatMap()操作的效果是对流的元素应用一对多的转换，然后将产生的元素平铺成一个新的流。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String&gt; list = nameList.stream()</span><br><span class="line">		.map(n -&gt; n.split(<span class="string">""</span>))</span><br><span class="line">		.flatMap(e -&gt; Arrays.stream(e))</span><br><span class="line">		.collect(Collectors.toList());</span><br><span class="line">System.out.println(list.toString());</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Z, h, a, n, g, S, a, n, T, o, m]</span><br></pre></td></tr></table></figure>
+<h2 id="list集合转map">7.List集合转Map</h2>
+<p>List&lt;User&gt; 集合，设置 User.name
+作为Map的key，User对象作为value，转换为Map集合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, User&gt; userMap = userList.stream()</span><br><span class="line">	.collect(Collectors.toMap(User::getName, Function.identity()));</span><br></pre></td></tr></table></figure>
+<h2 id="针对list列表按照指定元素分组生成新的map集合">8.针对List列表，按照指定元素分组，生成新的Map集合</h2>
+<p>例如对下面List列表的数据做分组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> User(<span class="string">"zhangsan"</span>, <span class="number">12</span>, <span class="string">"Guangzhou"</span>);</span><br><span class="line"><span class="keyword">new</span> User(<span class="string">"lisi"</span>, <span class="number">13</span>, <span class="string">"Shenzhen"</span>);</span><br><span class="line"><span class="keyword">new</span> User(<span class="string">"tom"</span>, <span class="number">12</span>, <span class="string">"Beijing"</span>);</span><br></pre></td></tr></table></figure>
+<p>分组操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, List&lt;User&gt;&gt; map = userList.stream().collect(Collectors.groupingBy(User::getAge));</span><br></pre></td></tr></table></figure>
+<p>分组结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	12=[</span><br><span class="line">		User [name=zhangsan, age=12, address=Guangzhou], </span><br><span class="line">		User [name=tom, age=12, address=Beijing]</span><br><span class="line">	], </span><br><span class="line">	13=[</span><br><span class="line">		User [name=lisi, age=13, address=Shenzhen]</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/02/22/浅析Field-injection-is-not-recommended/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-02-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Java/">Java<span>6</span></a></li> <li><a href="/tags/Stream/">Stream<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

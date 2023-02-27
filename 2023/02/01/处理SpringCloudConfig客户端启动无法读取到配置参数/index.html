@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>处理SpringCloudConfig客户端启动无法读取到配置参数 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="自己部署了一个Spring Cloud微服务项目，实践Spring Cloud
+Config分布式配置组件，按照Spring Cloud Config 资料Config：Spring
+Cloud分布式配置组件 先后创建了Eureka注册中心服务、 Spring Cloud
+Config Server服务、 Spring Cloud Config Client客户端，在最后启动 Spring
+Client Config Client 客户端时，客户端始终无法访问 Config
+Server服务，读取上传在Gitee上的配置文件的内容。
+在Baidu、
+Google搜索了大量资料，问题是最终解决了，但是这其中的原因，还需要继续探讨。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="处理SpringCloudConfig客户端启动无法读取到配置参数">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 处理SpringCloudConfig客户端启动无法读取到配置参数</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>自己部署了一个Spring Cloud微服务项目，实践Spring Cloud
+Config分布式配置组件，按照Spring Cloud Config 资料<a href="http://c.biancheng.net/springcloud/config.html" target="_blank" rel="noopener">Config：Spring
+Cloud分布式配置组件</a> 先后创建了Eureka注册中心服务、 Spring Cloud
+Config Server服务、 Spring Cloud Config Client客户端，在最后启动 Spring
+Client Config Client 客户端时，客户端始终无法访问 Config
+Server服务，读取上传在Gitee上的配置文件的内容。</p>
+<p>在Baidu、
+Google搜索了大量资料，问题是最终解决了，但是这其中的原因，还需要继续探讨。</p>
+<a id="more"></a>
+<p>Eureka注册中心和Spring Cloud Config
+Server的配置内容就不多讲，可参考<a href="http://c.biancheng.net/springcloud/eureka.html" target="_blank" rel="noopener">Eureka：Spring
+Cloud服务注册与发现组件</a> 和<a href="http://c.biancheng.net/springcloud/config.html" target="_blank" rel="noopener">Config：Spring
+Cloud分布式配置组件</a>，启动了 Config Server
+服务，并用浏览器访问，上传在Gitee上的参数文件的内容是可以正常获取到的</p>
+<img src="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/微信截图_20230201175150.png">
+<p>我们重点说一下Spring Cloud Config Client的配置，yml文件配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 3355 #端口号</span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: spring-cloud-config-client #服务名</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      label: master #分支名称</span><br><span class="line">      name: application  #配置文件名称，application-dev.yml 中的 config</span><br><span class="line">      profile: dev  #环境名  application-dev.yml 中的 dev</span><br><span class="line">      #这里不要忘记添加 http:// 否则无法读取</span><br><span class="line">      uri: http://localhost:3344 #Spring Cloud Config 服务端（配置中心）地址</span><br><span class="line"></span><br><span class="line">eureka:</span><br><span class="line">  client: #将客户端注册到 eureka 服务列表内</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http://localhost:9900/eureka</span><br></pre></td></tr></table></figure>
+<p>新增Controller类，用于测试配置文件内容的读取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/config/client&quot;)</span><br><span class="line">public class ConfigClientController &#123;</span><br><span class="line"></span><br><span class="line">    @Value(&quot;$&#123;server.port&#125;&quot;)</span><br><span class="line">    private String serverPort;</span><br><span class="line"></span><br><span class="line">    @Value(&quot;$&#123;config.info&#125;&quot;)</span><br><span class="line">    private String configInfo;</span><br><span class="line"></span><br><span class="line">    @Value(&quot;$&#123;config.version&#125;&quot;)</span><br><span class="line">    private String configVersion;</span><br><span class="line"></span><br><span class="line">    @GetMapping(value = &quot;/getConfig&quot;)</span><br><span class="line">    public String getConfig() &#123;</span><br><span class="line">        return &quot;info：&quot; + configInfo + &quot;&lt;br/&gt;version：&quot; </span><br><span class="line">        	+ configVersion + &quot;&lt;br/&gt;port：&quot; + serverPort;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Spring Cloud Config Client客户端在启动的时候控制台报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder &apos;config.info&apos; in value &quot;$&#123;config.info&#125;&quot;</span><br><span class="line">	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:180) ~[spring-core-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:126) ~[spring-core-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:239) ~[spring-core-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:210) ~[spring-core-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:191) ~[spring-context-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:936) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1332) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:656) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:639) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399) ~[spring-beans-5.3.23.jar:5.3.23]</span><br><span class="line">	... 16 common frames omitted</span><br><span class="line"></span><br><span class="line">Disconnected from the target VM, address: &apos;127.0.0.1:54601&apos;, transport: &apos;socket&apos;</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></table></figure>
+<p>遂检查配置文件，对照资料教程看是不是自己写错了。在检查 Config Client
+模块的配置文件时发现，资料上创建的配置文件名称是
+<code>bootstrap.yml</code> 而非 <code>application.yml</code></p>
+<p>遂把配置文件名改为 bootstrap.yml，
+重新启动，发现没有报之前的错误了。但是服务也没有正常运行起来，而是直接停止了，控制台输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">2023-02-01 20:42:52.002  INFO 15096 --- [           main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30</span><br><span class="line">2023-02-01 20:42:52.005  INFO 15096 --- [           main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4</span><br><span class="line">2023-02-01 20:42:52.012  INFO 15096 --- [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1675255372011 with initial instances count: 2</span><br><span class="line">2023-02-01 20:42:52.015  INFO 15096 --- [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application SPRING-CLOUD-CONFIG-CLIENT with eureka with status UP</span><br><span class="line">2023-02-01 20:42:52.016  INFO 15096 --- [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1675255372016, current=UP, previous=STARTING]</span><br><span class="line">2023-02-01 20:42:52.018  INFO 15096 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355: registering service...</span><br><span class="line">2023-02-01 20:42:52.033  INFO 15096 --- [           main] c.s.c.ConfigClientApplication            : Started ConfigClientApplication in 10.224 seconds (JVM running for 10.92)</span><br><span class="line">2023-02-01 20:42:52.040  INFO 15096 --- [ionShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application SPRING-CLOUD-CONFIG-CLIENT with eureka with status DOWN</span><br><span class="line">2023-02-01 20:42:52.040  INFO 15096 --- [ionShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1675255372040, current=DOWN, previous=UP]</span><br><span class="line">2023-02-01 20:42:52.042  INFO 15096 --- [ionShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...</span><br><span class="line">2023-02-01 20:42:52.076  INFO 15096 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355 - registration status: 204</span><br><span class="line">2023-02-01 20:42:52.077  INFO 15096 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355: registering service...</span><br><span class="line">2023-02-01 20:42:52.080  INFO 15096 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355 - registration status: 204</span><br><span class="line">2023-02-01 20:42:52.081  INFO 15096 --- [ionShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...</span><br><span class="line">2023-02-01 20:42:52.085  INFO 15096 --- [ionShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355 - deregister  status: 200</span><br><span class="line">2023-02-01 20:42:52.091  INFO 15096 --- [ionShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient</span><br><span class="line">Disconnected from the target VM, address: &apos;127.0.0.1:58233&apos;, transport: &apos;socket&apos;</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>其中有一句
+<code>Registering application SPRING-CLOUD-CONFIG-CLIENT with eureka with status UP</code>，</p>
+<p>查询资料，在这篇文章<a href="https://blog.csdn.net/m0_57545353/article/details/125411539" target="_blank" rel="noopener">SpringCloud中Client向Eureka注册中心注册服务成功后不久就Unregistering（Unregistering
+application 服务名 with eureka with）</a>中有提出解决办法</p>
+<blockquote>
+<p>虽然 Config Client
+子模块依赖的父模块中，pom文件已经引入了spring-boot-web
+依赖，但是依旧要在 Config Client 子模块的pom文件上加上 spring-boot-web
+依赖 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; &lt;dependency&gt;</span><br><span class="line">&gt;   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">&gt;   &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">&gt; &lt;/dependency&gt;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>再次启动，服务启动成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">23-02-01 20:51:37.092  INFO 16848 --- [           main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4</span><br><span class="line">2023-02-01 20:51:37.098  INFO 16848 --- [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1675255897097 with initial instances count: 1</span><br><span class="line">2023-02-01 20:51:37.100  INFO 16848 --- [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application SPRING-CLOUD-CONFIG-CLIENT with eureka with status UP</span><br><span class="line">2023-02-01 20:51:37.100  INFO 16848 --- [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1675255897100, current=UP, previous=STARTING]</span><br><span class="line">2023-02-01 20:51:37.103  INFO 16848 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355: registering service...</span><br><span class="line">2023-02-01 20:51:37.138  INFO 16848 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 3355 (http) with context path &apos;&apos;</span><br><span class="line">2023-02-01 20:51:37.139  INFO 16848 --- [           main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 3355</span><br><span class="line">2023-02-01 20:51:37.164  INFO 16848 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SPRING-CLOUD-CONFIG-CLIENT/DESKTOP-A5PHDVG:spring-cloud-config-client:3355 - registration status: 204</span><br><span class="line">2023-02-01 20:51:38.241  INFO 16848 --- [           main] c.s.c.ConfigClientApplication            : Started ConfigClientApplication in 12.417 seconds (JVM running for 13.157)</span><br></pre></td></tr></table></figure>
+<p>Eureka注册中心</p>
+<img src="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/微信截图_20230201205231.png">
+<p>浏览器调用接口</p>
+<img src="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/微信截图_20230201205330.png">
+<p>那么，为什么Spring Cloud Config Client 的配置文件为什么要用
+bootstrap.yml， 而不是 application ？ 这里有一篇文章有说明<a href="https://www.cnblogs.com/frankcui/p/15256664.html" target="_blank" rel="noopener">SpringCloud
+Config - client连接server的设置写在application.yml,
+导致属性无法解析</a></p>
+<p>Bootstrap.yml (bootstrap.properties) 是在application.yml
+(application.properties)之前加载的。它通常用于“使用SpringCloud Config
+Server时，应在bootstrap.yml中指定spring.application.name和spring.cloud.config.server.git.uri”以及一些加密/解密信息。</p>
+<p>Spring
+Cloud会创建一个<code>Bootstrap Context</code>（由bootstrap.yml加载），作为Spring应用的<code>Application Context</code>（由application.yml加载）的父上下文。初始化的时候，<code>Bootstrap Context</code>负责从外部源加载配置属性并解析配置。这两个上下文共享一个从外部获取的<code>Environment</code>。<code>Bootstrap</code>属性有高优先级，默认情况下，它们不会被本地配置覆盖。</p>
+<p>例如，当使用SpringCloud
+Config时，通常从服务器加载“真正的”配置数据。为了获取URL（和其他连接配置，如密码等），您需要一个较早的或“bootstrap”配置。因此，您将配置服务器属性放在bootstrap.yml中，该属性用于加载实际配置数据（通常覆盖application.yml
+[如果存在]中的内容）。</p>
+<hr>
+<p>补充：</p>
+<p>在刚开始启动Spring Cloud Config Client 时，控制台提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Description:</span><br><span class="line"></span><br><span class="line">No spring.config.import property has been defined</span><br><span class="line"></span><br><span class="line">Action:</span><br><span class="line"></span><br><span class="line">Add a spring.config.import=configserver: property to your configuration.</span><br><span class="line">	If configuration is not required add spring.config.import=optional:configserver: instead.</span><br><span class="line">	To disable this check, set spring.cloud.config.enabled=false or </span><br><span class="line">	spring.cloud.config.import-check.enabled=false.</span><br><span class="line"></span><br><span class="line">Disconnected from the target VM, address: &apos;127.0.0.1:58966&apos;, transport: &apos;socket&apos;</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></table></figure>
+<p>stackoverflow上有篇文章<a href="https://stackoverflow.com/questions/67507452/no-spring-config-import-property-has-been-defined" target="_blank" rel="noopener">No
+spring.config.import property has been
+defined</a>中给出解决办法，在pom文件中加上依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-bootstrap&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/02/08/日常工作中Java-Stream流操作汇总/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-02-01 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Java/">Java<span>6</span></a></li> <li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

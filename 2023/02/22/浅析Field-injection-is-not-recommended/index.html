@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>浅析Field-injection-is-not-recommended | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="IDEA运行SpringBoot项目，遇到以下有关 @Autowired 注解的警告：Field injection is
+not recommended .
+这篇文章浅析这个问题，为什么会有这样的提示？为什么字段注入的方式不推荐？">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="浅析Field-injection-is-not-recommended">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 浅析Field-injection-is-not-recommended</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>IDEA运行SpringBoot项目，遇到以下有关 <span class="citation" data-cites="Autowired">@Autowired</span> 注解的警告：Field injection is
+not recommended .
+这篇文章浅析这个问题，为什么会有这样的提示？为什么字段注入的方式不推荐？</p>
+<a id="more"></a>
+<p>当前的 spring framework (5.0.3) 文档仅定义了两种主要的注入类型<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<blockquote>
+<p>DI exists in two major variants: Constructor-based dependency
+injection and Setter-based dependency injection.</p>
+</blockquote>
+<p>基于构造函数的依赖注入:在基于构造函数的依赖注入中，类构造函数被注释@Autowired并包含可变数量的参数以及要注入的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the SimpleMovieLister has a dependency on a MovieFinder</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// a constructor so that the Spring container can inject a MovieFinder</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleMovieLister</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// business logic that actually uses the injected MovieFinder is omitted...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基于构造函数的注入的主要优点是您可以将注入的字段声明为final，因为它们将在类实例化期间启动。这对于所需的依赖项很方便。</p>
+<p>基于Setter的依赖注入:在基于 setter 的依赖注入中，setter
+方法用@Autowired. 一旦使用无参数构造函数或无参数静态工厂方法实例化
+Bean，Spring 容器将调用这些 setter 方法以注入 Bean 的依赖项。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the SimpleMovieLister has a dependency on the MovieFinder</span></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// a setter method so that the Spring container can inject a MovieFinder</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMovieFinder</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// business logic that actually uses the injected MovieFinder is omitted...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但实际上还有第三种，也是被广泛应用的</p>
+<p>基于字段的依赖注入:在基于字段的依赖注入中，字段/属性用@Autowired.
+实例化类后，Spring 容器将设置这些字段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConstructorBasedInjection</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> InjectedBean injectedBean;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是注入依赖项的最简洁的方法，因为它避免了添加样板代码，并且无需为类声明构造函数。代码看起来不错，简洁明了，但正如代码检查员已经提示我们的那样，这种方法有一些缺点。</p>
+<p>那么为什么不推荐使用基于字段的依赖注入？</p>
+<h2 id="基于字段的依赖注入缺点2">基于字段的依赖注入缺点<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></h2>
+<h3 id="不允许不可变字段声明">不允许不可变字段声明</h3>
+<p>基于字段的依赖注入不适用于声明为 final/immutable
+的字段，因为这些字段必须在类实例化时实例化。声明不可变依赖项的唯一方法是使用基于构造函数的依赖项注入。</p>
+<h3 id="违反了单一责任原则">违反了单一责任原则</h3>
+<p>如您所知，在面向对象的计算机编程中，<a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="noopener">SOLID</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>首字母缩略词定义了五个设计原则，这些原则将使您的代码易于理解、灵活和可维护。SOLID中的S代表单一职责原则，这意味着一个类应该只负责软件应用程序功能的单个部分，并且它的所有服务都应该与该职责严格对齐。</p>
+<p>使用基于字段的依赖注入，很容易在你的类中有很多依赖，一切看起来都很好。如果改为使用基于构造函数的依赖注入，随着更多的依赖项被添加到你的类中，构造函数变得越来越大。拥有一个包含十个以上参数的构造函数是一个明显的标志，表明该类有太多协作者，这可能是开始将类拆分为更小且更易于维护的部分的好时机。</p>
+<blockquote>
+<p>这里要说明：基于构造函数依赖注入，并不说能够解决类里面的过多依赖的问题。而是说能够直观的提示我们：这个类被注入了太多的依赖，你该停下来，优化并拆分你的业务逻辑了！</p>
+</blockquote>
+<p>因此，尽管字段注入并不直接导致打破单一责任原则，但它肯定有助于隐藏信号，否则这些信号会非常明显。</p>
+<h3 id="与依赖注入容器紧密耦合">与依赖注入容器紧密耦合</h3>
+<p>使用基于字段的注入的主要原因是避免getter和setter的样板代码或为您的类创建构造函数。最后，这意味着可以设置这些字段的唯一方法是通过Spring容器实例化类并使用反射注入它们，否则字段将保持为
+null 并且您的类将被破坏/无用。</p>
+<p>依赖注入设计模式将类依赖的创建与类本身分开，将此责任转移到类注入器，允许程序设计松散耦合并遵循单一职责和依赖倒置原则（再次是SOLID）。因此，最终通过自动装配其字段实现的类解耦会因再次与类注入器（在本例中为
+Spring）耦合而丢失，从而使该类在 Spring 容器之外无用。</p>
+<p>这意味着如果你想在应用程序容器之外使用你的类，例如用于单元测试，你必须使用
+Spring
+容器来实例化你的类，因为没有其他可能的方法（除了反射）来设置自动装配的字段。</p>
+<h3 id="隐藏的依赖">隐藏的依赖</h3>
+<p>使用依赖注入模式时，受影响的类应该使用公共接口清楚地公开这些依赖关系，方法是在构造函数中公开所需的依赖关系，或者使用方法（setter）公开可选的依赖关系。当使用基于字段的依赖注入时，该类本质上将这些依赖隐藏到外部世界。</p>
+<h3 id="结论">结论</h3>
+<p>我们已经看到应该尽可能避免基于字段的注入，因为它有许多缺点，无论它看起来多么优雅。推荐的方法是使用基于构造函数和基于设置器的依赖注入。对于必需的依赖项，建议使用基于构造函数的注入，以允许它们不可变并防止它们为空。对于可选的依赖项，建议使用基于
+Setter 的注入。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>《Spring Framework Documentation 1.4.1. Dependency
+Injection》 <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-collaborators" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-collaborators</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>《Field injection is not recommended – Spring IOC》 <a href="https://blog.marcnuri.com/field-injection-is-not-recommended#eases-single-responsibility-principle-violation" target="_blank" rel="noopener">https://blog.marcnuri.com/field-injection-is-not-recommended#eases-single-responsibility-principle-violation</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>《Wiki SOLID》 <a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/SOLID</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/02/08/日常工作中Java-Stream流操作汇总/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-02-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Oracle存储过程的实现 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="Oracle存储过程是一组为了完成特定功能的SQL语句集，经编译后存储在数据库中。用户通过指定存储过程的名字并给出参数（是否给参数要看该存储过程定义的过程中是否设置了参数）来执行它。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Oracle存储过程的实现">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Oracle存储过程的实现</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>Oracle存储过程是一组为了完成特定功能的SQL语句集，经编译后存储在数据库中。用户通过指定存储过程的名字并给出参数（是否给参数要看该存储过程定义的过程中是否设置了参数）来执行它。</p>
+<a id="more"></a>
+<h4 id="准备工作">准备工作</h4>
+<p>创建一张测试表 <code>students</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> STUDENTS(</span><br><span class="line">  <span class="keyword">id</span>      <span class="built_in">VARCHAR2</span>(<span class="number">50</span>) <span class="keyword">default</span> sys_guid() <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  <span class="keyword">name</span>    <span class="built_in">VARCHAR2</span>(<span class="number">20</span>),</span><br><span class="line">  age     <span class="built_in">NUMBER</span>(<span class="number">4</span>,<span class="number">1</span>),</span><br><span class="line">  school  <span class="built_in">VARCHAR2</span>(<span class="number">100</span>),</span><br><span class="line">  grade   <span class="built_in">VARCHAR2</span>(<span class="number">50</span>),</span><br><span class="line">  address <span class="built_in">VARCHAR2</span>(<span class="number">500</span>),</span><br><span class="line">  remarks <span class="built_in">VARCHAR2</span>(<span class="number">500</span>),</span><br><span class="line">  ts      <span class="built_in">CHAR</span>(<span class="number">19</span>) <span class="keyword">default</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>插入一条测试数据。当然，也可以插入自己想插入的内容。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> STUDENTS (<span class="keyword">id</span>, <span class="keyword">name</span>, age, school, grade, address, remarks, ts)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>, <span class="string">'xiaoming'</span>, <span class="number">20</span>, <span class="string">'Changchun University of Architecture'</span>, <span class="string">'Junior'</span>, <span class="string">'Changchun, Jilin'</span>, <span class="literal">null</span>, <span class="string">'2019-06-12 11:07:57'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="第一个简单的存储过程">第一个简单的存储过程</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_school</span><br><span class="line"><span class="keyword">AS</span> school_name <span class="built_in">VARCHAR2</span>(<span class="number">100</span>);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> school <span class="keyword">INTO</span> school_name <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>;</span><br><span class="line">  dbms_output.put_line(school_name);</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>执行存储过程，可以在PLSQL对象中看到我们刚才新创建的存储过程，并且没有报错，代表编译成功。</p>
+<figure>
+<img src="TIM20190612114117.png" alt="简单的存储过程">
+<figcaption aria-hidden="true">简单的存储过程</figcaption>
+</figure>
+<p>执行存储过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> stu_school();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>调用时，"()"是必不可少的，无论是有参数还是无参数</p>
+</blockquote>
+<p>在SQL窗口输出页签中可以看到正确的输出内容</p>
+<figure>
+<img src="TIM20190612114535.png" alt="输出">
+<figcaption aria-hidden="true">输出</figcaption>
+</figure>
+<h3 id="四种存储过程">四种存储过程</h3>
+<p><strong>存储过程有一下四种情况</strong> - 无参数存储过程 -
+仅有输入参数存储过程 - 仅有输出参数存储过程 -
+既有输入又有输出存储过程</p>
+<p>下面将对这四种存储过程分别举例说明</p>
+<h4 id="无参数存储过程">无参数存储过程</h4>
+<p>无参数存储过程就如上面写的那个简单的存储过程，也可以这样写：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_school</span><br><span class="line"><span class="keyword">AS</span> school_name students.school%<span class="keyword">TYPE</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> school <span class="keyword">INTO</span> school_name <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>;</span><br><span class="line">  dbms_output.put_line(school_name);</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="仅有输入参数存储过程">仅有输入参数存储过程</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_address(stu_id <span class="keyword">IN</span> students.id%<span class="keyword">TYPE</span>)</span><br><span class="line"><span class="keyword">AS</span> addr students.address%<span class="keyword">TYPE</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> address <span class="keyword">INTO</span> addr <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=stu_id;</span><br><span class="line">  dbms_output.put_line(addr);</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>执行存储过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> stu_address(<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>);</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="TIM20190612121128.png" alt="仅有输入参数存储过程">
+<figcaption aria-hidden="true">仅有输入参数存储过程</figcaption>
+</figure>
+<h4 id="仅有输出参数存储过程">仅有输出参数存储过程</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_age(stu_age <span class="keyword">OUT</span> students.age%<span class="keyword">TYPE</span>)</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> age <span class="keyword">INTO</span> stu_age <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，此种存储过程不能直接通过call来调用，需要通过一下方式执行</p>
+<blockquote>
+<p>注意，如果通过这种方式执行存储过程，要记得在存储过程中添加输出语句，不然的话，纵然执行成功，也没有结果输出。
+<code>dbms_output.put_line(stu_age);</code></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">stuage students.age%<span class="keyword">TYPE</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  stu_age(stuage);</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>或者通过oracle函数调用带有输出参数的存储过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">FUNCTION</span> get_stuage(stuage <span class="keyword">OUT</span> <span class="built_in">NUMBER</span>) <span class="keyword">RETURN</span> <span class="built_in">NUMBER</span> <span class="keyword">IS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  stu_age(stuage);</span><br><span class="line">  RETURN stuage;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>执行函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">  stuage students.age%<span class="keyword">TYPE</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  dbms_output.put_line(<span class="string">'return result:'</span> || get_stuage(stuage));</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="既有输入又有输出参数的存储过程">既有输入又有输出参数的存储过程</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_name(stuid <span class="keyword">IN</span> students.id%<span class="keyword">TYPE</span>, stuname <span class="keyword">OUT</span> students.name%<span class="keyword">TYPE</span>)</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">  <span class="keyword">SELECT</span> <span class="keyword">NAME</span> <span class="keyword">INTO</span> stuname <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=stuid;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>新建存储函数调用存储过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">FUNCTION</span> get_stuname(stuid <span class="keyword">IN</span> students.id%<span class="keyword">TYPE</span>, stuname <span class="keyword">OUT</span> students.name%<span class="keyword">TYPE</span>) <span class="keyword">RETURN</span> <span class="built_in">VARCHAR2</span> <span class="keyword">IS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  stu_name(stuid, stuname);</span><br><span class="line">  RETURN stuname;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>执行函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">  stuname students.name%<span class="keyword">TYPE</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  dbms_output.put_line(<span class="string">'The student name is:'</span> || get_stuname(<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>, stuname));</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="java调用存储过程">Java调用存储过程</h3>
+<h4 id="java调用仅有输出参数的存储过程">Java调用仅有输出参数的存储过程</h4>
+<p>针对存储过程 <code>stu_age</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_age(stu_age <span class="keyword">OUT</span> students.age%<span class="keyword">TYPE</span>)</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> age <span class="keyword">INTO</span> stu_age <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=<span class="string">'8A17DE17428E45D6E0530100007FABEB'</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>Java代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnlyOutputProcedure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class.forName(DRVIER);</span><br><span class="line">        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);</span><br><span class="line">        String sql = <span class="string">"&#123;call stu_age(?)&#125;"</span>;</span><br><span class="line">        CallableStatement statement = connection.prepareCall(sql);</span><br><span class="line">        statement.registerOutParameter(<span class="number">1</span>, OracleTypes.NUMBER);</span><br><span class="line">        statement.execute();</span><br><span class="line">        System.out.println(statement.getInt(<span class="number">1</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="java调用既有输入参数又有输出参数的存储过程">Java调用既有输入参数又有输出参数的存储过程</h4>
+<p>针对存储过程 <code>stu_name</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">PROCEDURE</span> stu_name(stuid <span class="keyword">IN</span> students.id%<span class="keyword">TYPE</span>, stuname <span class="keyword">OUT</span> students.name%<span class="keyword">TYPE</span>)</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">SELECT</span> <span class="keyword">NAME</span> <span class="keyword">INTO</span> stuname <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> <span class="keyword">ID</span>=stuid;</span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>Java代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">InAndOutputProcedure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class.forName(DRVIER);</span><br><span class="line">        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);</span><br><span class="line">        String sql = <span class="string">"&#123;call stu_name(?,?)&#125;"</span>;</span><br><span class="line">        CallableStatement statement = connection.prepareCall(sql);</span><br><span class="line">        statement.setString(<span class="number">1</span>, <span class="string">"8A17DE17428E45D6E0530100007FABEB"</span>);</span><br><span class="line">        statement.registerOutParameter(<span class="number">2</span>, OracleTypes.VARCHAR);</span><br><span class="line">        statement.execute();</span><br><span class="line">        System.out.println(statement.getString(<span class="number">2</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>以上是有OUT输出参数的存储过程，Java在调用存储过程后还会获得存储过程返回的参数。那么如果存储过程没有OUT输出参数怎么办？</p>
+</blockquote>
+<h4 id="java调用仅有输入参数的存储过程">Java调用仅有输入参数的存储过程</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnlyInputProcedure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class.forName(DRVIER);</span><br><span class="line">        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);</span><br><span class="line">        String sql = <span class="string">"&#123;call stu_address(?)&#125;"</span>;</span><br><span class="line">        CallableStatement statement = connection.prepareCall(sql);</span><br><span class="line">        statement.setString(<span class="number">1</span>, <span class="string">"8A17DE17428E45D6E0530100007FABEB"</span>);</span><br><span class="line">        statement.execute();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="java调用无参的存储过程">Java调用无参的存储过程</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">NoParameterProcedure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class.forName(DRVIER);</span><br><span class="line">        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);</span><br><span class="line">        String sql = <span class="string">"&#123;call stu_school()&#125;"</span>;</span><br><span class="line">        CallableStatement statement = connection.prepareCall(sql);</span><br><span class="line">        statement.execute();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="java调用存储函数">Java调用存储函数</h3>
+<p>创建一个存储函数 <code>get_address</code> 调用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">function</span> get_address(stuid <span class="keyword">in</span> students.id%<span class="keyword">type</span>) <span class="keyword">return</span> <span class="built_in">varchar2</span> <span class="keyword">is</span></span><br><span class="line">stuaddress students.address%<span class="keyword">type</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">select</span> address <span class="keyword">into</span> stuaddress <span class="keyword">from</span> students <span class="keyword">where</span> <span class="keyword">id</span>=stuid;</span><br><span class="line">  return stuaddress;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<p>Java调用存储过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">NoParameterProcedure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class.forName(DRVIER);</span><br><span class="line">        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);</span><br><span class="line">        String sql = <span class="string">"&#123;?=call get_address(?)&#125;"</span>;</span><br><span class="line">        CallableStatement statement = connection.prepareCall(sql);</span><br><span class="line">        statement.registerOutParameter(<span class="number">1</span>, Types.VARCHAR);</span><br><span class="line">        statement.setString(<span class="number">2</span>, <span class="string">"8A17DE17428E45D6E0530100007FABEB"</span>);</span><br><span class="line">        statement.execute();</span><br><span class="line">        System.out.println(statement.getString(<span class="number">1</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有一个关于Oracle存储过程的PPT文档，供大家下载学习<a href="oracle存储过程.ppt">点击下载</a></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2019/03/26/Java基础知识小结/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2013/07/13/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-03-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/数据库/">数据库<span>8</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Oracle/">Oracle<span>3</span></a></li> <li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

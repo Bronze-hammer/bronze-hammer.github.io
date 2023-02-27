@@ -1,0 +1,675 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Page 2 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>Change Myself From Now ON.<span class="blink-fast">∎</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		Keep and carry on.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/04/26/MySQL事务/">MySQL事务</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-26  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>MySQL数据库事务是一组原子性的SQL单元，事务内的语句要么全部执行成功，要么全部执行失败。</p>
+<h3 id="事务的四个特性">事务的四个特性</h3>
+<ul>
+<li>原子性（Atomicity）
+事务必须是原子工作单元，事务中的操作要么全部执行成功，要么全部执行失败，不能只执行部分操作。</li>
+<li>一致性
+事务开始之前，数据库处于一致性的状态；事务结束后，数据库必须仍处于一致性状态。数据库一致性的定义是由用户负责的。例如，在银行转账中，用户可以定义转账前后两个账户金额之和保持不变。</li>
+<li>隔离性
+通常来说一个事务在修改时但还未提交，对其他事务是不可见的。</li>
+<li>持久性
+-一旦事务提交，则其所做的修改就会永久保存在数据库中。此时即使系统崩溃，修改的数据也不会丢失。</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2020/04/26/MySQL事务/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/04/14/Java多线程/">Java多线程</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-14  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>Java 给多线程编程提供了内置的支持。
+一条线程指的是进程中一个单一顺序的控制流，一个进程中可以并发多个线程，每条线程并行执行不同的任务。</p>
+<p>多线程是多任务的一种特别的形式，但多线程使用了更小的资源开销。</p>
+<p>这里定义和线程相关的另一个术语 -
+进程：一个进程包括由操作系统分配的内存空间，包含一个或多个线程。一个线程不能独立的存在，它必须是进程的一部分。一个进程一直运行，直到所有的非守护线程都结束运行后才能结束。</p>
+<p>多线程能满足程序员编写高效率的程序来达到充分利用 CPU 的目的。</p>
+	
+	</div>
+  <a type="button" href="/2020/04/14/Java多线程/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/">面试官邪魅一笑：MySQL千万级别大表，你要如何优化？</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>当MySQL单表记录数过大时，增删改查性能都会急剧下降，可以参考以下步骤来优化：</p>
+	
+	</div>
+  <a type="button" href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/04/02/vsftpd配置文件详解/">vsftpd配置文件详解</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>yum安装的vsftpd配置文件如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure></p>
+<p>1）以“#”字符开始的行是注释行。每一行为一个选项设置，格式为“option=value”，注意“=”号两边不能留空白符。
+2）除了这个主配置文件外，还可以给特定用户设定个人配置文件</p>
+	
+	</div>
+  <a type="button" href="/2020/04/02/vsftpd配置文件详解/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/">不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-26  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>文章来自 <a href="http://www.hollischuang.com/archives/4057" target="_blank" rel="noopener">Hollis</a></p>
+</blockquote>
+<p>数据库查询相信很多人都不陌生，所有经常有人调侃程序员就是CRUD专员，这所谓的CRUD指的就是数据库的增删改查。</p>
+<p>在数据库的增删改查操作中，使用最频繁的就是查询操作。而在所有查询操作中，统计数量操作更是经常被用到。</p>
+	
+	</div>
+  <a type="button" href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/23/Oracle索引/">Oracle索引</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-23  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。</p>
+<p>在没有创建索引之前，如果要按照用户名字段username全表查询一条用户数据，就要必须在全表都搜索一遍；在username上创建索引，Oracle会对全表进行一次搜索，将每条记录的username按照顺序排序，然后构建索引条目（name和rowid），存储到索引段中。在接下来查找username等于某个值时即可直接查找到相应的地方。</p>
+	
+	</div>
+  <a type="button" href="/2020/03/23/Oracle索引/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/05/28/理解线程安全/">理解线程安全</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>转自<a href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q" target="_blank" rel="noopener">编程新说李新杰</a></p>
+</blockquote>
+<h3 id="不是线程的安全">不是线程的安全</h3>
+<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
+<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
+<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
+<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
+<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
+<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
+<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
+<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
+<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
+<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
+<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
+	
+	</div>
+  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/04/28/单例模式的7种写法/">单例模式的7种写法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>文章转自公众号<a href="https://mp.weixin.qq.com/s/zXhvdF9inUDkqwCrrBt_Cg" target="_blank" rel="noopener">无敌码农 |
+谁要是再问你单例模式，那就抛给他这7种写法吧！</a></p>
+</blockquote>
+<p>单例设计模式是23种设计模式中，最基础也是最常用的设计模式之一，也是面试中关于设计模式知识点考察比较高频的问题之一。说起单例模式的写法，大多数情况下出现在我们脑海中的可能就是“饿汉式”，“懒汉式”这两种写法，但是今天小码哥今天要介绍的是单例模式的7种写法，以后面试官要是再问你单例模式，那就抛给他这七种写法吧！</p>
+	
+	</div>
+  <a type="button" href="/2019/04/28/单例模式的7种写法/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/04/28/Linux定时任务/">Linux定时任务</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>文章转自 <a href="https://www.runoob.com/w3cnote/linux-crontab-tasks.html" target="_blank" rel="noopener">菜鸟教程</a></p>
+</blockquote>
+<p>inux内置的cron进程能帮我们实现这些需求，cron搭配shell脚本，非常复杂的指令也没有问题。</p>
+<h3 id="cron介绍">cron介绍</h3>
+<p>我们经常使用的是crontab命令是cron
+table的简写，它是cron的配置文件，也可以叫它作业列表，我们可以在以下文件夹内找到相关配置文件。</p>
+<ul>
+<li>/var/spool/cron/
+目录下存放的是每个用户包括root的crontab任务，每个任务以创建者的名字命名</li>
+<li>/etc/crontab 这个文件负责调度各种管理和维护任务。</li>
+<li>/etc/cron.d/ 这个目录用来存放任何要执行的crontab文件或脚本。</li>
+<li>我们还可以把脚本放在/etc/cron.hourly、/etc/cron.daily、/etc/cron.weekly、/etc/cron.monthly目录中，让它每小时/天/星期、月执行一次。</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2019/04/28/Linux定时任务/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/04/08/Oracle的一些故障处理/">Oracle的一些故障处理</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-08  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>这里汇总了一些在使用Oracle过程中遇到的问题及解决办法，一方面做为笔记帮助自己以后更快速处理问题，一方面分享处理供大家互相学习。</p>
+	
+	</div>
+  <a type="button" href="/2019/04/08/Oracle的一些故障处理/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/3/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			
+	<div class="widget">
+		<h4>Categories</h4>
+		<ul class="tag_box inline list-unstyled">
+		
+			<li><a href="/categories/Linux/">Linux<span>2</span></a></li>
+		
+			<li><a href="/categories/兴趣使然/">兴趣使然<span>1</span></a></li>
+		
+			<li><a href="/categories/升级之路/">升级之路<span>1</span></a></li>
+		
+			<li><a href="/categories/工具/">工具<span>1</span></a></li>
+		
+			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
+		
+			<li><a href="/categories/数据库/">数据库<span>8</span></a></li>
+		
+			<li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+		
+		</ul>
+	</div>
+
+		
+			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/hello/">hello<span>1</span></a></li>
+		
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+		
+			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+		
+			<li><a href="/tags/world/">world<span>1</span></a></li>
+		
+			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
+		
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+		
+			<li><a href="/tags/接口/">接口<span>1</span></a></li>
+		
+			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
+		
+			<li><a href="/tags/线程/">线程<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
+		
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+		
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
+		
+			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
+		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
+		
+			<li><a href="/tags/MySQL/">MySQL<span>4</span></a></li>
+		
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
+		
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+		
+			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+		
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>31</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2023/02/22/浅析Field-injection-is-not-recommended/"><i class="fa fa-file-o"></i>浅析Field-injection-is-not-re...</a>
+      </li>
+    
+      <li>
+        <a href="/2023/02/08/日常工作中Java-Stream流操作汇总/"><i class="fa fa-file-o"></i>日常工作中Java.Stream流操作汇总</a>
+      </li>
+    
+      <li>
+        <a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/"><i class="fa fa-file-o"></i>处理SpringCloudConfig客户端启动无法读...</a>
+      </li>
+    
+      <li>
+        <a href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/"><i class="fa fa-file-o"></i>Arrays.asList()生成的对象不能执行add...</a>
+      </li>
+    
+      <li>
+        <a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/"><i class="fa fa-file-o"></i>关于《软件设计师教程第5版》UML构件图两类接口描述错...</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank" ]);">My Github</a></li>
+	
+		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank" ]);">My CSDN</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

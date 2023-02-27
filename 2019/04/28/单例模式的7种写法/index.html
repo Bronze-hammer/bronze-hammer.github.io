@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>单例模式的7种写法 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="文章转自公众号无敌码农 |
+谁要是再问你单例模式，那就抛给他这7种写法吧！
+
+单例设计模式是23种设计模式中，最基础也是最常用的设计模式之一，也是面试中关于设计模式知识点考察比较高频的问题之一。说起单例模式的写法，大多数情况下出现在我们脑海中的可能就是“饿汉式”，“懒汉式”这两种写法，但是今天小码哥今天要介绍的是单例模式的7种写法，以后面试官要是再问你单例模式，那就抛给他这七种写法吧！">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="单例模式的7种写法">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 单例模式的7种写法</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <blockquote>
+<p>文章转自公众号<a href="https://mp.weixin.qq.com/s/zXhvdF9inUDkqwCrrBt_Cg" target="_blank" rel="noopener">无敌码农 |
+谁要是再问你单例模式，那就抛给他这7种写法吧！</a></p>
+</blockquote>
+<p>单例设计模式是23种设计模式中，最基础也是最常用的设计模式之一，也是面试中关于设计模式知识点考察比较高频的问题之一。说起单例模式的写法，大多数情况下出现在我们脑海中的可能就是“饿汉式”，“懒汉式”这两种写法，但是今天小码哥今天要介绍的是单例模式的7种写法，以后面试官要是再问你单例模式，那就抛给他这七种写法吧！</p>
+<a id="more"></a>
+<p>接下来，我们就言归正传，来一一介绍这七种单例模式的写法吧！</p>
+<h3 id="饿汉式">饿汉式</h3>
+<p>饿汉式是单例模式设计中比较经典的实现方式。实现代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonEhangshi</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//在定义实例对象时直接初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleTonEhangshi instance = <span class="keyword">new</span> SingleTonEhangshi();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造函数，不允许外部NEW</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonEhangshi</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonEhangshi <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>饿汉式的实现关键在于instance作为类变量直接得到了初始化，如果我们主动使用SingleToEhangshi类，那么instance实例将会直接完成创建，包括其中的实例变量也都会得到初始化。</p>
+<p>instance作为类变量，在类初始化的过程中会被收集进&lt;clinit&gt;()方法中，而该方法是可以100%地保证同步，也就是说instance在多线程的情况下不可能被初始化两次。但是由于instance被ClassLoader加载后很长一段时间才被使用的话，那就会意味着instance实例所开辟的堆内存会驻留很长的时间。</p>
+<p>总体说来，如果一个类中的成员变量比较少，且占用的内存资源也不多，用饿汉式的方式实现单例模式也未尝不可，只是其无法进行懒加载。</p>
+<h3 id="懒汉式">懒汉式</h3>
+<p>所谓懒汉式就是在使用类实例的时候再去创建，也就是说用到的时候我再创建，这样就可以避免类在初始化的时候提前创建过早地占用内存空间。实现代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonLhangshi</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义实例，但是不直接初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleTonLhangshi instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造函数，不允许外部NEW</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonLhangshi</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTonLhangshi <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingleTonLhangshi();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类变量instance=null,因此当类被初始化的时候instance并不会立刻被实例化，而是在getInstance()方法被调用时判断instance实例是否被实例化，如果没有实例化在调用私有构造方法进行实例化操作。</p>
+<p>懒汉式写法在多线程环境下，会存在同一时间多个线程同时看到null==instance的情况，从而导致instance会被实例化多次，从而无法保证单例的唯一性。</p>
+<h3 id="懒汉式同步方法">懒汉式＋同步方法</h3>
+<p>懒汉式的单例实现方式可以保证实例的懒加载，但是却无法保证实例的唯一性。在多线程环境下由于instance为共享数据，当多个线程访问使用时，需要保证数据的同步性，所以如果需要保证懒汉式实例的唯一性，我们可以通过同步的方式来实现。代码如下：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleTonLhangshiSync</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义实例，但是不直接初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleTonLhangshiSync instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造函数，不允许外部NEW</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTonLhangshiSync</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向getInstance方法加入同步控制，每次只能有一个线程能够进入</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SingleTonLhangshiSync <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingleTonLhangshiSync();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>采用懒汉式＋数据同步的方法既满足了懒加载又能够100%保证instance实例的唯一性。但是，synchronized关键字的排它性会导致getInstance()方法同一时刻只能被一个线程访问，性能会比较低下。</p>
+<h3 id="double-check">Double-Check</h3>
+<p>Double-Check是一种比较聪明的设计方式，它提供了一种高效的数据同步策略，那就是首次初始化的时候加锁，之后则允许多个线程同时进行getInstance()方法的调用来获得类的实例。代码如下：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义实例，但是不直接初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDoubleCheck instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    Connection con;</span><br><span class="line">    Socket socket;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造函数，不允许外部NEW</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">(Connection con, Socket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.con = con;<span class="comment">//初始化</span></span><br><span class="line">        <span class="keyword">this</span>.socket = socket;<span class="comment">//初始化</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//当instance为null时，进入同步代码块，同时该判断避免了每次都需要进入同步代码块，可以提高效率</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">            <span class="comment">//只有一个线程能够获得SingletonDoubleCheck.class关联的monitor</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDoubleCheck<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                <span class="comment">//判断如果instance为null则创建</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonDoubleCheck();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当两个线程发现null==instance成立时，只有一个线程有资格进入同步代码块，完成对instance的初始化，随后的线程发现null==instance不成立则无须进行任何操作，以后对getInstance的访问就不会再需要进行数据同步了。</p>
+<p>此种方式看起来是既满足了懒加载，又保证了instance实例的唯一性，并且还提供了比较高效的数据同步策略，可以允许多个线程同时对getInstance进行访问。但是这种方式在多线程的情况下，可能会引起空指针异常，这是因为如果在如上代码的构造方法中还存在初始化其他资源的情况的话，由于JVM运行时存在指令重排的情况，这些资源在实例化时顺序并无前后关系的约束，那么在这种情况下，就极有可能是instance最先被实例化，而con和socket并未完成实例化，而未完成实例化的实例在调用其方法时将会抛出空指针异常。</p>
+<h3 id="volatiledouble-check">Volatile+Double-Check</h3>
+<p>为了解决Double-Check指令重排导致的空指针问题，可以用volatile关键字防止这种重排序的发生。因此代码只需要稍作修改就能满足多线程下的单例、懒加载以及实例的高效性了。代码如下：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义实例，但是不直接初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    Connection con;</span><br><span class="line">    Socket socket;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造函数，不允许外部NEW</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">(Connection con, Socket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.con = con;<span class="comment">//初始化</span></span><br><span class="line">        <span class="keyword">this</span>.socket = socket;<span class="comment">//初始化</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//当instance为null时，进入同步代码块，同时该判断避免了每次都需要进入同步代码块，可以提高效率</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">            <span class="comment">//只有一个线程能够获得SingletonDoubleCheck.class关联的monitor</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDoubleCheck<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                <span class="comment">//判断如果instance为null则创建</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonDoubleCheck();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="holder方式">Holder方式</h3>
+<p>Holder方式完全借助了类加载的特点。代码如下： <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不允许被继承</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonHolder</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//在静态内部类中持有单例类的实例，并且可直接被初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> SingletonHolder instance = <span class="keyword">new</span> SingletonHolder();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//调用getInstance方法，事实上是获得Holder的instance静态属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonHolder <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Holder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在单例类中并没有instance的静态成员，而是将其放到了静态内部类Holder之中，因此单例类在初始化的过程中并不会创建SingletonHolder的实例，内部类Holder中定义了SingletonHolder的静态变量，并且直接进行了实例化，只有当Holder被主动引用的时候才会创建SingletonHolder的实例。</p>
+<p>SingletonHolder实例的创建过程在Java程序编译时期收集至&lt;clinit&gt;()方法中，该方法又是同步方法，可以保证内存的可见性、JVM指令的顺序性和原子性。Holder方式的单例模式设计是最好的设计之一，也是目前使用比较广的设计。</p>
+<h3 id="枚举方式">枚举方式</h3>
+<p>枚举方式在很多开源框架中也应用得比较广泛，枚举类型不允许被继承，同样是线程安全的，并且只能被实例化一次，但是枚举类型不能够实现懒加载。用枚举类型，实现单例模式的代码如下：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonEnum</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实例变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonEnum</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用枚举充当Holder</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">enum</span> EnumHolder &#123;</span><br><span class="line">        INSTANCE;</span><br><span class="line">        <span class="keyword">private</span> SingletonEnum instance;</span><br><span class="line"></span><br><span class="line">        EnumHolder() &#123;</span><br><span class="line">            <span class="keyword">this</span>.instance = <span class="keyword">new</span> SingletonEnum();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> SingletonEnum <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> instance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonEnum <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> EnumHolder.INSTANCE.getInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上就是要给大家介绍的单例模式的7种写法了，虽然单例模式非常简单，但是在多线程的情况下，我们之前所设计的单例程序未必能够满足单实例、懒加载以及高性能的特点。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2019/05/28/理解线程安全/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/04/28/Linux定时任务/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-04-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Java/">Java<span>6</span></a></li> <li><a href="/tags/单例模式/">单例模式<span>1</span></a></li> <li><a href="/tags/设计模式/">设计模式<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
