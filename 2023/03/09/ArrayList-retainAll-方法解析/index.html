@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>ArrayList.retainAll()方法解析 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="在工作中，用java.util.ArrayList.retainAll(Collection&amp;lt;?&amp;gt;)方法判断两个list集合是否有交集（两个list是否有相同的元素）。如果两个集合有相同元素，那么retainAll返回true。但是如果两个集合的元素完全相同，返回的结果却是false,而如果两个list集合的元素都不一样，retainAll却返回true。
+这是怎么回事呢？">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ArrayList.retainAll()方法解析">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> ArrayList.retainAll()方法解析</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>在工作中，用java.util.ArrayList.retainAll(Collection&lt;?&gt;)方法判断两个list集合是否有交集（两个list是否有相同的元素）。如果两个集合有相同元素，那么retainAll返回true。但是如果两个集合的元素完全相同，返回的结果却是false,而如果两个list集合的元素都不一样，retainAll却返回true。
+这是怎么回事呢？</p>
+<a id="more"></a>
+<p>先来看看<code>ArrayList.retainAll(Collection&lt;?&gt;)</code>
+源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Retains only the elements in this list that are contained in the</span></span><br><span class="line"><span class="comment"> * specified collection.  In other words, removes from this list all</span></span><br><span class="line"><span class="comment"> * of its elements that are not contained in the specified collection.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> c collection containing elements to be retained in this list</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if this list changed as a result of the call</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ClassCastException if the class of an element of this list</span></span><br><span class="line"><span class="comment"> *         is incompatible with the specified collection</span></span><br><span class="line"><span class="comment"> * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if this list contains a null element and the</span></span><br><span class="line"><span class="comment"> *         specified collection does not permit null elements</span></span><br><span class="line"><span class="comment"> * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;),</span></span><br><span class="line"><span class="comment"> *         or if the specified collection is null</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> Collection#contains(Object)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(c);</span><br><span class="line">    <span class="keyword">return</span> batchRemove(c, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">batchRemove</span><span class="params">(Collection&lt;?&gt; c, <span class="keyword">boolean</span> complement)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Object[] elementData = <span class="keyword">this</span>.elementData;</span><br><span class="line">    <span class="keyword">int</span> r = <span class="number">0</span>, w = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> modified = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (; r &lt; size; r++)</span><br><span class="line">            <span class="keyword">if</span> (c.contains(elementData[r]) == complement)</span><br><span class="line">                elementData[w++] = elementData[r];</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// Preserve behavioral compatibility with AbstractCollection,</span></span><br><span class="line">        <span class="comment">// even if c.contains() throws.</span></span><br><span class="line">        <span class="keyword">if</span> (r != size) &#123;</span><br><span class="line">            System.arraycopy(elementData, r,</span><br><span class="line">                             elementData, w,</span><br><span class="line">                             size - r);</span><br><span class="line">            w += size - r;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (w != size) &#123;</span><br><span class="line">            <span class="comment">// clear to let GC do its work</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = w; i &lt; size; i++)</span><br><span class="line">                elementData[i] = <span class="keyword">null</span>;</span><br><span class="line">            modCount += size - w;</span><br><span class="line">            size = w;</span><br><span class="line">            modified = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> modified;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>retainAll注释的第一句已经基本交代了方法的功能</p>
+<blockquote>
+<p>Retains only the elements in this list that are contained in the
+specified collection. In other words, removes from this list all of its
+elements that are not contained in the specified collection.</p>
+<p>仅保留此列表中包含在指定集合中的元素。换句话说，从此列表中删除未包含在指定集合中的所有元素。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (; r &lt; size; r++)</span><br><span class="line">	<span class="keyword">if</span> (c.contains(elementData[r]) == complement)</span><br><span class="line">		elementData[w++] = elementData[r];</span><br></pre></td></tr></table></figure>
+<p>遍历此列表 <code>elementData</code> 中的元素，判断是否与
+<code>c</code>集合有相同元素，把相同的元素覆盖在此列表的第一个地址上，以此类推。以<code>w</code>
+记录相同元素的个数。</p>
+<p>回到刚开始的问题上，为什么两个集合的元素都一样，结果返回 false，
+两个集合元素都不一样，结果返回 true 呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (w != size) &#123;</span><br><span class="line">    <span class="comment">// clear to let GC do its work</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = w; i &lt; size; i++)</span><br><span class="line">        elementData[i] = <span class="keyword">null</span>;</span><br><span class="line">    modCount += size - w;</span><br><span class="line">    size = w;</span><br><span class="line">    modified = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果两个集合的元素完全一样，<code>w == size</code>，这样会跳过判断，直接返回
+modified 的初始值 false;
+如果两个集合的元素都不一样，<code>w != size</code>满足条件，modified
+被赋值为true，返回结果即为true。</p>
+<p>所以单纯用ArrayList.retainAll()方法，根据返回值true/false,判断两个集合是否有相同元素，是不准确的。</p>
+<p>可以使用另一个方法
+<code>java.util.Collections.disjoint(Collection&lt;?&gt; c1, Collection&lt;?&gt; c2)</code>，两个指定collection中没有相同的元素，则返回true。如果其中一个集合为null，则抛出NullPointerException。</p>
+<p>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns &#123;<span class="doctag">@code</span> true&#125; if the two specified collections have no</span></span><br><span class="line"><span class="comment"> * elements in common.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Care must be exercised if this method is used on collections that</span></span><br><span class="line"><span class="comment"> * do not comply with the general contract for &#123;<span class="doctag">@code</span> Collection&#125;.</span></span><br><span class="line"><span class="comment"> * Implementations may elect to iterate over either collection and test</span></span><br><span class="line"><span class="comment"> * for containment in the other collection (or to perform any equivalent</span></span><br><span class="line"><span class="comment"> * computation).  If either collection uses a nonstandard equality test</span></span><br><span class="line"><span class="comment"> * (as does a &#123;<span class="doctag">@link</span> SortedSet&#125; whose ordering is not &lt;em&gt;compatible with</span></span><br><span class="line"><span class="comment"> * equals&lt;/em&gt;, or the key set of an &#123;<span class="doctag">@link</span> IdentityHashMap&#125;), both</span></span><br><span class="line"><span class="comment"> * collections must use the same nonstandard equality test, or the</span></span><br><span class="line"><span class="comment"> * result of this method is undefined.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Care must also be exercised when using collections that have</span></span><br><span class="line"><span class="comment"> * restrictions on the elements that they may contain. Collection</span></span><br><span class="line"><span class="comment"> * implementations are allowed to throw exceptions for any operation</span></span><br><span class="line"><span class="comment"> * involving elements they deem ineligible. For absolute safety the</span></span><br><span class="line"><span class="comment"> * specified collections should contain only elements which are</span></span><br><span class="line"><span class="comment"> * eligible elements for both collections.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Note that it is permissible to pass the same collection in both</span></span><br><span class="line"><span class="comment"> * parameters, in which case the method will return &#123;<span class="doctag">@code</span> true&#125; if and</span></span><br><span class="line"><span class="comment"> * only if the collection is empty.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> c1 a collection</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> c2 a collection</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if the two specified collections have no</span></span><br><span class="line"><span class="comment"> * elements in common.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if either collection is &#123;<span class="doctag">@code</span> null&#125;.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if one collection contains a &#123;<span class="doctag">@code</span> null&#125;</span></span><br><span class="line"><span class="comment"> * element and &#123;<span class="doctag">@code</span> null&#125; is not an eligible element for the other collection.</span></span><br><span class="line"><span class="comment"> * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ClassCastException if one collection contains an element that is</span></span><br><span class="line"><span class="comment"> * of a type which is ineligible for the other collection.</span></span><br><span class="line"><span class="comment"> * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.5</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">disjoint</span><span class="params">(Collection&lt;?&gt; c1, Collection&lt;?&gt; c2)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// The collection to be used for contains(). Preference is given to</span></span><br><span class="line">    <span class="comment">// the collection who's contains() has lower O() complexity.</span></span><br><span class="line">    Collection&lt;?&gt; contains = c2;</span><br><span class="line">    <span class="comment">// The collection to be iterated. If the collections' contains() impl</span></span><br><span class="line">    <span class="comment">// are of different O() complexity, the collection with slower</span></span><br><span class="line">    <span class="comment">// contains() will be used for iteration. For collections who's</span></span><br><span class="line">    <span class="comment">// contains() are of the same complexity then best performance is</span></span><br><span class="line">    <span class="comment">// achieved by iterating the smaller collection.</span></span><br><span class="line">    Collection&lt;?&gt; iterate = c1;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Performance optimization cases. The heuristics:</span></span><br><span class="line">    <span class="comment">//   1. Generally iterate over c1.</span></span><br><span class="line">    <span class="comment">//   2. If c1 is a Set then iterate over c2.</span></span><br><span class="line">    <span class="comment">//   3. If either collection is empty then result is always true.</span></span><br><span class="line">    <span class="comment">//   4. Iterate over the smaller Collection.</span></span><br><span class="line">    <span class="keyword">if</span> (c1 <span class="keyword">instanceof</span> Set) &#123;</span><br><span class="line">        <span class="comment">// Use c1 for contains as a Set's contains() is expected to perform</span></span><br><span class="line">        <span class="comment">// better than O(N/2)</span></span><br><span class="line">        iterate = c2;</span><br><span class="line">        contains = c1;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(c2 <span class="keyword">instanceof</span> Set)) &#123;</span><br><span class="line">        <span class="comment">// Both are mere Collections. Iterate over smaller collection.</span></span><br><span class="line">        <span class="comment">// Example: If c1 contains 3 elements and c2 contains 50 elements and</span></span><br><span class="line">        <span class="comment">// assuming contains() requires ceiling(N/2) comparisons then</span></span><br><span class="line">        <span class="comment">// checking for all c1 elements in c2 would require 75 comparisons</span></span><br><span class="line">        <span class="comment">// (3 * ceiling(50/2)) vs. checking all c2 elements in c1 requiring</span></span><br><span class="line">        <span class="comment">// 100 comparisons (50 * ceiling(3/2)).</span></span><br><span class="line">        <span class="keyword">int</span> c1size = c1.size();</span><br><span class="line">        <span class="keyword">int</span> c2size = c2.size();</span><br><span class="line">        <span class="keyword">if</span> (c1size == <span class="number">0</span> || c2size == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// At least one collection is empty. Nothing will match.</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (c1size &gt; c2size) &#123;</span><br><span class="line">            iterate = c2;</span><br><span class="line">            contains = c1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Object e : iterate) &#123;</span><br><span class="line">        <span class="keyword">if</span> (contains.contains(e)) &#123;</span><br><span class="line">           <span class="comment">// Found a common element. Collections are not disjoint.</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// No common elements were found.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/02/22/浅析Field-injection-is-not-recommended/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-03-09 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>1</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li> <li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
