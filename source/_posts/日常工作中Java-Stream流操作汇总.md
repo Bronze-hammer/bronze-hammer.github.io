@@ -192,7 +192,7 @@ Map<String, User> userMap = userList.stream()
 
 例如对下面List列表的数据做分组
 
-```java
+```
 new User("zhangsan", 12, "Guangzhou");
 new User("lisi", 13, "Shenzhen");
 new User("tom", 12, "Beijing");
@@ -216,4 +216,34 @@ Map<Integer, List<User>> map = userList.stream().collect(Collectors.groupingBy(U
 		User [name=lisi, age=13, address=Shenzhen]
 	]
 }
+```
+
+## 9.根据指定元素去重
+
+第1部分已经介绍了`distinct`去重方法，但是这种方法只能针对整个对象去重，如果想只根据对象中的某几个元素去重，可以通过下面的方法
+
+```
+User(name=zhangsan, sex=man, ages=1)
+User(name=zhangsan, sex=man, ages=2)
+User(name=lisi, sex=woman, ages=3)
+User(name=wanger, sex=man, ages=4)
+```
+
+如果只根据name和sex去重
+
+```java
+userList.stream().collect(
+    Collectors.collectingAndThen(
+        Collectors.toCollection(() -> new TreeSet<>(
+        	Comparator.comparing(p -> p.getName()+";"+p.getSex()))
+        ) , ArrayList::new)
+).forEach(System.out::println);
+```
+
+结果：
+
+```
+User(name=lisi, sex=woman, ages=3)
+User(name=wanger, sex=man, ages=4)
+User(name=zhangsan, sex=man, ages=1)
 ```
