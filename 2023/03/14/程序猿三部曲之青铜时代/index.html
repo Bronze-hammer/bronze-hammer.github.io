@@ -415,6 +415,86 @@ CUP
 <p>当缓存达到指定值之后，不淘汰任何缓存，而是不能新增缓存，直到有缓存淘汰时，才能继续添加缓存。</p>
 <p>参考资料：<a href="https://zhuanlan.zhihu.com/p/82074159" target="_blank" rel="noopener">实现 Java
 本地缓存，该从这几点开始</a></p>
+<h1 id="exception和error的区别">8 Exception和Error的区别</h1>
+<p>Exception和Error都继承了Throwable类。</p>
+<p>Exception
+是程序正常运行中，可以预料的意外情况，可能并且应该被捕获，进行相应处理；Error
+是指在正常情况下，不大可能出现的情况，绝大部分的 Error
+都会导致程序（比如 JVM 自身）处于非正常的、不可恢复状态</p>
+<img src="/2023/03/14/程序猿三部曲之青铜时代/ErrorVsException.png">
+<p>Exception 又分为cheked exception（检查异常） 和 unchecked
+exception（不检查异常）。</p>
+<p>checked exception 指的是在源代码里必须处理的异常。例如：</p>
+<ul>
+<li>IOException</li>
+</ul>
+<p>unchecked exception
+指的是不用在源代码里处理，为运行时异常。例如：</p>
+<ul>
+<li>NullPointerException</li>
+<li>ClassCastException</li>
+</ul>
+<p>绝大数的Error会导致程序处于非正常状态。例如：</p>
+<ul>
+<li>NoClassDefFoundError</li>
+<li>OutOfMemoryError</li>
+<li>StackOverflowError</li>
+</ul>
+<p>参考资料： <a href="https://cloud.tencent.com/developer/article/1851847" target="_blank" rel="noopener">《谈谈你对Exception
+和 Error的理解》</a> <a href="https://cloud.tencent.com/developer/article/2177926" target="_blank" rel="noopener">《Exception和Error有什么区别吗》</a></p>
+<h1 id="设计模式">9 设计模式</h1>
+<p>23种经典设计模式，设计模式的具逻辑和实现，可移步<a href="https://www.runoob.com/design-pattern/design-pattern-tutorial.html" target="_blank" rel="noopener">菜鸟教程</a>了解。</p>
+<h2 id="创建型模式">9.1 创建型模式</h2>
+<p>这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用
+new
+运算符直接实例化对象。这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活。</p>
+<ul>
+<li>工厂模式（Factory Pattern）</li>
+<li>抽象工厂模式（Abstract Factory Pattern）</li>
+<li>单例模式（Singleton Pattern）</li>
+<li>建造者模式（Builder Pattern）</li>
+<li>原型模式（Prototype Pattern）</li>
+</ul>
+<h2 id="结构型模式">9.2 结构型模式</h2>
+<p>这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。</p>
+<ul>
+<li>适配器模式（Adapter Pattern）</li>
+<li>桥接模式（Bridge Pattern）</li>
+<li>过滤器模式（Filter、Criteria Pattern）</li>
+<li>组合模式（Composite Pattern）</li>
+<li>装饰器模式（Decorator Pattern）</li>
+<li>外观模式（Facade Pattern）</li>
+<li>享元模式（Flyweight Pattern）</li>
+<li>代理模式（Proxy Pattern）</li>
+</ul>
+<h2 id="行为型模式">9.3 行为型模式</h2>
+<p>这些设计模式特别关注对象之间的通信。</p>
+<ul>
+<li>责任链模式（Chain of Responsibility Pattern）</li>
+<li>命令模式（Command Pattern）</li>
+<li>解释器模式（Interpreter Pattern）</li>
+<li>迭代器模式（Iterator Pattern）</li>
+<li>中介者模式（Mediator Pattern）</li>
+<li>备忘录模式（Memento Pattern）</li>
+<li>观察者模式（Observer Pattern）</li>
+<li>状态模式（State Pattern）</li>
+<li>空对象模式（Null Object Pattern）</li>
+<li>策略模式（Strategy Pattern）</li>
+<li>模板模式（Template Pattern）</li>
+<li>访问者模式（Visitor Pattern）</li>
+</ul>
+<h2 id="j2ee-模式">9.4 J2EE 模式</h2>
+<p>这些设计模式特别关注表示层。这些模式是由 Sun Java Center 鉴定的。</p>
+<ul>
+<li>MVC 模式（MVC Pattern）</li>
+<li>业务代表模式（Business Delegate Pattern）</li>
+<li>组合实体模式（Composite Entity Pattern）</li>
+<li>数据访问对象模式（Data Access Object Pattern）</li>
+<li>前端控制器模式（Front Controller Pattern）</li>
+<li>拦截过滤器模式（Intercepting Filter Pattern）</li>
+<li>服务定位器模式（Service Locator Pattern）</li>
+<li>传输对象模式（Transfer Object Pattern）</li>
+</ul>
 <hr>
 <p>未完，待续...</p>
 	  
@@ -426,7 +506,7 @@ CUP
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a href="/2023/04/04/程序猿三部曲之白银时代/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
@@ -470,7 +550,7 @@ CUP
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>2</span></a></li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>3</span></a></li>
   
 
     </ul>
@@ -483,13 +563,22 @@ CUP
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/Ioc/">Ioc<span>1</span></a></li> <li><a href="/tags/AOP/">AOP<span>1</span></a></li> <li><a href="/tags/反射/">反射<span>1</span></a></li> <li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
+  <li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li> <li><a href="/tags/反射/">反射<span>1</span></a></li> <li><a href="/tags/动态代理/">动态代理<span>1</span></a></li> <li><a href="/tags/异常/">异常<span>1</span></a></li> <li><a href="/tags/索引/">索引<span>2</span></a></li> <li><a href="/tags/Redis/">Redis<span>1</span></a></li> <li><a href="/tags/缓存/">缓存<span>1</span></a></li>
     </ul>
 	</div>
 		
 
 	<!-- toc -->
 	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#接口和抽象类的关系和区别"><span class="toc-article-text">1 接口和抽象类的关系和区别</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#理解接口和抽象类"><span class="toc-article-text">1.1 理解接口和抽象类</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#接口和抽象类的区别"><span class="toc-article-text">1.2 接口和抽象类的区别</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#什么时候应该使用接口而不用抽象类"><span class="toc-article-text">1.3
+什么时候应该使用接口而不用抽象类</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#反射机制和动态代理"><span class="toc-article-text">2 反射机制和动态代理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#反射机制"><span class="toc-article-text">2.1 反射机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#反射的应用场景"><span class="toc-article-text">2.1.1 反射的应用场景</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#反射的缺点"><span class="toc-article-text">2.1.2 反射的缺点</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#动态代理"><span class="toc-article-text">2.2 动态代理</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#项目中事务的使用"><span class="toc-article-text">3 项目中事务的使用</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#事务传播属性"><span class="toc-article-text">3.1 事务传播属性</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#transactional事务不生效的场景"><span class="toc-article-text">3.2 @Transactional事务不生效的场景</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#spring-ioc和aop"><span class="toc-article-text">4 Spring IoC和AOP</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#ioc-控制反转"><span class="toc-article-text">4.1 IoC 控制反转</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#在实际工作中怎样对sql进行调优"><span class="toc-article-text">5
+在实际工作中怎样对SQL进行调优</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#防止索引失效"><span class="toc-article-text">5.1 防止索引失效</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#select检查"><span class="toc-article-text">5.2 SELECT检查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#limit"><span class="toc-article-text">5.3 LIMIT</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#redis是如何实现高可用的"><span class="toc-article-text">6 Redis是如何实现高可用的？</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#数据持久化"><span class="toc-article-text">6.1 数据持久化</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#redis主从同步"><span class="toc-article-text">6.2 Redis主从同步</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#哨兵模式"><span class="toc-article-text">6.3 哨兵模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#redis-集群"><span class="toc-article-text">6.4 Redis 集群</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#利用jdk不依赖外部工具实现一个简单的缓存机制"><span class="toc-article-text">7
+利用JDK，不依赖外部工具，实现一个简单的缓存机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#存储集合的选择"><span class="toc-article-text">7.1 存储集合的选择</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#过期缓存处理"><span class="toc-article-text">7.2 过期缓存处理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#定期删除策略"><span class="toc-article-text">7.2.1 定期删除策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#懒惰淘汰策略"><span class="toc-article-text">7.2.2 懒惰淘汰策略</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#缓存淘汰策略"><span class="toc-article-text">7.3 缓存淘汰策略</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#先进先出策略"><span class="toc-article-text">7.3.1 先进先出策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最少使用策略"><span class="toc-article-text">7.3.2 最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最近最少使用策略"><span class="toc-article-text">7.3.3 最近最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#随机淘汰策略"><span class="toc-article-text">7.3.4 随机淘汰策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#不淘汰策略"><span class="toc-article-text">7.3.5 不淘汰策略</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#exception和error的区别"><span class="toc-article-text">8 Exception和Error的区别</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#设计模式"><span class="toc-article-text">9 设计模式</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#创建型模式"><span class="toc-article-text">9.1 创建型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#结构型模式"><span class="toc-article-text">9.2 结构型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#行为型模式"><span class="toc-article-text">9.3 行为型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#j2ee-模式"><span class="toc-article-text">9.4 J2EE 模式</span></a></li></ol></li></ol>
+		</div>
 	
 	</div>
 	
@@ -510,8 +599,8 @@ CUP
   <footer> <p>
   &copy; 2023 xuzh
   
-      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
-     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->
