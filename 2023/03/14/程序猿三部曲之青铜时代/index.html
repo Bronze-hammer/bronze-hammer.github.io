@@ -495,6 +495,211 @@ new
 <li>服务定位器模式（Service Locator Pattern）</li>
 <li>传输对象模式（Transfer Object Pattern）</li>
 </ul>
+<h1 id="一个线程调用两次start方法会发生什么简单谈谈线程的几种状态">10
+一个线程调用两次start()方法会发生什么？简单谈谈线程的几种状态</h1>
+<h2 id="调用两次start">10.1 调用两次start()</h2>
+<p>Java的线程是不允许启动两次的，第二次调用必然会抛岀<code>IllegalThreadStateEXception</code>，这是一种运行时异常，多次调用
+start 被认为是编程错误。</p>
+<h2 id="线程的生命周期">10.2 线程的生命周期</h2>
+<ul>
+<li>新建（NEW），表示线程被创建出来还没真正启动的状态，可以认为它是个Java内部状态。</li>
+<li>就绪（
+RUNNABLE），表示该线程已经在WM中执行，当然由于执行需要计算资源，它可能是正在运行，也可能还在等待系统分配给它cpu片段，在就绪队列里面排队。</li>
+<li>运行（Running）在其他一些分析中，会额外区分一种状态 RUNNING，但是从
+Java API的角度，并不能表示出来。</li>
+<li>阻塞（
+BLOCKED），这个状态和我们前面两讲介绍的同步非常相关，阻塞表示线程在等待
+Monitor
+lock。比如，线程试图通过synchronized去获取某个锁，但是其他线程已经独占了，那么当前线程就会处于阻塞状态。</li>
+<li>等待（
+WAITING），表示正在等待其他线程釆取某些操作。一个常见的场景是类似生产者消费者模式，发现任务条件尚未满足，就让当前消费者线程等待（wait），另外的生产者线程去准备任务数据，然后通过类似
+notify等动作，通知消费线程可以继续工作了。Thread
+join（也会令线程进入等待状态。</li>
+<li>计时等待（
+TIMED_WAIT），其进入条件和等待状态类似，但是调用的是存在超时条件的方法，比如wait或join等方法的指定超时版本，如下面示例</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> wait（<span class="keyword">long</span> timeout） <span class="keyword">throws</span> InterruptedException；</span><br></pre></td></tr></table></figure>
+<ul>
+<li>终止（
+TERMINATED），不管是意外退出还是正常执行结束，线程已经完成使命，终止运行，也有人把这个状态叫作死亡在第二次调用
+start()方法的时候，线程可能处于终止或者其他（非NEW）状态，但是不论如何，都是不可以再次启动的。</li>
+</ul>
+<p>参考资料：<a href="https://cloud.tencent.com/developer/article/1625433" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1625433</a></p>
+<h1 id="rocketmq">11 RocketMQ</h1>
+<p>RocketMQ是一个纯Java、分布式队列模型的消息中间件，具有高可用、高可靠、高实时、低延迟的特点。</p>
+<h2 id="消息中间件的通用功能">11.1 消息中间件的通用功能</h2>
+<ol type="1">
+<li>业务解耦：这也是发布订阅的消息模型。生产者发送指令到MQ中，然后下游订阅这类指令的消费者会收到这个指令执行相应的逻辑，整个过程与具体业务无关，抽象成了一个发送指令，存储指令，消费指令的过程。</li>
+<li>前端削峰：前端发起的请求在短时间内太多后端无法处理，可以堆积在MQ中，后端按照一定的顺序处理，秒杀系统就是这么实现的。</li>
+</ol>
+<h2 id="rocketmq的特点">11.2 RocketMQ的特点</h2>
+<ol type="1">
+<li>亿级消息的堆积能力：单个队列中的百万级消息的累积容量。</li>
+<li>高可用性</li>
+<li>高可靠性</li>
+<li>支持分布式事务消息</li>
+<li>支持顺序消息：消息在Broker中是采用队列的FIFO模式存储的，也就是发送是顺序的，只要保证消费的顺序性即可。</li>
+<li>支持消息过滤：建议采用消费者业务端的tag过滤。</li>
+<li>支持定时消息和延迟消息</li>
+</ol>
+<h2 id="rocketmq消息模型">11.3 RocketMQ消息模型</h2>
+<h3 id="message">Message</h3>
+<p>就是要传输的消息，一个消息必须有一个主题，一条消息也可以有一个可选的Tag（标签）和额外的键值对，可以用来设置一个业务的key，便于开发中在broker服务端查找消息。</p>
+<h3 id="topic">Topic</h3>
+<p>主题，是消息的第一级类型，每条消息都有一个主题，就像信件邮寄的地址一样。主题就是我们具体的业务，比如一个电商系统可以有订单消息，商品消息，采购消息，交易消息等。Topic和生产者和消费者的关系非常松散，生产者和Topic可以是1对多，多对1或者多对多，消费者也是这样。</p>
+<h3 id="tag">Tag</h3>
+<p>标签，是消息的第二级类型，可以作为某一类业务下面的二级业务区分，它的主要用途是在消费端的消息过滤。比如采购消息分为采购创建消息，采购审核消息，采购推送消息，采购入库消息，采购作废消息等，这些消息是同一Topic和不同的Tag，当消费端只需要采购入库消息时就可以用Tag来实现过滤，不是采购入库消息的tag就不处理。</p>
+<h3 id="group">Group</h3>
+<p>组，可分为ProducerGroup生产者组合ConsumerGroup消费者组，一个组可以订阅多个Topic。一般来说，某一类相同业务的生产者和消费者放在一个组里。</p>
+<h3 id="message-queue">Message Queue</h3>
+<p>消息队列，一个Topic可以划分成多个消息队列。Topic只是个逻辑上的概念，消息队列是消息的物理管理单位，当发送消息的时候，Broker会轮询包含该Topic的所有消息队列，然后将消息发出去。有了消息队列，可以使得消息的存储可以分布式集群化，具有了水平的扩展能力。</p>
+<h3 id="offset">offset</h3>
+<p>是指消息队列中的offset，可以认为就是下标，消息队列可看做数组。offset是java
+long，64位，理论上100年不会溢出，所以可以认为消息队列是一个长度无限的数据结构。</p>
+<p>参考资料：<a href="https://zhuanlan.zhihu.com/p/521109575" target="_blank" rel="noopener">RocketMq面试题精选</a></p>
+<h1 id="rocketmq和其他消息中间件的区别">12
+RocketMQ和其他消息中间件的区别</h1>
+<img src="/2023/03/14/程序猿三部曲之青铜时代/diff_mq.png">
+<h1 id="序列化和反序列化">13 序列化和反序列化</h1>
+<h2 id="什么是序列化和反序列化">13.1 什么是序列化和反序列化？</h2>
+<p>序列化：就是将对象转化成字节序列的过程。</p>
+<p>反序列化：就是将字节序列转化成对象的过程。</p>
+<p>对象序列化成的字节序列会包含对象的类型信息、对象的数据等，说白了就是包含了描述这个对象的所有信息，能根据这些信息“复刻”出一个和原来一模一样的对象。</p>
+<h2 id="为什么要序列化和反序列化">13.2 为什么要序列化和反序列化？</h2>
+<ol type="1">
+<li>持久化：对象是存储在JVM中的堆区的，但是如果JVM停止运行了，对象也不存在了。序列化可以将对象转化成字节序列，可以写进硬盘文件中实现持久化。在新开启的JVM中可以读取字节序列进行反序列化成对象。</li>
+<li>网络传输：网络直接传输数据，但是无法直接传输对象，可在传输前序列化，传输完成后反序列化成对象。所以所有可在网络上传输的对象都必须是可序列化的。</li>
+</ol>
+<h2 id="实现序列化和反序列化的方法">13.3 实现序列化和反序列化的方法</h2>
+<p>Java为我们提供了对象序列化的机制，规定了要实现序列化对象的类要满足的条件和实现方法。</p>
+<ol type="1">
+<li>对于要序列化对象的类要去实现Serializable接口或者Externalizable接口。</li>
+<li>实现方法：JDK提供的ObjectOutputStream和ObjectInputStream来实现序列化和反序列化。</li>
+</ol>
+<h2 id="serialversionuid的作用">13.4 serialVersionUID的作用</h2>
+<p>先讲述下序列化的过程：在进行序列化时，会把当前类的serialVersionUID写入到字节序列中（也会写入序列化的文件中），在反序列化时会将字节流中的serialVersionUID同本地对象中的serialVersionUID进行对比，一直的话进行反序列化，不一致则失败报错（报InvalidCastException异常）</p>
+<p>serialVersionUID的生成有三种方式（private static final long
+serialVersionUID= XXXL ）：</p>
+<ol type="1">
+<li>显式声明：默认的1L</li>
+<li>显式声明：根据包名、类名、继承关系、非私有的方法和属性以及参数、返回值等诸多因素计算出的64位的hash值</li>
+<li>隐式声明：未显式的声明serialVersionUID时java序列化机制会根据Class自动生成一个serialVersionUID（最好不要这样，因为如果Class发生变化，自动生成的serialVersionUID可能会随之发生变化，导致匹配不上）</li>
+</ol>
+<blockquote>
+<p>序列化类增加属性时，最好不要修改serialVersionUID，避免反序列化失败</p>
+</blockquote>
+<p>参考资料：<a href="https://zhuanlan.zhihu.com/p/316200445" target="_blank" rel="noopener">一文搞懂序列化与反序列化</a></p>
+<h1 id="dubbo和springcloud核心组件feignribbinhystrix对比">14
+Dubbo和SpringCloud核心组件Feign、Ribbin、Hystrix对比</h1>
+<h2 id="协议">14.1 协议</h2>
+<p>Dubbo：支持多传输协议：Dubbo、Rmi、http，可灵活配置。</p>
+<p>Feign：基于http传输协议，短连接，性能比Dubbo低。</p>
+<h2 id="与springcloud集成">14.2 与SpringCloud集成</h2>
+<p>Dubbo：在早期Dubbo是与Spring Cloud 集成有一些脱落,但是在Spring Cloud
+Alibaba 出现后，spring-cloud-starter-dubbo 与Spring Cloud完美集成</p>
+<p>Feign：Spring Cloud 最早支持的RPC框架，兼容性好</p>
+<h2 id="负载均衡">14.3 负载均衡</h2>
+<p>Dubbo内置了如下负载均衡算法，用户可直接配置使用：</p>
+<table>
+<colgroup>
+<col style="width: 29%">
+<col style="width: 22%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>算法</th>
+<th>特性</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>RandomLandBalance</td>
+<td>加权随机</td>
+<td>默认算法，默认权重相同</td>
+</tr>
+<tr class="even">
+<td>RoundRobinLoadBalance</td>
+<td>加权轮询</td>
+<td>借鉴与Nginx的平滑加权轮询算法，默认权重相同</td>
+</tr>
+<tr class="odd">
+<td>LeastActiveLoadBalance</td>
+<td>最少活跃优先+加权随机</td>
+<td>背后是能者多劳的思想</td>
+</tr>
+<tr class="even">
+<td>ShortestResponseLoadBalance</td>
+<td>最短响应优先+加权随机</td>
+<td>更加关注响应速度</td>
+</tr>
+<tr class="odd">
+<td>ConsistentHashLoadBalance</td>
+<td>一致性Hash</td>
+<td>确定的入参，确定的提供者，适用于有状态的请求</td>
+</tr>
+</tbody>
+</table>
+<p>同时支持服务端负载均衡和客户端负载均衡配置，灵活度非常高</p>
+<p>Fegin自身是没有负载均衡能力的，之前默认使用Ribbon作为负载均衡的组件，但是Netfix已经不再维护。新版本的Spring
+Cloud已经将Ribbon替换成Spring Cloud Load
+Balancer,Ribbon是客户端级别的负载均衡，不像dubbo支持客户端和服务端双向配置</p>
+<h2 id="容错机制">14.4 容错机制</h2>
+<h3 id="dubbo支持多种容错策略">Dubbo支持多种容错策略：</h3>
+<ol type="1">
+<li>Failover
+Cluste：失败自动切换，当出现失败，重试其它服务器。通常用于读操作，但重试会带来更长延迟。可通过
+retries="2" 来设置重试次数(不含第一次)。默认容错机制</li>
+<li>Failfast
+Cluster：快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，比如新增记录。</li>
+<li>Failsafe
+Cluster：失败安全，出现异常时，直接忽略。通常用于写入审计日志等操作。</li>
+<li>Failback Cluster
+：失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知操作。</li>
+<li>Forking
+Cluster：并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多服务资源。可通过
+forks="2" 来设置最大并行数。</li>
+<li>Broadcast
+Cluster：广播调用所有提供者，逐个调用，任意一台报错则报错。通常用于通知所有提供者更新缓存或日志等本地资源信息。</li>
+</ol>
+<h3 id="feign">Feign</h3>
+<p>Feign默认使用Netfix
+Hystrix作为服务熔断的组件。Hystix提供了服务降级，服务熔断，依赖隔离，监控（Hystrix
+Dashboard）等功能。 目前 Hystrix
+已经处于维护（maintenance）状态，不再继续开发，这个消息是Netfix
+在2018年对外宣布的。Hystrix
+GitHub页面上也说明了该项目目前处于维护模式</p>
+<blockquote>
+<p>在使用dubbo后续的熔断降级也还可以使用Alibaba Sentinel</p>
+</blockquote>
+<h2 id="迁移">14.5 迁移</h2>
+<h3 id="dubbo">Dubbo</h3>
+<p>dubbo为了提供对RestTemplate和OpenFeign客户端端的支持，在Dubbo Spring
+Cloud提供了@DubboTransported注解，使客户端无需额外处理即可兼容RestTemplate和OpenFeign的调用，换而言之在不调整
+Feign 接口以及 RestTemplate URL 的前提下，可以实现无缝迁移
+比如在客户端使用OpenFeign调用duboo服务，只需要添加如下注解如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient</span>(<span class="string">"order"</span>)</span><br><span class="line"><span class="meta">@DubboTransported</span>(protocol = <span class="string">"dubbo"</span>)</span><br></pre></td></tr></table></figure>
+<p>使用RestTemplate或OpenFeign调用Dubbo服务会经历以下过程：</p>
+<ol type="1">
+<li>根据服务名得到注册中心的Dubbo服务DubboMetadataService。</li>
+<li>使用DubboMetadataService里提供的getServiceRestMetadata方法获取要使用的Dubbo服务和对应的Rest元数据。</li>
+<li>基于Dubbo服务和Rest元数据构造GenericService。</li>
+<li>服务调用过程中使用GenericService发起泛化调用。</li>
+</ol>
+<h3 id="feign-1">Feign</h3>
+<p>没有提供对dubbo无缝迁移的支持</p>
+<p>参考资料：<a href="https://juejin.cn/post/7042686801877663752" target="_blank" rel="noopener">Spring
+Cloud RPC(Feign VS Dubbo)多维度对比选型</a></p>
+<h1 id="线程的创建方式">15 线程的创建方式</h1>
+<h2 id="继承thread类">15.1 继承Thread类</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ThreadObject().start();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadObject</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"current thread name is :"</span> + Thread.currentThread().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现runnable接口">15.2 实现Runnable接口</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> RunnableObject());</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableObject</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"current thread name is :"</span> + Thread.currentThread().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现callable接口">15.3 实现Callable接口</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行Callable方式，需要FutureTask实现，用于接收运算结果</span></span><br><span class="line">        FutureTask&lt;Integer&gt; futureTask = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(<span class="keyword">new</span> CallableObject());</span><br><span class="line">        <span class="keyword">new</span> Thread(futureTask).start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 获取线程执行完毕后的返回值</span></span><br><span class="line">            Integer sum = futureTask.get();</span><br><span class="line">            System.out.println(<span class="string">"sum is :"</span> + sum);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Callable泛型定义返回值的类型</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">CallableObject</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Integer sum = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">                sum += i;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基于线程池创建">15.4 基于线程池创建</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建线程池</span></span><br><span class="line">        ExecutorService threadPool = Executors.newFixedThreadPool(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span> ; i++) &#123;</span><br><span class="line">            <span class="comment">//调用execute()方法创建线程</span></span><br><span class="line">            <span class="comment">//采用匿名内部类的方法，创建Runnable对象，并重写run()方法</span></span><br><span class="line">            threadPool.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 关闭线程池</span></span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <p>未完，待续...</p>
 	  
@@ -563,7 +768,7 @@ new
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li> <li><a href="/tags/反射/">反射<span>1</span></a></li> <li><a href="/tags/动态代理/">动态代理<span>1</span></a></li> <li><a href="/tags/异常/">异常<span>1</span></a></li> <li><a href="/tags/索引/">索引<span>2</span></a></li> <li><a href="/tags/Redis/">Redis<span>1</span></a></li> <li><a href="/tags/缓存/">缓存<span>1</span></a></li>
+  <a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a> <a href="/tags/反射/">反射<span>1</span></a> <a href="/tags/动态代理/">动态代理<span>1</span></a> <a href="/tags/异常/">异常<span>1</span></a> <a href="/tags/索引/">索引<span>2</span></a> <a href="/tags/Redis/">Redis<span>1</span></a> <a href="/tags/缓存/">缓存<span>1</span></a> <a href="/tags/设计模式/">设计模式<span>2</span></a> <a href="/tags/Dubbo/">Dubbo<span>1</span></a> <a href="/tags/SpringCloud/">SpringCloud<span>1</span></a> <a href="/tags/序列化/">序列化<span>1</span></a> <a href="/tags/线程/">线程<span>2</span></a> <a href="/tags/RocketMQ/">RocketMQ<span>1</span></a>
     </ul>
 	</div>
 		
@@ -577,7 +782,10 @@ new
 			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#接口和抽象类的关系和区别"><span class="toc-article-text">1 接口和抽象类的关系和区别</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#理解接口和抽象类"><span class="toc-article-text">1.1 理解接口和抽象类</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#接口和抽象类的区别"><span class="toc-article-text">1.2 接口和抽象类的区别</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#什么时候应该使用接口而不用抽象类"><span class="toc-article-text">1.3
 什么时候应该使用接口而不用抽象类</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#反射机制和动态代理"><span class="toc-article-text">2 反射机制和动态代理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#反射机制"><span class="toc-article-text">2.1 反射机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#反射的应用场景"><span class="toc-article-text">2.1.1 反射的应用场景</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#反射的缺点"><span class="toc-article-text">2.1.2 反射的缺点</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#动态代理"><span class="toc-article-text">2.2 动态代理</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#项目中事务的使用"><span class="toc-article-text">3 项目中事务的使用</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#事务传播属性"><span class="toc-article-text">3.1 事务传播属性</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#transactional事务不生效的场景"><span class="toc-article-text">3.2 @Transactional事务不生效的场景</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#spring-ioc和aop"><span class="toc-article-text">4 Spring IoC和AOP</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#ioc-控制反转"><span class="toc-article-text">4.1 IoC 控制反转</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#在实际工作中怎样对sql进行调优"><span class="toc-article-text">5
 在实际工作中怎样对SQL进行调优</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#防止索引失效"><span class="toc-article-text">5.1 防止索引失效</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#select检查"><span class="toc-article-text">5.2 SELECT检查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#limit"><span class="toc-article-text">5.3 LIMIT</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#redis是如何实现高可用的"><span class="toc-article-text">6 Redis是如何实现高可用的？</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#数据持久化"><span class="toc-article-text">6.1 数据持久化</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#redis主从同步"><span class="toc-article-text">6.2 Redis主从同步</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#哨兵模式"><span class="toc-article-text">6.3 哨兵模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#redis-集群"><span class="toc-article-text">6.4 Redis 集群</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#利用jdk不依赖外部工具实现一个简单的缓存机制"><span class="toc-article-text">7
-利用JDK，不依赖外部工具，实现一个简单的缓存机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#存储集合的选择"><span class="toc-article-text">7.1 存储集合的选择</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#过期缓存处理"><span class="toc-article-text">7.2 过期缓存处理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#定期删除策略"><span class="toc-article-text">7.2.1 定期删除策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#懒惰淘汰策略"><span class="toc-article-text">7.2.2 懒惰淘汰策略</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#缓存淘汰策略"><span class="toc-article-text">7.3 缓存淘汰策略</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#先进先出策略"><span class="toc-article-text">7.3.1 先进先出策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最少使用策略"><span class="toc-article-text">7.3.2 最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最近最少使用策略"><span class="toc-article-text">7.3.3 最近最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#随机淘汰策略"><span class="toc-article-text">7.3.4 随机淘汰策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#不淘汰策略"><span class="toc-article-text">7.3.5 不淘汰策略</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#exception和error的区别"><span class="toc-article-text">8 Exception和Error的区别</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#设计模式"><span class="toc-article-text">9 设计模式</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#创建型模式"><span class="toc-article-text">9.1 创建型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#结构型模式"><span class="toc-article-text">9.2 结构型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#行为型模式"><span class="toc-article-text">9.3 行为型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#j2ee-模式"><span class="toc-article-text">9.4 J2EE 模式</span></a></li></ol></li></ol>
+利用JDK，不依赖外部工具，实现一个简单的缓存机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#存储集合的选择"><span class="toc-article-text">7.1 存储集合的选择</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#过期缓存处理"><span class="toc-article-text">7.2 过期缓存处理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#定期删除策略"><span class="toc-article-text">7.2.1 定期删除策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#懒惰淘汰策略"><span class="toc-article-text">7.2.2 懒惰淘汰策略</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#缓存淘汰策略"><span class="toc-article-text">7.3 缓存淘汰策略</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#先进先出策略"><span class="toc-article-text">7.3.1 先进先出策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最少使用策略"><span class="toc-article-text">7.3.2 最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#最近最少使用策略"><span class="toc-article-text">7.3.3 最近最少使用策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#随机淘汰策略"><span class="toc-article-text">7.3.4 随机淘汰策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#不淘汰策略"><span class="toc-article-text">7.3.5 不淘汰策略</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#exception和error的区别"><span class="toc-article-text">8 Exception和Error的区别</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#设计模式"><span class="toc-article-text">9 设计模式</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#创建型模式"><span class="toc-article-text">9.1 创建型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#结构型模式"><span class="toc-article-text">9.2 结构型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#行为型模式"><span class="toc-article-text">9.3 行为型模式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#j2ee-模式"><span class="toc-article-text">9.4 J2EE 模式</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#一个线程调用两次start方法会发生什么简单谈谈线程的几种状态"><span class="toc-article-text">10
+一个线程调用两次start()方法会发生什么？简单谈谈线程的几种状态</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#调用两次start"><span class="toc-article-text">10.1 调用两次start()</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#线程的生命周期"><span class="toc-article-text">10.2 线程的生命周期</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#rocketmq"><span class="toc-article-text">11 RocketMQ</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#消息中间件的通用功能"><span class="toc-article-text">11.1 消息中间件的通用功能</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#rocketmq的特点"><span class="toc-article-text">11.2 RocketMQ的特点</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#rocketmq消息模型"><span class="toc-article-text">11.3 RocketMQ消息模型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#message"><span class="toc-article-text">Message</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#topic"><span class="toc-article-text">Topic</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#tag"><span class="toc-article-text">Tag</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#group"><span class="toc-article-text">Group</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#message-queue"><span class="toc-article-text">Message Queue</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#offset"><span class="toc-article-text">offset</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#rocketmq和其他消息中间件的区别"><span class="toc-article-text">12
+RocketMQ和其他消息中间件的区别</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#序列化和反序列化"><span class="toc-article-text">13 序列化和反序列化</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#什么是序列化和反序列化"><span class="toc-article-text">13.1 什么是序列化和反序列化？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#为什么要序列化和反序列化"><span class="toc-article-text">13.2 为什么要序列化和反序列化？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#实现序列化和反序列化的方法"><span class="toc-article-text">13.3 实现序列化和反序列化的方法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#serialversionuid的作用"><span class="toc-article-text">13.4 serialVersionUID的作用</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#dubbo和springcloud核心组件feignribbinhystrix对比"><span class="toc-article-text">14
+Dubbo和SpringCloud核心组件Feign、Ribbin、Hystrix对比</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#协议"><span class="toc-article-text">14.1 协议</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#与springcloud集成"><span class="toc-article-text">14.2 与SpringCloud集成</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#负载均衡"><span class="toc-article-text">14.3 负载均衡</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#容错机制"><span class="toc-article-text">14.4 容错机制</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#dubbo支持多种容错策略"><span class="toc-article-text">Dubbo支持多种容错策略：</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#feign"><span class="toc-article-text">Feign</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#迁移"><span class="toc-article-text">14.5 迁移</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#dubbo"><span class="toc-article-text">Dubbo</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#feign-1"><span class="toc-article-text">Feign</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#线程的创建方式"><span class="toc-article-text">15 线程的创建方式</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#继承thread类"><span class="toc-article-text">15.1 继承Thread类</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#实现runnable接口"><span class="toc-article-text">15.2 实现Runnable接口</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#实现callable接口"><span class="toc-article-text">15.3 实现Callable接口</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#基于线程池创建"><span class="toc-article-text">15.4 基于线程池创建</span></a></li></ol></li></ol>
 		</div>
 	
 	</div>
