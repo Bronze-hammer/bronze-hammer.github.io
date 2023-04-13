@@ -187,8 +187,8 @@
         <category>编程语言</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>线程</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -257,8 +257,8 @@
         <category>编程语言</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>设计模式</tag>
+        <tag>Java</tag>
         <tag>单例模式</tag>
       </tags>
   </entry>
