@@ -35,7 +35,7 @@
   <script src="/js/jquery-2.0.3.min.js"></script>
 
   <!-- analytics -->
-  <script>
+  <!-- <script>
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
@@ -44,7 +44,7 @@ var _hmt = _hmt || [];
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
-
+ -->
 
 </head>
 </html>
@@ -100,7 +100,7 @@ var _hmt = _hmt || [];
   <div class="container">
   	<div class="content">
     	 <div class="page-header logo">
-  <h1>Change Myself From Now ON.<span class="blink-fast">∎</span></h1>
+  <h1>在总结中一步步提升自己，要善于总结，好记性不如烂笔头.<span class="blink-fast">∎</span></h1>
 </div>
 
 <div class="row page">
@@ -122,6 +122,47 @@ var _hmt = _hmt || [];
 		<div class="mypage">
 		
 		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/05/28/理解线程安全/">理解线程安全</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>转自<a href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q" target="_blank" rel="noopener">编程新说李新杰</a></p>
+</blockquote>
+<h3 id="不是线程的安全">不是线程的安全</h3>
+<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
+<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
+<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
+<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
+<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
+<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
+<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
+<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
+<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
+<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
+<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
+	
+	</div>
+  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
+</div>
+
 		
 			
 	
@@ -359,7 +400,7 @@ you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank
 		
 			<li><a href="/categories/Linux/">Linux<span>2</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>3</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>4</span></a></li>
 		
 			<li><a href="/categories/兴趣使然/">兴趣使然<span>1</span></a></li>
 		
@@ -382,48 +423,48 @@ you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
-		
-			<li><a href="/tags/抽象类/">抽象类<span>1</span></a></li>
-		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
-		
-			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
-		
-			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
-		
-			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
-		
-			<li><a href="/tags/索引/">索引<span>2</span></a></li>
-		
-			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
-		
 			<li><a href="/tags/crontab/">crontab<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
-			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
 		
 			<li><a href="/tags/异常/">异常<span>1</span></a></li>
 		
-			<li><a href="/tags/MySQL/">MySQL<span>4</span></a></li>
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
 		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
 		
-			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
-		
-			<li><a href="/tags/maven/">maven<span>1</span></a></li>
-		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
 		
 			<li><a href="/tags/UML/">UML<span>1</span></a></li>
 		
-			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+		
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
+		
+			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+		
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
+		
+			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
+		
+			<li><a href="/tags/SpringCloud/">SpringCloud<span>1</span></a></li>
+		
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
 			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
 		
-		   <li><a href="/tags">...<span>47</span></a></li>
+			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+		
+			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+		
+			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
+		
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>48</span></a></li>
 		 
 		</ul>
 	</div>
@@ -434,6 +475,10 @@ you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2023/04/14/总结学习HashMap和HashTable/"><i class="fa fa-file-o"></i>总结学习HashMap和HashTable</a>
+      </li>
     
       <li>
         <a href="/2023/04/04/程序猿三部曲之白银时代/"><i class="fa fa-file-o"></i>程序猿三部曲之白银时代</a>
@@ -449,10 +494,6 @@ you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank
     
       <li>
         <a href="/2023/02/22/浅析Field-injection-is-not-recommended/"><i class="fa fa-file-o"></i>浅析Field-injection-is-not-re...</a>
-      </li>
-    
-      <li>
-        <a href="/2023/02/08/日常工作中Java-Stream流操作汇总/"><i class="fa fa-file-o"></i>日常工作中Java.Stream流操作汇总</a>
       </li>
     
   </ul>
