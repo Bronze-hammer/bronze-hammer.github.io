@@ -11,6 +11,8 @@ toc: true
 
 HashMap 和 Hashtable 都用于以键和值的形式存储数据。两者都使用散列技术来存储唯一密钥。但是HashMap和Hashtable 类之间也是有许多区别。
 
+<!-- more -->
+
 ## 1.HashMap是不同步的，即非线程安全；Hashtable是同步的，即线程安全。
 
 HashMap部分源码:
