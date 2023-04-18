@@ -9,9 +9,7 @@
   <title>理解线程安全 | 徐子辉的个人站点</title>
   <meta name="author" content="xuzh">
   
-  <meta name="description" content="转自编程新说李新杰
-
-不是线程的安全
+  <meta name="description" content="不是线程的安全
 面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。
 论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。
 同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。
@@ -136,10 +134,7 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <blockquote>
-<p>转自<a href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q" target="_blank" rel="noopener">编程新说李新杰</a></p>
-</blockquote>
-<h3 id="不是线程的安全">不是线程的安全</h3>
+	  <h1 id="不是线程的安全">不是线程的安全</h1>
 <p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
 <p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
 <p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
@@ -152,7 +147,7 @@ var _hmt = _hmt || [];
 <p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
 <p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
 <a id="more"></a>
-<h3 id="私有的东西就不该让别人知道">私有的东西就不该让别人知道</h3>
+<h1 id="私有的东西就不该让别人知道">私有的东西就不该让别人知道</h1>
 <p>现实中很多人都会把1万块钱藏着掖着，不让无关的人知道，所以根本不可能扔到大马路上。因为这钱是你的私有物品。</p>
 <p>在程序中也是这样的，所以操作系统会为每个线程分配属于它自己的内存空间，通常称为栈内存，其它线程无权访问。这也是由操作系统保障的。</p>
 <p>如果一些数据只有某个线程会使用，其它线程不能操作也不需要操作，这些数据就可以放入线程的栈内存中。较为常见的就是局部变量。</p>
@@ -162,7 +157,7 @@ var _hmt = _hmt || [];
 <p>也就是说这些局部变量会在每个线程的栈内存中都分配一份。由于线程的栈内存只能自己访问，所以栈内存中的变量只属于自己，其它线程根本就不知道。</p>
 <p>就像每个人的家只属于自己，其他人不能进来。所以你把1万块钱放到家里，其他人是不会知道的。且一般还会放到某个房间里，而不是仍在客厅的桌子上。</p>
 <p>所以把自己的东西放到自己的私人地盘，是安全的，因为其他人无法知道。而且越隐私的地方越好。</p>
-<h3 id="大家不要抢人人有份">大家不要抢，人人有份</h3>
+<h1 id="大家不要抢人人有份">大家不要抢，人人有份</h1>
 <p>相信聪明的你已经发现，上面的解决方案是基于“位置”的。因为你放东西的“位置”只有你自己知道（或能到达），所以东西是安全的，因此这份安全是由“位置”来保障的。</p>
 <p>在程序里就对应于方法的局部变量。局部变量之所以是安全的，就是因为定义它的“位置”是在方法里。这样一来安全是达到了，但是它的使用范围也就被限制在这个方法里了，其它方法想用也不用了啦。</p>
 <p>现实中往往会有一个变量需要多个方法都能够使用的情况，此时定义这个变量的“位置”就不能在方法里面了，而应该在方法外面。即从（方法的）局部变量变为（类的）成员变量，其实就是“位置”发生了变化。</p>
@@ -178,7 +173,7 @@ var _hmt = _hmt || [];
 <p>需要说明的是这N份数据都还是存储在公共区域堆内存里的，经常听到的“线程本地”，是从逻辑从属关系上来讲的，这些数据和线程一一对应，仿佛成了线程自己“领地”的东西了。其实从数据所在“位置”的角度来讲，它们都位于公共的堆内存中，只不过被线程认领了而已。这一点我要特地强调一下。</p>
 <p>其实就像大街上的共享单车。原来只有1辆，大家抢着骑，老出问题。现在从这1辆复制出N辆，每人1辆，各骑各的，问题得解。共享单车就是数据，你就是线程。骑行期间，这辆单车从逻辑上来讲是属于你的，从所在位置上来讲还是在大街上这个公共区域的，因为你发现每个小区大门口都贴着“共享单车，禁止入门”。哈哈哈哈。</p>
 <p>共享单车是不是和ThreadLocal很像呀。<strong><em>再重申一遍，ThreadLocal就是，把一个数据复制N份，每个线程认领一份，各玩各的，互不影响。</em></strong></p>
-<h3 id="只能看不能摸">只能看，不能摸</h3>
+<h1 id="只能看不能摸">只能看，不能摸</h1>
 <p>放在公共区域的东西，只是存在潜在的安全风险，并不是说一定就不安全。有些东西虽然也在公共区域放着，但也是十分安全的。比如你在大街上放一个上百吨的石头雕像，就非常安全，因为大家都弄不动它。</p>
 <p>再比如你去旅游时，经常发现一些珍贵的东西，会被用铁栅栏围起来，上面挂一个牌子，写着“只能看，不能摸”。当然可以国际化一点，“only
 look，don't touch”。这也是很安全的，因为光看几眼是不可能看坏的。</p>
@@ -191,7 +186,7 @@ look，don't touch”。这也是很安全的，因为光看几眼是不可能�
 <p><strong>第三种，更狠了，直接规定，只能读取，禁止修改，当然也安全了。</strong></p>
 <p>是不是都在“避重就轻”呀。如果这三种方法都解决不了，该怎么办呢？Don't
 worry，just continue reading。</p>
-<h3 id="没有规则那就先入为主">没有规则，那就先入为主</h3>
+<h1 id="没有规则那就先入为主">没有规则，那就先入为主</h1>
 <p>前面给出的三种方案，有点“理想化”了。现实中的情况其实是非常混乱嘈杂的，没有规则的。</p>
 <p>比如在中午高峰期你去饭店吃饭，进门后发现只剩一个空桌子了，你心想先去点餐吧，回来就坐这里吧。当你点完餐回来后，发现已经被别人捷足先登了。</p>
 <p>因为桌子是属于公共区域的物品，任何人都可以坐，那就只能谁先抢到谁坐。虽然你在人群中曾多看了它一眼，但它并不会记住你容颜。</p>
@@ -204,7 +199,7 @@ worry，just continue reading。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassAssistant</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">double</span> totalScore = <span class="number">60</span>;</span><br><span class="line">    <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> Lock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addScore</span><span class="params">(<span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore += score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">subScore</span><span class="params">(<span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore -= score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>假定一个班级的初始分数是60分，这个班级抽出10名学生来同时参加10个不同的答题节目，每个学生答对一次为班级加上5分，答错一次减去5分。因为10个学生一起进行，所以这一定是一个并发情形。</p>
 <p>因此加分和减分这两个方法被并发的调用，它们共同操作总分数。为了保证数据的一致性，需要在每次操作前先获取锁，操作完成后再释放锁。</p>
-<h3 id="相信世界充满爱即使被伤害">相信世界充满爱，即使被伤害</h3>
+<h1 id="相信世界充满爱即使被伤害">相信世界充满爱，即使被伤害</h1>
 <p>再回到一开始的例子，假如你往地上仍1万块钱，是不是一定会丢呢？这要看情况了，如果是在人来人往的都市，可以说肯定会丢的。如果你跑到无人区扔地上，可以说肯定不会丢。</p>
 <p>可以看到，都是把东西无保护的放到公共区域里，结果却相差很大。这说明安全问题还和公共区域的环境状况有关系。</p>
 <p>比如我把数据放到公共区域的堆内存中，但是始终都只会有1个线程，也就是单线程模型，那这数据肯定是安全的。</p>
@@ -219,10 +214,13 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 <p>这里再解释下ABA问题，假如你睡觉前数据是5，醒来后数据还是5，并不能肯定数据没有被修改过。可能数据先被修改成8然后又改回到5，只是你不知道罢了。对于这个问题，其实也很好解决，再加一个版本号字段就行了，并规定只要修改数据，必须使版本号加1。</p>
 <p>这样你睡觉前数据是5版本号是0，醒来后数据是5版本号是0，表明数据没有被修改。如果数据是5版本号是2，表明数据被改动了2次，先改为其它，然后又改回到5。</p>
 <p>我再次相信聪明的你已经发现了，这里的CAS其实就是乐观锁，上一种方案里的获取锁和释放锁其实就是悲观锁。乐观锁持乐观态度，就是假设我的数据不会被意外修改，如果修改了，就放弃，从头再来。悲观锁持悲观态度，就是假设我的数据一定会被意外修改，那干脆直接加锁得了。</p>
-<h3 id="作者观点">作者观点：</h3>
+<h1 id="作者观点">作者观点：</h1>
 <p>前两种属于隔离法，一个是位置隔离，一个是数据隔离。</p>
 <p>然后两种是标记法，一个是只读标记，一个是加锁标记。</p>
 <p>最后一种是大胆法，先来怼一把试试，若不行从头再来。</p>
+<blockquote>
+<p>转自<a href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q" target="_blank" rel="noopener">编程新说李新杰</a></p>
+</blockquote>
 	  
 	</div>
 
@@ -276,7 +274,7 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/编程语言/">编程语言<span>9</span></a></li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>6</span></a></li>
   
 
     </ul>
@@ -296,6 +294,12 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 
 	<!-- toc -->
 	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#不是线程的安全"><span class="toc-article-text">不是线程的安全</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#私有的东西就不该让别人知道"><span class="toc-article-text">私有的东西就不该让别人知道</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#大家不要抢人人有份"><span class="toc-article-text">大家不要抢，人人有份</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#只能看不能摸"><span class="toc-article-text">只能看，不能摸</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#没有规则那就先入为主"><span class="toc-article-text">没有规则，那就先入为主</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#相信世界充满爱即使被伤害"><span class="toc-article-text">相信世界充满爱，即使被伤害</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#作者观点"><span class="toc-article-text">作者观点：</span></a></li></ol>
+		</div>
 	
 	</div>
 	
