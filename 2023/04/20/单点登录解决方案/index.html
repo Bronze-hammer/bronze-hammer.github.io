@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>单点登录解决方案 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="单点登录 (SSO)
+是一种身份验证过程，在该过程中，用户仅使用一组登录凭据即可访问多个应用程序或网站，这避免了用户分别登录不同应用程序需要输入不同验证信息的麻烦。用户凭据和其他识别信息由称为身份提供者(IdP)的集中式系统存储和管理。身份提供者是一个受信任的系统，可以提供对其他网站和应用程序的访问。基于单点登录
+(SSO)
+的身份验证系统通常用于员工需要访问其组织的多个应用程序的企业环境中。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="单点登录解决方案">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  <!-- <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+ -->
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 单点登录解决方案</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>单点登录 (SSO)
+是一种身份验证过程，在该过程中，用户仅使用一组登录凭据即可访问多个应用程序或网站，这避免了用户分别登录不同应用程序需要输入不同验证信息的麻烦。用户凭据和其他识别信息由称为身份提供者(IdP)的集中式系统存储和管理。身份提供者是一个受信任的系统，可以提供对其他网站和应用程序的访问。基于单点登录
+(SSO)
+的身份验证系统通常用于员工需要访问其组织的多个应用程序的企业环境中。</p>
+<a id="more"></a>
+<h1 id="单点登录sso的好处">单点登录SSO的好处</h1>
+<ol type="1">
+<li>由于 SSO
+允许用户使用他们自己的登录系统进行身份验证，因此它还允许管理员管理用户帐户并使员工能够在公司使用的多个应用程序中使用它。</li>
+<li>SSO 允许管理员立即控制对所有应用程序的访问，而不是登录 100
+个不同的用户管理门户来更改用户权限。</li>
+<li>重要的是，SSO
+还有助于提高安全性。由于只有一个系统保存所有员工信息，因此保护一个地方比保护数百个不同的帐户容易得多，后者可能成为可能的“泄漏”。</li>
+</ol>
+<h1 id="单点登录验证过程示例图">单点登录验证过程示例图</h1>
+<img src="/2023/04/20/单点登录解决方案/sso-for-login.png">
+<p><br></p>
+<h1 id="saml-2.0-oauth-2.0-openid-connect的对比">SAML 2.0、 OAuth 2.0、
+OpenID Connect的对比</h1>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 23%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>SAML</th>
+<th>OAuth</th>
+<th>OpenID Connect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Description</td>
+<td>Open standard for authorization and authentication</td>
+<td>Open standard for authorization</td>
+<td>Open standard for authentication</td>
+</tr>
+<tr class="even">
+<td>Primary user case</td>
+<td>SSO for enterprise applications</td>
+<td>API authorization</td>
+<td>SSO for consumer applications</td>
+</tr>
+<tr class="odd">
+<td>Data format</td>
+<td>XML</td>
+<td>JSON</td>
+<td>JSON</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h1 id="saml-2.0-协议">SAML 2.0 协议</h1>
+<p>SAML
+是唯一同时支持身份验证和授权的标准。SAML通过支持服务提供商和身份提供商端的数据签名和加密，为公司提供更多控制，以保持其
+SSO
+登录更安全。因此，如果需要，可以对整个过程的数据进行加密，并且攻击无法对其进行解密，除非他们已经可以访问服务和身份提供者的私钥。</p>
+<img src="/2023/04/20/单点登录解决方案/saml.png">
+<p><br></p>
+<p>该过程进行如下：</p>
+<ol type="1">
+<li>用户向服务提供商请求启动 SSO。</li>
+<li>服务提供商创建 base64
+编码的身份验证请求并将其发送给身份提供商。</li>
+<li>身份提供者接收身份验证请求，对其进行验证，并请求用户进行身份验证（登录）。</li>
+<li>身份提供者发送带有 base64 编码 SAML 响应的用户 XHTML 表单。</li>
+<li>用户向服务提供商发送 SAML 响应。</li>
+<li>服务提供商验证 SAML 响应并将用户重定向到目标资源。</li>
+</ol>
+<h1 id="实施单点登录">实施单点登录</h1>
+<p>大多数情况下，身份验证请求是使用 HTTP-Redirect 或 HTTP-Post
+绑定发送的，因为数据负载很小。但是，由于 SAML 响应通常太大而无法放入
+url，因此通常的做法是使用 HTTP-Post 绑定来传输 SAML 响应数据。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/04/17/ArrayList去重方式总结/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-04-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>7</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/SSO/">SSO<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#单点登录sso的好处"><span class="toc-article-text">单点登录SSO的好处</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#单点登录验证过程示例图"><span class="toc-article-text">单点登录验证过程示例图</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#saml-2.0-oauth-2.0-openid-connect的对比"><span class="toc-article-text">SAML 2.0、 OAuth 2.0、
+OpenID Connect的对比</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#saml-2.0-协议"><span class="toc-article-text">SAML 2.0 协议</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#实施单点登录"><span class="toc-article-text">实施单点登录</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
