@@ -129,6 +129,41 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/">Convert Image File to Base64 String or Base64 String to Image File in Java</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-06-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="add-maven-dependency">Add Maven Dependency</h2>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="image-file-convert-base64-string">Image File Convert Base64
+String</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] fileContent = FileUtils.readFileToByteArray(<span class="keyword">new</span> File(filePath));</span><br><span class="line">String encodedString = Base64.getEncoder().encodeToString(fileContent);</span><br></pre></td></tr></table></figure>
+<h2 id="base64-string-convert-image-file">Base64 String Convert Image
+File</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] decodedBytes = Base64.getDecoder().decode(encodedString);</span><br><span class="line">FileUtils.writeByteArrayToFile(<span class="keyword">new</span> File(outputFileName), decodedBytes);</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+  <a type="button" href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/">SpringBoot项目下实践设计模式之工厂模式</a>
 		</h3>
 		</div>
@@ -406,40 +441,6 @@ operation)得到前面处理的结果。</p>
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/">处理SpringCloudConfig客户端启动无法读取到配置参数</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-02-01  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>自己部署了一个Spring Cloud微服务项目，实践Spring Cloud
-Config分布式配置组件，按照Spring Cloud Config 资料<a href="http://c.biancheng.net/springcloud/config.html" target="_blank" rel="noopener">Config：Spring
-Cloud分布式配置组件</a> 先后创建了Eureka注册中心服务、 Spring Cloud
-Config Server服务、 Spring Cloud Config Client客户端，在最后启动 Spring
-Client Config Client 客户端时，客户端始终无法访问 Config
-Server服务，读取上传在Gitee上的配置文件的内容。</p>
-<p>在Baidu、
-Google搜索了大量资料，问题是最终解决了，但是这其中的原因，还需要继续探讨。</p>
-	
-	</div>
-  <a type="button" href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -489,7 +490,7 @@ Google搜索了大量资料，问题是最终解决了，但是这其中的原�
 		
 			<li><a href="/categories/Linux/">Linux<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>8</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>9</span></a></li>
 		
 			<li><a href="/categories/兴趣使然/">兴趣使然<span>1</span></a></li>
 		
@@ -512,43 +513,43 @@ Google搜索了大量资料，问题是最终解决了，但是这其中的原�
 		
 			<li><a href="/tags/异常/">异常<span>1</span></a></li>
 		
-			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
 		
-			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
+			<li><a href="/tags/索引/">索引<span>2</span></a></li>
 		
-			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
-		
-			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
-		
-			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
-		
-			<li><a href="/tags/线程/">线程<span>2</span></a></li>
-		
-			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
-		
-			<li><a href="/tags/优化/">优化<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>6</span></a></li>
 		
 			<li><a href="/tags/货币/">货币<span>1</span></a></li>
 		
-			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
+		
+			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+		
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+		
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+		
+			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+		
+			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
+		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
+		
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
 		
 			<li><a href="/tags/事务/">事务<span>1</span></a></li>
 		
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+		
 			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
 		
-			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
-			<li><a href="/tags/SpringBoot/">SpringBoot<span>1</span></a></li>
+			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
 		
-			<li><a href="/tags/UML/">UML<span>1</span></a></li>
-		
-			<li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
-		
-			<li><a href="/tags/反射/">反射<span>1</span></a></li>
-		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
-		
-			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>45</span></a></li>
@@ -564,6 +565,10 @@ Google搜索了大量资料，问题是最终解决了，但是这其中的原�
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/"><i class="fa fa-file-o"></i>Convert Image File to Base6...</a>
+      </li>
+    
+      <li>
         <a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/"><i class="fa fa-file-o"></i>SpringBoot项目下实践设计模式之工厂模式</a>
       </li>
     
@@ -577,10 +582,6 @@ Google搜索了大量资料，问题是最终解决了，但是这其中的原�
     
       <li>
         <a href="/2023/04/14/总结学习HashMap和HashTable/"><i class="fa fa-file-o"></i>总结学习HashMap和HashTable</a>
-      </li>
-    
-      <li>
-        <a href="/2023/04/04/程序猿三部曲之白银时代/"><i class="fa fa-file-o"></i>程序猿三部曲之白银时代</a>
       </li>
     
   </ul>
