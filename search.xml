@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[读取jar包中指定资源文件的内容]]></title>
+    <url>%2F2023%2F06%2F12%2F%E8%AF%BB%E5%8F%96jar%E5%8C%85%E4%B8%AD%E6%8C%87%E5%AE%9A%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9%2F</url>
+    <content type="text"><![CDATA[背景描述：SpringBoot项目构建打包生成的jar包，在资源文件夹下有个普通txt文件，路径：/templates/content.txt 方式一： 1234567891011121314151617181920212223File file = new File(ResourceUtils.getURL("classpath:").getPath());File templateFile = new File(file, "/templates/content.txt");BufferedReader reader = null;StringBuffer sbf = new StringBuffer();try &#123; reader = new BufferedReader(new FileReader(file)); String tempStr; while ((tempStr = reader.readLine()) != null) &#123; sbf.append(tempStr); &#125; reader.close();&#125; catch (IOException e) &#123; e.printStackTrace();&#125; finally &#123; if (reader != null) &#123; try &#123; reader.close(); &#125; catch (IOException e1) &#123; e1.printStackTrace(); &#125; &#125;&#125;return sbf.toString(); 方式二： 12345678910111213141516171819202122InputStream in = this.getClass().getClassLoader().getResourceAsStream("templates/content.txt");BufferedReader reader = null;StringBuffer sbf = new StringBuffer();try &#123; reader = new BufferedReader(new InputStreamReader(inputStream)); String tempStr; while ((tempStr = reader.readLine()) != null) &#123; sbf.append(tempStr); &#125; reader.close();&#125; catch (IOException e) &#123; e.printStackTrace();&#125; finally &#123; if (reader != null) &#123; try &#123; reader.close(); &#125; catch (IOException e1) &#123; e1.printStackTrace(); &#125; &#125;&#125;return sbf.toString(); 文件位置示例：]]></content>
+      <categories>
+        <category>代码人生</category>
+      </categories>
+      <tags>
+        <tag>jar</tag>
+        <tag>File</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Convert Image File to Base64 String or Base64 String to Image File in Java]]></title>
     <url>%2F2023%2F06%2F07%2FConvert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java%2F</url>
     <content type="text"><![CDATA[Add Maven Dependency 12345&lt;dependency&gt; &lt;groupId&gt;commons-io&lt;/groupId&gt; &lt;artifactId&gt;commons-io&lt;/artifactId&gt; &lt;version&gt;2.11.0&lt;/version&gt;&lt;/dependency&gt; Image File Convert Base64 String 12byte[] fileContent = FileUtils.readFileToByteArray(new File(filePath));String encodedString = Base64.getEncoder().encodeToString(fileContent); Base64 String Convert Image File 12byte[] decodedBytes = Base64.getDecoder().decode(encodedString);FileUtils.writeByteArrayToFile(new File(outputFileName), decodedBytes);]]></content>
