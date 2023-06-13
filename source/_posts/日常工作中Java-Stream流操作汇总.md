@@ -247,3 +247,18 @@ User(name=lisi, sex=woman, ages=3)
 User(name=wanger, sex=man, ages=4)
 User(name=zhangsan, sex=man, ages=1)
 ```
+
+## 10.List<User>转为List<Map<String,Object>>格式
+
+把`List<User>`集合，按指定字段，转为`List<Map<String,Object>>`格式
+
+```java
+List<User> userList = new ArrayList<>();
+List<Map<String,Object>> result = userList.stream().map(user -> {
+    Map<String,Object> map = new HashMap<>();
+    map.put("id", user.getId());
+    map.put("name", user.getName());
+    return map;
+}).collect(Collectors.toList());
+
+```
