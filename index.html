@@ -129,6 +129,45 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/06/13/List＜String＞集合转Long-数组/">List＜String＞集合转Long[]数组</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-06-13  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> Long[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+<p><code>List&lt;String&gt;</code>直接以toArray的方式转换<code>Long数组</code>是错误的，运行后报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
+<p>查看<code>java.util.List.toArray(T[])</code>方法，注释中明确写到：</p>
+<blockquote>
+<p><span class="citation" data-cites="throws">@throws</span>
+ArrayStoreException if the runtime type of the specified array is not a
+supertype of the runtime type of every element in this list
+如果指定数组的运行时类型不是此列表中每个元素的运行时类型的超类型</p>
+</blockquote>
+<p>明显Long类型不是String类型的超类。</p>
+<p>可以通过下面的方式实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2023/06/13/List＜String＞集合转Long-数组/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/06/12/读取jar包中指定资源文件的内容/">读取jar包中指定资源文件的内容</a>
 		</h3>
 		</div>
@@ -404,35 +443,6 @@ new
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/02/22/浅析Field-injection-is-not-recommended/">浅析Field-injection-is-not-recommended</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-02-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>IDEA运行SpringBoot项目，遇到以下有关 <span class="citation" data-cites="Autowired">@Autowired</span> 注解的警告：Field injection is
-not recommended .
-这篇文章浅析这个问题，为什么会有这样的提示？为什么字段注入的方式不推荐？</p>
-	
-	</div>
-  <a type="button" href="/2023/02/22/浅析Field-injection-is-not-recommended/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -482,7 +492,7 @@ not recommended .
 		
 			<li><a href="/categories/Linux/">Linux<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>10</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>11</span></a></li>
 		
 			<li><a href="/categories/兴趣使然/">兴趣使然<span>1</span></a></li>
 		
@@ -503,48 +513,48 @@ not recommended .
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/jar/">jar<span>1</span></a></li>
+			<li><a href="/tags/maven/">maven<span>1</span></a></li>
 		
-			<li><a href="/tags/反射/">反射<span>1</span></a></li>
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
 		
-			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
+			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
 		
 			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
 		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
+			<li><a href="/tags/jar/">jar<span>1</span></a></li>
 		
-			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
 		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+			<li><a href="/tags/UML/">UML<span>1</span></a></li>
 		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+			<li><a href="/tags/反射/">反射<span>1</span></a></li>
 		
-			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
 		
-			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
 		
-			<li><a href="/tags/File/">File<span>1</span></a></li>
+			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
 		
-			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
 		
-			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
 		
-			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
+			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
 		
-			<li><a href="/tags/Java/">Java<span>6</span></a></li>
-		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
-		
-			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
-		
-			<li><a href="/tags/优化/">优化<span>1</span></a></li>
-		
-			<li><a href="/tags/ConcurrentHashMap/">ConcurrentHashMap<span>1</span></a></li>
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
 			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
 		
+			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
 		
-		   <li><a href="/tags">...<span>47</span></a></li>
+			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+		
+			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+		
+			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>50</span></a></li>
 		 
 		</ul>
 	</div>
@@ -555,6 +565,10 @@ not recommended .
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2023/06/13/List＜String＞集合转Long-数组/"><i class="fa fa-file-o"></i>List＜String＞集合转Long[]数组</a>
+      </li>
     
       <li>
         <a href="/2023/06/12/读取jar包中指定资源文件的内容/"><i class="fa fa-file-o"></i>读取jar包中指定资源文件的内容</a>
@@ -570,10 +584,6 @@ not recommended .
     
       <li>
         <a href="/2023/04/20/单点登录解决方案/"><i class="fa fa-file-o"></i>单点登录解决方案</a>
-      </li>
-    
-      <li>
-        <a href="/2023/04/17/ArrayList去重方式总结/"><i class="fa fa-file-o"></i>ArrayList去重方式总结</a>
       </li>
     
   </ul>

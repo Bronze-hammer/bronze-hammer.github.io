@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>List＜String＞集合转Long[]数组 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="12List&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;&amp;gt;();Long[] item = list.toArray(new Long[0]);
+List&amp;lt;String&amp;gt;直接以toArray的方式转换Long数组是错误的，运行后报错：
+1Exception in thread &amp;quot;main&amp;quot; java.lang.ArrayStoreException
+查看java.util.List.toArray(T[])方法，注释中明确写到：
+
+@throws
+ArrayStoreException if the runtime type of the specified array is not a
+supertype of the runtime type of every element in this list
+如果指定数组的运行时类型不是此列表中每个元素的运行时类型的超类型
+
+明显Long类型不是String类型的超类。
+可以通过下面的方式实现
+12List&amp;lt;String&amp;gt; stringList = Arrays.asList(&#34;1&#34;, &#34;2&#34;, &#34;3&#34;);Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::new);">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="List＜String＞集合转Long[]数组">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  <!-- <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+ -->
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> List＜String＞集合转Long[]数组</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> Long[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+<p><code>List&lt;String&gt;</code>直接以toArray的方式转换<code>Long数组</code>是错误的，运行后报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
+<p>查看<code>java.util.List.toArray(T[])</code>方法，注释中明确写到：</p>
+<blockquote>
+<p><span class="citation" data-cites="throws">@throws</span>
+ArrayStoreException if the runtime type of the specified array is not a
+supertype of the runtime type of every element in this list
+如果指定数组的运行时类型不是此列表中每个元素的运行时类型的超类型</p>
+</blockquote>
+<p>明显Long类型不是String类型的超类。</p>
+<p>可以通过下面的方式实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><strong>引申：</strong></p>
+<p>如何实现 <code>List&lt;String&gt;</code> 转
+<code>List&lt;Long&gt;</code> ?</p>
+<p>实现方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">List&lt;Long&gt; longList = stringList.stream().map(Long::valueOf).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>java.util.List.toArray(T[])</code> 源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array containing all of the elements in this list in</span></span><br><span class="line"><span class="comment">     * proper sequence (from first to last element); the runtime type of</span></span><br><span class="line"><span class="comment">     * the returned array is that of the specified array.  If the list fits</span></span><br><span class="line"><span class="comment">     * in the specified array, it is returned therein.  Otherwise, a new</span></span><br><span class="line"><span class="comment">     * array is allocated with the runtime type of the specified array and</span></span><br><span class="line"><span class="comment">     * the size of this list.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;If the list fits in the specified array with room to spare (i.e.,</span></span><br><span class="line"><span class="comment">     * the array has more elements than the list), the element in the array</span></span><br><span class="line"><span class="comment">     * immediately following the end of the list is set to &lt;tt&gt;null&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     * (This is useful in determining the length of the list &lt;i&gt;only&lt;/i&gt; if</span></span><br><span class="line"><span class="comment">     * the caller knows that the list does not contain any null elements.)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;Like the &#123;<span class="doctag">@link</span> #toArray()&#125; method, this method acts as bridge between</span></span><br><span class="line"><span class="comment">     * array-based and collection-based APIs.  Further, this method allows</span></span><br><span class="line"><span class="comment">     * precise control over the runtime type of the output array, and may,</span></span><br><span class="line"><span class="comment">     * under certain circumstances, be used to save allocation costs.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;Suppose &lt;tt&gt;x&lt;/tt&gt; is a list known to contain only strings.</span></span><br><span class="line"><span class="comment">     * The following code can be used to dump the list into a newly</span></span><br><span class="line"><span class="comment">     * allocated array of &lt;tt&gt;String&lt;/tt&gt;:</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;pre&gt;&#123;<span class="doctag">@code</span></span></span><br><span class="line"><span class="comment">     *     String[] y = x.toArray(new String[0]);</span></span><br><span class="line"><span class="comment">     * &#125;&lt;/pre&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * Note that &lt;tt&gt;toArray(new Object[0])&lt;/tt&gt; is identical in function to</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;toArray()&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> a the array into which the elements of this list are to</span></span><br><span class="line"><span class="comment">     *          be stored, if it is big enough; otherwise, a new array of the</span></span><br><span class="line"><span class="comment">     *          same runtime type is allocated for this purpose.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> an array containing the elements of this list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ArrayStoreException if the runtime type of the specified array</span></span><br><span class="line"><span class="comment">     *         is not a supertype of the runtime type of every element in</span></span><br><span class="line"><span class="comment">     *         this list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified array is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; T[] toArray(T[] a);</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/06/12/读取jar包中指定资源文件的内容/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-06-13 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>11</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/List/">List<span>1</span></a> <a href="/tags/String/">String<span>1</span></a> <a href="/tags/Long/">Long<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
