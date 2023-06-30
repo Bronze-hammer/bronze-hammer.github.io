@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2023-06-13T07:58:35.155Z</updated>
+  <updated>2023-06-30T05:01:00.437Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,79 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</title>
+    <link href="http://yoursite.com/2023/06/30/MyBatis%E9%85%8D%E7%BD%AEallowMultiQueries-true%E5%85%81%E8%AE%B8%E4%BD%BF%E7%94%A8foreach%E6%A0%87%E7%AD%BE%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5%E6%88%96%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE/"/>
+    <id>http://yoursite.com/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/</id>
+    <published>2023-06-30T04:59:35.000Z</published>
+    <updated>2023-06-30T05:01:00.437Z</updated>
+    
+    <content type="html"><![CDATA[<p>执行update更新操作</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"batchUpdate"</span> <span class="attr">parameterType</span>=<span class="string">"java.util.List"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"list"</span> <span class="attr">item</span>=<span class="string">"item"</span> <span class="attr">separator</span>=<span class="string">";"</span> <span class="attr">open</span>=<span class="string">""</span> <span class="attr">close</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.a != null"</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.b!= null"</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.c!= null"</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure><p>执行报错： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;update test_table set a = 1, &apos; at line 14</span><br></pre></td></tr></table></figure></p><p>刚开始出现这个错误，以为是update语句写的有问题，但是检查了很多遍都没有问题。奇怪的是，同样的代码，同样的数据，本地启的环境不行，测试环境却可以。经过同事提醒了一下，于是检查了一下配置文件，果然发现配置文件上的jdbc配置，测试环境比开发环境多了个<code>allowMultiQueries=true</code>。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true&amp;serverTimezone=GMT%2B8&amp;nullCatalogMeansCurrent=true</span><br></pre></td></tr></table></figure><p>MyBatis默认情况下不允许批量插入或更新数据的原因是出于安全考虑。在许多情况下，数据的插入和更新都需要经过验证和控制，以确保数据的完整性和一致性。如果允许默认的批量操作，可能会导致不正确的数据插入或更新，从而影响应用程序的正常运行。</p><p>通过配置<code>allowMultiQueries=true</code>可以开启MyBatis的批量操作功能。这个配置项告诉MyBatis允许在单个数据库连接中执行多个SQL语句，从而实现批量插入或更新数据的功能。但是要注意，在开启批量操作之前，确保你已经了解并理解了可能引发的安全风险，并且在使用批量操作时要进行适当的验证和控制，以确保数据的完整性和安全性。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;执行update更新操作&lt;/p&gt;
+&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/s
+      
+    
+    </summary>
+    
+    
+      <category term="MySQL" scheme="http://yoursite.com/categories/MySQL/"/>
+    
+      <category term="代码人生" scheme="http://yoursite.com/categories/MySQL/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/MySQL/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
+    
+      <category term="allowMultiQueries" scheme="http://yoursite.com/tags/allowMultiQueries/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Flowable工作流重启已经结束的流程</title>
+    <link href="http://yoursite.com/2023/06/30/Flowable%E5%B7%A5%E4%BD%9C%E6%B5%81%E9%87%8D%E5%90%AF%E5%B7%B2%E7%BB%8F%E7%BB%93%E6%9D%9F%E7%9A%84%E6%B5%81%E7%A8%8B/"/>
+    <id>http://yoursite.com/2023/06/30/Flowable工作流重启已经结束的流程/</id>
+    <published>2023-06-30T03:51:32.000Z</published>
+    <updated>2023-06-30T03:57:41.499Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2><p>在Flowable中，已终止的流程实例不能通过<code>RuntimeService</code>接口直接查询到。相反，你需要使用<code>HistoryService</code>接口来查询历史流程实例，并从中筛选出已终止的实例。以下是正确的步骤：</p><ol type="1"><li><p>确保你的应用程序连接到正确的Flowable流程引擎实例。你需要使用Flowable的API来执行后续的操作。</p></li><li><p>使用<code>HistoryService</code>接口的<code>createHistoricProcessInstanceQuery()</code>方法构建查询，设置适当的条件来筛选已终止的流程实例。</p></li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">.finished();</span><br></pre></td></tr></table></figure><ol start="3" type="1"><li>执行查询并获取已终止的流程实例列表。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;HistoricProcessInstance&gt; terminatedInstances = query.list();</span><br></pre></td></tr></table></figure><ol start="4" type="1"><li><p>根据需要选择要重启的流程实例。你可以根据流程实例的ID或其他属性进行选择。</p></li><li><p>如果你需要将已终止的流程实例重新激活，可以创建一个新的流程实例，或者使用历史流程实例中的数据进行修复。请注意，这取决于你的业务需求和流程定义的复杂性。</p></li></ol><p>请注意，已终止的流程实例是历史数据，因此无法直接重新激活。你需要根据业务需求进行相应的处理。使用<code>HistoryService</code>接口可以提供有关已终止流程实例的详细信息，但不能直接操作它们。</p><a id="more"></a><h2 id="使用historyservice获取的流程实例信息重新发起一个新的流程实例">使用<code>HistoryService</code>获取的流程实例信息重新发起一个新的流程实例</h2><p>要使用<code>HistoryService</code>获取的流程实例信息重新发起一个新的流程实例，你需要执行以下步骤：</p><ol type="1"><li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure><ol start="2" type="1"><li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>方法或<code>startProcessInstanceByKey()</code>方法来启动新的流程实例。根据你的需求选择合适的方法。</li></ol><p>如果你选择使用流程定义ID：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">.startProcessInstanceById(processDefinitionId, businessKey);</span><br></pre></td></tr></table></figure><p>如果你选择使用流程定义的键（Key）：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">.startProcessInstanceByKey(processDefinitionKey, businessKey);</span><br></pre></td></tr></table></figure><p>在这里，<code>processDefinitionKey</code>是流程定义的键（Key）。</p><ol start="3" type="1"><li>在启动新的流程实例后，你可以执行后续的操作，例如处理任务等，以继续流程的执行。</li></ol><p>请注意，重新发起的新流程实例与原始已终止的流程实例是独立的。你需要根据需求来处理任何必要的数据复制或流程初始化操作。</p><h2 id="设置重新发起的流程实例的变量variables">设置重新发起的流程实例的变量（variables）</h2><p>要设置重新发起的流程实例的变量（variables），你可以使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>或<code>startProcessInstanceByKey()</code>方法的重载版本来指定变量的值。以下是设置变量的步骤：</p><ol type="1"><li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure><ol start="2" type="1"><li>创建一个<code>Map</code>对象，将变量名和对应的值放入该对象中。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">"variable1"</span>, value1);</span><br><span class="line">variables.put(<span class="string">"variable2"</span>, value2);</span><br><span class="line"><span class="comment">// 添加其他变量</span></span><br></pre></td></tr></table></figure><p>在上述代码中，"variable1"和"variable2"是变量名，value1和value2是对应的值。</p><ol start="3" type="1"><li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>方法或<code>startProcessInstanceByKey()</code>方法的重载版本来启动新的流程实例，并在参数中传递变量的Map对象。</li></ol><p>如果你选择使用流程定义ID：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure><p>如果你选择使用流程定义的键（Key）：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);</span><br></pre></td></tr></table></figure><ol start="4" type="1"><li>通过上述步骤，变量将与新的流程实例关联，并可以在流程的执行中使用。</li></ol><p>请注意，如果重新发起的流程实例需要使用历史流程实例的数据作为变量的值，你需要根据业务需求将这些数据复制到新的流程实例中。</p><h2 id="关于新发起流程的processinstancename为空的情况说明">关于新发起流程的<code>processInstanceName</code>为空的情况说明</h2><p>在Flowable中，流程实例的名称（process instancename）是一个可选的属性，并且不会自动从历史流程实例中继承。因此，在重新发起流程实例时，<code>processInstanceName</code>默认为空。</p><p>如果你想为重新发起的流程实例设置一个名称，可以通过设置流程变量的方式来实现。以下是设置流程实例名称的步骤：</p><ol type="1"><li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure><ol start="2" type="1"><li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>或<code>startProcessInstanceByKey()</code>方法启动新的流程实例，并在参数中传递变量的Map对象。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">"processInstanceName"</span>, <span class="string">"My Process Instance"</span>); <span class="comment">// 设置流程实例名称</span></span><br><span class="line"></span><br><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure><p>在上述代码中，我们将流程实例名称作为变量<code>"processInstanceName"</code>的值传递给了<code>startProcessInstanceById()</code>方法。</p><ol start="3" type="1"><li>在新的流程实例中，你可以使用<code>RuntimeService</code>接口的<code>getVariable()</code>方法来获取流程实例名称。</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String processInstanceName = runtimeService</span><br><span class="line">.getVariable(newProcessInstance.getId(), <span class="string">"processInstanceName"</span>);</span><br></pre></td></tr></table></figure><p>在上述代码中，<code>newProcessInstance.getId()</code>是重新发起的流程实例的ID。</p><p>通过上述步骤，你可以在重新发起的流程实例中设置和获取流程实例名称。</p><h2 id="关于流程中historicprocessinstance的endtime字段为空的情况说明">关于流程中<code>HistoricProcessInstance</code>的<code>endTime</code>字段为空的情况说明</h2><p>在Flowable中，<code>HistoricProcessInstance</code>的<code>endTime</code>字段为空是因为该字段仅在流程实例完成时被设置为非空值。当你重新发起一个新的流程实例时，该实例尚未完成，因此<code>endTime</code>字段仍然为空。</p><p><code>HistoricProcessInstance</code>对象表示已完成或已终止的流程实例的历史记录，其中<code>endTime</code>字段指示流程实例的结束时间。只有在流程实例完成时，即流程的所有活动都已完成，<code>endTime</code>字段才会被设置为相应的时间戳。</p><p>当你重新发起一个新的流程实例时，新的流程实例将被视为全新的实例，其<code>endTime</code>字段将在实例完成时被设置为相应的时间戳。因此，刚刚重新发起的流程实例的<code>endTime</code>字段为空是符合预期的行为。</p><p>如果你需要确定新流程实例的完成状态，你可以使用<code>RuntimeService</code>接口或其他相关接口来查询并检查流程实例的状态。例如，可以使用<code>RuntimeService</code>的<code>createProcessInstanceQuery()</code>方法查询并判断流程实例是否已完成。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstanceQuery query = runtimeService</span><br><span class="line">.createProcessInstanceQuery().processInstanceId(newProcessInstanceId);</span><br><span class="line"><span class="keyword">boolean</span> isProcessInstanceFinished = query.singleResult() == <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure><p>在上述代码中，<code>newProcessInstanceId</code>是你重新发起的新流程实例的ID。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;使用historyservice接口来查询历史流程实例&quot;&gt;使用&lt;code&gt;HistoryService&lt;/code&gt;接口来查询历史流程实例&lt;/h2&gt;
+&lt;p&gt;在Flowable中，已终止的流程实例不能通过&lt;code&gt;RuntimeService&lt;/code&gt;接口直接查询到。相反，你需要使用&lt;code&gt;HistoryService&lt;/code&gt;接口来查询历史流程实例，并从中筛选出已终止的实例。以下是正确的步骤：&lt;/p&gt;
+&lt;ol type=&quot;1&quot;&gt;
+&lt;li&gt;&lt;p&gt;确保你的应用程序连接到正确的Flowable流程引擎实例。你需要使用Flowable的API来执行后续的操作。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用&lt;code&gt;HistoryService&lt;/code&gt;接口的&lt;code&gt;createHistoricProcessInstanceQuery()&lt;/code&gt;方法构建查询，设置适当的条件来筛选已终止的流程实例。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		.finished();&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ol start=&quot;3&quot; type=&quot;1&quot;&gt;
+&lt;li&gt;执行查询并获取已终止的流程实例列表。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;List&amp;lt;HistoricProcessInstance&amp;gt; terminatedInstances = query.list();&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ol start=&quot;4&quot; type=&quot;1&quot;&gt;
+&lt;li&gt;&lt;p&gt;根据需要选择要重启的流程实例。你可以根据流程实例的ID或其他属性进行选择。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果你需要将已终止的流程实例重新激活，可以创建一个新的流程实例，或者使用历史流程实例中的数据进行修复。请注意，这取决于你的业务需求和流程定义的复杂性。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;请注意，已终止的流程实例是历史数据，因此无法直接重新激活。你需要根据业务需求进行相应的处理。使用&lt;code&gt;HistoryService&lt;/code&gt;接口可以提供有关已终止流程实例的详细信息，但不能直接操作它们。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="代码人生" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/"/>
+    
+      <category term="Flowable" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/Flowable/"/>
+    
+    
+      <category term="flowable" scheme="http://yoursite.com/tags/flowable/"/>
+    
+  </entry>
   
   <entry>
     <title>List＜String＞集合转Long[]数组</title>
@@ -556,65 +629,6 @@ Fleet文档&lt;/a&gt;创建maven项目.&lt;/p&gt;
     
     
       <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>货币的发行</title>
-    <link href="http://yoursite.com/2022/07/25/%E8%B4%A7%E5%B8%81%E7%9A%84%E5%8F%91%E8%A1%8C/"/>
-    <id>http://yoursite.com/2022/07/25/货币的发行/</id>
-    <published>2022-07-25T07:06:15.000Z</published>
-    <updated>2022-07-29T07:04:22.046Z</updated>
-    
-    <content type="html"><![CDATA[<p>中国共产党的货币实践有一个特点，就是货币本位十分灵活（当然也有革命条件艰苦缺乏贵金属的因素），从革命战争年代到改革开放以前长期实行的是一种“物资本位”。下面以长征时期的货币发行实践举例，题主大概可以见微知著，了解“物资本位”货币的发行、流通与回收</p><a id="more"></a><p>1935年1月7日，红军攻占遵义城。遵义是贵州省内仅次于贵阳的第二大城市，一向为黔北中心，各种土产集散地，汉、苗等族商旅云集之所，市场十分繁华，是红军长征以来所经过的第一座繁华的中等城市。</p><p>红军大部队进城时，群众已发动起来，“各种商店都已开门营业，百货日用品、食品到处都是，街上行人也很多，有赶街市的，有看热闹的，有做宣传的，还有高声叫卖麻糖的”。久困大山、长期作战的红军指战员，得到这么一个难得的休整机会，来到这么一个有大量东西可买的地方，也急需用经费购买生活、医疗等用品，以利今后的行军打仗。</p><p>但由于红军指战员随身携带的经费一部分或全部是苏维埃国家银行在中央苏区发行的苏维埃纸币，它们在白区无法流通，得不到当地百姓的认可。另一方面，当年遵义作为国民党政府的一个行署，管辖十来个县，自是军阀、官僚、地主、奸商相互勾结的地方，贵州军阀王家烈便在这里称雄一方。他在遵义开有烟馆、盐行，囤积了价值几十万元的食盐和大量烟土。当地缺盐，他一手操纵市场，以高价出售。其时猪肉才两角钱一斤，盐巴倒要四角钱一斤。许多老百姓因为买不起盐而患大脖子病。</p><p>苏维埃国家银行对上述情况进行了充分的估量，认为这种一面到处是商机、商业活动，一面群众严重缺盐而军阀囤积居奇的局面，有利于发行苏维埃钞票，主导市场，满足群众需要。他们把没收来的大量食盐和其他稀缺物资以低价卖给群众，规定只收苏维埃钞票，不收其他货币。而且一元苏维埃钞票可到兑换点换取一元二角现洋，或两元国民党的钞票。由于国家银行有充足的现金(银圆、金条等)和物资保证，发行的苏维埃钞票完全可以兑现，遵义城及附近驻有红军部队的城镇的群众和商家都乐于接纳、使用苏维埃钞票，红军指战员得以用手中的苏维埃币购买必要的物资。苏维埃钞票信誉盛极一时，市面也空前繁荣。为此，国家银行的工作人员在遵义度过了最为忙碌的10天。</p><p>由于无法在遵义建立稳固的根据地，红军决定撤离遵义。在红军撤离遵义前，为避免百姓蒙受损失或招来报复，苏维埃国家银行连夜组织回笼苏维埃币。这样，短短的十几天里，苏维埃国家银行完成了苏维埃币的发行、流通与回收，创造了一个奇迹。</p><p>国家银行在遵义发行、回笼苏维埃钞票的做法，既活跃了市场，保障了红军的供给，又维护了苏维埃钞票的信誉，维护了群众的利益，因而在当地留下了很好的影响，树立了共产党和红军的良好形象。对于当年少数还流散在群众手中的苏维埃钞票，1955年国家发行新的人民币时，还以1∶1的比价兑回了。</p><p>-- 以上来自 <a href="https://www.zhihu.com/question/25049553/answer/32176501" target="_blank" rel="noopener">知乎方亮</a></p><hr><p>关于货币发行的问题，可能大多数人是不清楚的，但是不了解货币发行的原理，对于各种经济学现象就不能真正的理解。关于中国目前货币是如何发行的，这样发行的道理又是什么，本人做了以下研究和思考。</p><p>首先国内货币的发行，离不开中国人民银行（简称央行，是中华人民共和国的中央银行）。本人理解央行和现代企业运行的基本规则是相似的。企业的主要职责是赚取利润，而央行的主要职责就是通过控制市场中货币的数量，来实现物价稳定（即通货膨胀指标）、经济发展、充分就业、国际收支平衡（汇率指标）等目标。央行对外提供借款，需要设定利率和借款期限，到期收回借款，央行可以对外支付对价购买外汇、债券等资产，这些都是和企业的运行规则是相似的。</p><p>央行控制市场中货币数量的方法主要包括向商业银行购买外汇和提供贷款。其中提供贷款又可细分为MLF、PSL等公开市场操作投放和再贷款、再贴现投放。</p><p>首先要说明的央行向商业银行购买外汇。目前国际贸易中主要是以美元结算，因为美国的超级大国的国际地位，让美元成为类似于黄金的硬通货。正是因为美元作为国际结算的主要货币，所以国家需要储备美元资产。国内的对外贸易公司通过向国外出售商品赚取到了美元，将一部分需要兑换成人民币的美元出售给中国银行（国内一般都是出售给中国银行），央行再向商业银行购买这部分外汇。央行购买的外汇向国外换为其他资产，如下图所示。</p><img src="/2022/07/25/货币的发行/v2-7f38fbd86bb35d1fdc96a381a7e63765_720w.jpg"><p>央行购买外汇支付的是债券（即人民币），这里债券相当于借条，只不过因为央行的地位，这张借条有了在市场流通的价值，可以在市场中购买资产，所以也就不需要用这张借条向央行要求还资产了。（在这里要说明的是，央行对外支付的货币可以是纸质也可以是账户里的余额，两者是等价的。在现实生活中，纸质货币能满足大家的一些使用需求，所以央行需要投放和更换市场中的纸质货币，满足大家对纸质货币的使用需求。但市场中的货币，现金（M0)只占其中一小部分，货币大部分以银行存款的余额和其他形式存在，这里不做过多解释。）央行和商业银行的资产负债表如下图所示。</p><img src="/2022/07/25/货币的发行/v2-82204188854ed918b280b4e7556b6a0a_720w.jpg"><p>央行从商业银行手中买入资产，通过增加商业银行在央行账户的存款准备金为支付手段。商业银行可以在超出央行规定的存款准备金比例之外的资金支取，用于银行的对外贷款等业务，从而增加了货币在市场中的数量。</p><img src="/2022/07/25/货币的发行/v2-0068f48a4d91a8e0dcee4a9510e52b36_720w.jpeg"><p>央行在向商业银行提供贷款中，央行增加债权资产和商业银行存款负债，商业银行增加负债和央行存款。央行向商业银行提供贷款同样增加了市场中货币的数量。</p><p>增加的货币数量，通过货币乘数，转化为真正的货币增量。（具体原理：假设甲有1000元的现金，存在商业银行A活期存款帐户。银行按照中央银行的要求，把其中10%（100元）交纳法定准备金，存入中央银行。剩下的900元可以全部贷出去，贷给乙。乙把这些钱再存入乙在B银行的帐户，B银行再交给中国人民银行90元，剩下的再贷出去。周而复始，理论上可以产生10000（1000/10%）元的活期存款。那么这个货币乘数就是10。10000元为真正增加的货币数量）</p><p>以上是央行控制市场中货币数量的方法，央行会根据市场是否缺少流动性，来调整其以上方法的使用力度，达到其想要实施的货币政策。</p><p>市场中货币数量的增加，在总商品数量不变的情况下，会引起商品价格的上升，货币总是追逐相对有些的商品引起价格的上升。因此当货币发行的速度，大于GDP的增长速度，那么就会带来通货膨胀。在通货膨胀的过程中，谁会受益呢？应该是能从价格上升中得到益处的人。通过努力，在这个过程中拥有较多具有保值功能的资产的人会受益。还有谁会受益呢，能够利用流动性宽裕的人，通过其良好的运作，可以在其中获益。</p><p>-- 以上来自 <a href="https://zhuanlan.zhihu.com/p/89363149" target="_blank" rel="noopener">知乎大峰哥</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;中国共产党的货币实践有一个特点，就是货币本位十分灵活（当然也有革命条件艰苦缺乏贵金属的因素），从革命战争年代到改革开放以前长期实行的是一种“物资本位”。下面以长征时期的货币发行实践举例，题主大概可以见微知著，了解“物资本位”货币的发行、流通与回收&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="兴趣使然" scheme="http://yoursite.com/categories/%E5%85%B4%E8%B6%A3%E4%BD%BF%E7%84%B6/"/>
-    
-    
-      <category term="货币" scheme="http://yoursite.com/tags/%E8%B4%A7%E5%B8%81/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL事务</title>
-    <link href="http://yoursite.com/2020/04/26/MySQL%E4%BA%8B%E5%8A%A1/"/>
-    <id>http://yoursite.com/2020/04/26/MySQL事务/</id>
-    <published>2020-04-26T02:38:32.000Z</published>
-    <updated>2022-07-25T06:26:34.838Z</updated>
-    
-    <content type="html"><![CDATA[<p>MySQL数据库事务是一组原子性的SQL单元，事务内的语句要么全部执行成功，要么全部执行失败。</p><h3 id="事务的四个特性">事务的四个特性</h3><ul><li>原子性（Atomicity）事务必须是原子工作单元，事务中的操作要么全部执行成功，要么全部执行失败，不能只执行部分操作。</li><li>一致性事务开始之前，数据库处于一致性的状态；事务结束后，数据库必须仍处于一致性状态。数据库一致性的定义是由用户负责的。例如，在银行转账中，用户可以定义转账前后两个账户金额之和保持不变。</li><li>隔离性通常来说一个事务在修改时但还未提交，对其他事务是不可见的。</li><li>持久性-一旦事务提交，则其所做的修改就会永久保存在数据库中。此时即使系统崩溃，修改的数据也不会丢失。</li></ul><a id="more"></a><h3 id="事务的脏读不可重复读幻读">事务的脏读、不可重复读、幻读</h3><ul><li>脏读：事务 A 读取了事务 B 更新后的数据，但是事务 B没有提交，然后事务 B 执行回滚操作，那么事务 A读到的数据就是脏数据。</li><li>不可重复读：事务 A 进行多次读取操作，事务 B 在事务 A多次读取的过程中执行更新操作并提交，提交后事务 A 读到的数据不一致。</li><li>幻读：事务 A 将数据库中所有学生的成绩由 A -&gt; B，此时事务 B手动插入了一条成绩为 A 的记录，在事务 A更改完毕后，发现还有一条记录没有修改，那么这种情况就叫做出现了幻读。</li></ul><h3 id="事务的隔离级别">事务的隔离级别</h3><p>读未提交(read uncommitted)、读已提交(readcommitted)、可重复读(repetable read) 和 串行化(serializable)。</p><ul><li><p>读未提交：读未提交指的是一个事务在提交之前，它所做的修改就能够被其他事务所看到。</p></li><li><p>读已提交：读已提交指的是一个事务在提交之后，它所做的变更才能够让其他事务看到。</p></li><li><p>可重复读：可重复读指的是一个事务在执行的过程中，看到的数据是和启动时看到的数据是一致的。未提交的变更对其他事务不可见。</p></li><li><p>串行化：顾名思义是对于同一行记录，写会加写锁，读会加读锁。当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行。</p></li></ul><img src="/2020/04/26/MySQL事务/640.png"><p>隔离级别由低到高是：读未提交 &lt; 读已提交 &lt; 可重复读 &lt;串行化</p><h3 id="mysql-常见存储引擎的区别">MySQL 常见存储引擎的区别</h3><p>通过SQL语句 <code>SHOW ENGINES</code>查看存储引擎</p><img src="/2020/04/26/MySQL事务/641.png"><p>可以看到，InnoDB 是 MySQL默认支持的存储引擎，支持事务、行级锁定和外键。</p><h4 id="myisam-存储引擎的特点">MyISAM 存储引擎的特点</h4><p>在 5.1 版本之前，MyISAM 是 MySQL 的默认存储引擎，MyISAM并发性比较差，使用的场景比较少，主要特点是</p><ul><li><p>不支持事务操作，ACID的特性也就不存在了，这一设计是为了性能和效率考虑的。</p></li><li><p>不支持外键操作，如果强行增加外键，MySQL不会报错，只不过外键不起作用。</p></li><li><p>MyISAM默认的锁粒度是表级锁，所以并发性能比较差，加锁比较快，锁冲突比较少，不太容易发生死锁的情况。</p></li><li><p>MyISAM 会在磁盘上存储三个文件，文件名和表名相同，扩展名分别是.frm(存储表定义)、.MYD(MYData,存储数据)、MYI(MyIndex,存储索引)。这里需要特别注意的是MyISAM 只缓存索引文件，并不缓存数据文件。</p></li><li><p>MyISAM 支持的索引类型有 全局索引(Full-Text)、B-Tree 索引、R-Tree索引 Full-Text索引：它的出现是为了解决针对文本的模糊查询效率较低的问题。 B-Tree索引：所有的索引节点都按照平衡树的数据结构来存储，所有的索引数据节点都在叶节点R-Tree索引：它的存储方式和 B-Tree索引有一些区别，主要设计用于存储空间和多维数据的字段做索引,目前的 MySQL版本仅支持 geometry 类型的字段作索引，相对于 BTREE，RTREE的优势在于范围查找。</p></li><li><p>数据库所在主机如果宕机，MyISAM的数据文件容易损坏，而且难以恢复。</p></li><li><p>增删改查性能方面：SELECT 性能较高，适用于查询较多的情况</p></li></ul><h4 id="innodb-存储引擎的特点">InnoDB 存储引擎的特点</h4><p>自从 MySQL 5.1 之后，默认的存储引擎变成了 InnoDB 存储引擎，相对于MyISAM，InnoDB 存储引擎有了较大的改变，它的主要特点是</p><ul><li><p>支持事务操作，具有事务 ACID隔离特性，默认的隔离级别是可重复读(repetable-read)、通过MVCC（并发版本控制）来实现的。能够解决脏读和不可重复读的问题。</p></li><li><p>InnoDB 支持外键操作。</p></li><li><p>InnoDB默认的锁粒度行级锁，并发性能比较好，会发生死锁的情况。</p></li><li><p>和 MyISAM 一样的是，InnoDB 存储引擎也有 .frm文件存储表结构定义，但是不同的是，InnoDB 的表数据与索引数据是存储在一起的，都位于 B+数的叶子节点上，而 MyISAM 的表数据和索引数据是分开的。</p></li><li><p>InnoDB有安全的日志文件，这个日志文件用于恢复因数据库崩溃或其他情况导致的数据丢失问题，保证数据的一致性。</p></li><li><p>InnoDB 和 MyISAM支持的索引类型相同，但具体实现因为文件结构的不同有很大差异。</p></li><li><p>增删改查性能方面，如果执行大量的增删改操作，推荐使用 InnoDB存储引擎，它在删除操作时是对行删除，不会重建表。</p></li></ul><h4 id="myisam-和-innodb-存储引擎的对比">MyISAM 和 InnoDB存储引擎的对比</h4><ul><li><p>锁粒度方面：由于锁粒度不同，InnoDB 比 MyISAM支持更高的并发；InnoDB 的锁粒度为行锁、MyISAM的锁粒度为表锁、行锁需要对每一行进行加锁，所以锁的开销更大，但是能解决脏读和不可重复读的问题，相对来说也更容易发生死锁</p></li><li><p>可恢复性上：由于 InnoDB是有事务日志的，所以在产生由于数据库崩溃等条件后，可以根据日志文件进行恢复。而MyISAM 则没有事务日志。</p></li><li><p>查询性能上：MyISAM 要优于 InnoDB，因为 InnoDB在查询过程中，是需要维护数据缓存，而且查询过程是先定位到行所在的数据块，然后在从数据块中定位到要查找的行；而MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数据。</p></li><li><p>表结构文件上：MyISAM的表结构文件包括：.frm(表结构定义),.MYI(索引),.MYD(数据)；而 InnoDB的表数据文件为:.ibd和.frm(表结构定义)；</p></li></ul><p>文章来自<a href="https://mp.weixin.qq.com/s?__biz=MzU2NDg0OTgyMA==&amp;mid=2247486267&amp;idx=1&amp;sn=b96d38b39c34d400c9985c54899e126b&amp;chksm=fc45f6c8cb327fdecabac01cb7d6fe0d75c8c212fb341cf3dc7e481b53d5fe8915160b2059e8&amp;mpshare=1&amp;scene=24&amp;srcid=0514ROWD2lIjFItWOKlBYXL7&amp;sharer_sharetime=1589434711640&amp;sharer_shareid=50e38dcd7776348278a128de8ad8d396&amp;key=8d915c155b1ceb9625a9dda450e6bf03db464ddba9fffe454cf51960477f186591696584f72a61f96c942a2e9bf698615ae2bec9e397ec4b765aab5f5874b8272c427f9aed42e3c9fc5fc7dfc1bbd1c7&amp;ascene=14&amp;uin=OTQ3NzYxMTM2&amp;devicetype=Windows+10+x64&amp;version=62090070&amp;lang=zh_CN&amp;exportkey=AzZJkfttIkfe4EOendMMvhg%3D&amp;pass_ticket=Ca7nWpSV1zN1yKOGQoK6bpsW%2BmahyJBCE2FC9DYbOLGCDSxdtOi15zeY3wsLQ%2Bdd" target="_blank" rel="noopener">Java建设者</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;MySQL数据库事务是一组原子性的SQL单元，事务内的语句要么全部执行成功，要么全部执行失败。&lt;/p&gt;
-&lt;h3 id=&quot;事务的四个特性&quot;&gt;事务的四个特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;原子性（Atomicity）
-事务必须是原子工作单元，事务中的操作要么全部执行成功，要么全部执行失败，不能只执行部分操作。&lt;/li&gt;
-&lt;li&gt;一致性
-事务开始之前，数据库处于一致性的状态；事务结束后，数据库必须仍处于一致性状态。数据库一致性的定义是由用户负责的。例如，在银行转账中，用户可以定义转账前后两个账户金额之和保持不变。&lt;/li&gt;
-&lt;li&gt;隔离性
-通常来说一个事务在修改时但还未提交，对其他事务是不可见的。&lt;/li&gt;
-&lt;li&gt;持久性
--一旦事务提交，则其所做的修改就会永久保存在数据库中。此时即使系统崩溃，修改的数据也不会丢失。&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
-    
-      <category term="事务" scheme="http://yoursite.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
   </entry>
   
