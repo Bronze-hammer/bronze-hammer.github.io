@@ -58,6 +58,8 @@
   <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
 
   <!-- analytics -->
+  <% if (theme.baidu_tongji.enable){ %>
   <%- partial('baidu_analytics') %>
+  <% } %>
 
 </head>
