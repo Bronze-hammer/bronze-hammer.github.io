@@ -120,6 +120,39 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/07/14/SpringBoot与SpringCloud/">SpringBoot与SpringCloud</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-07-14  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="springboot">1. SpringBoot</h1>
+<h2 id="springboot的作用">1.1 SpringBoot的作用</h2>
+<p>SpringBoot是一个快速构建项目并简化项目配置的工具，内部集成了Tomcat及大多数第三方应用和Spring框架的默认配置。与我们学习的SpringMVC和SpringCloud并无冲突,SpringBoot提供的这些默认配置，大大简化了SpringMVC、SpringCloud等基于Spring的Web应用的开发。</p>
+<h2 id="springboot的自动配置原理如何实现">1.2.SpringBoot的自动配置原理（如何实现）？</h2>
+<h3 id="springboot的自动配置是如何实现的">SpringBoot的自动配置是如何实现的？</h3>
+<p>一般我们的SpringBoot项目启动类都会添加<code>@SpringBootApplication</code>注解，而这个注解的其中一个二级注解是<code>@EnableAutoConfiguration</code>注解。而<code>@EnableAutoConfiguration</code>注解通过<code>@Import</code>注解，以<code>ImportSelector</code>接口的方法来导入classpath下的<code>META-INF/spring.factories</code>文件，这些文件中会指定需要加载的一些类名称。</p>
+<p>这些类一般都加了<code>@Configuration</code>注解，并且完成了对某框架（例如Redis、SpringMVC）的默认配置，当这些类符合条件时，就会被实例化，其中的配置生效，那么自动配置自然生效了。</p>
+	
+	</div>
+  <a type="button" href="/2023/07/14/SpringBoot与SpringCloud/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/">MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</a>
 		</h3>
 		</div>
@@ -426,34 +459,6 @@ new
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/04/程序猿三部曲之白银时代/">程序猿三部曲之白银时代</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-04  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>之前在某篇<a href="https://mp.weixin.qq.com/s/CfBwk0dttd1eb2PvOvGvuQ" target="_blank" rel="noopener">公众号文章</a>中，看到工资10K、15K、20K的Java程序员应该掌握的技术。大致对应着初、中、高级开发人员，所以我打算针对这三个阶段，写三篇文章，一边学习，一边总结。</p>
-<p>曾经读过王小波的时代三部曲，分别是《青铜时代》、《白银时代》、《黄金时代》，遂借用来类比程序员的三个阶段。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/04/程序猿三部曲之白银时代/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -507,7 +512,7 @@ new
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>12</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -532,45 +537,45 @@ new
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
-		
-			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
-		
-			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
-		
-			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
-		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
 		
 			<li><a href="/tags/货币/">货币<span>1</span></a></li>
 		
+			<li><a href="/tags/Java/">Java<span>6</span></a></li>
+		
+			<li><a href="/tags/jar/">jar<span>1</span></a></li>
+		
+			<li><a href="/tags/异常/">异常<span>1</span></a></li>
+		
 			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
 		
-			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
+			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
 		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
 		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+			<li><a href="/tags/List/">List<span>1</span></a></li>
 		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
-		
-			<li><a href="/tags/File/">File<span>1</span></a></li>
-		
-			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
-		
-			<li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
+			<li><a href="/tags/String/">String<span>1</span></a></li>
 		
 			<li><a href="/tags/索引/">索引<span>2</span></a></li>
 		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
+			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
 		
-			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
 		
-			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+		
+			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+		
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+		
+			<li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
+		
+			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+		
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
 		
 			<li><a href="/tags/反射/">反射<span>1</span></a></li>
-		
-			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>52</span></a></li>
@@ -586,6 +591,10 @@ new
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2023/07/14/SpringBoot与SpringCloud/"><i class="fa fa-file-o"></i>SpringBoot与SpringCloud</a>
+      </li>
+    
+      <li>
         <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/"><i class="fa fa-file-o"></i>MyBatis配置allowMultiQueries=...</a>
       </li>
     
@@ -599,10 +608,6 @@ new
     
       <li>
         <a href="/2023/06/12/读取jar包中指定资源文件的内容/"><i class="fa fa-file-o"></i>读取jar包中指定资源文件的内容</a>
-      </li>
-    
-      <li>
-        <a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/"><i class="fa fa-file-o"></i>Convert Image File to Base6...</a>
       </li>
     
   </ul>

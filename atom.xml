@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2023-06-30T05:01:00.437Z</updated>
+  <updated>2023-07-14T09:03:43.325Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringBoot与SpringCloud</title>
+    <link href="http://yoursite.com/2023/07/14/SpringBoot%E4%B8%8ESpringCloud/"/>
+    <id>http://yoursite.com/2023/07/14/SpringBoot与SpringCloud/</id>
+    <published>2023-07-14T05:33:33.000Z</published>
+    <updated>2023-07-14T09:03:43.325Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="springboot">1. SpringBoot</h1><h2 id="springboot的作用">1.1 SpringBoot的作用</h2><p>SpringBoot是一个快速构建项目并简化项目配置的工具，内部集成了Tomcat及大多数第三方应用和Spring框架的默认配置。与我们学习的SpringMVC和SpringCloud并无冲突,SpringBoot提供的这些默认配置，大大简化了SpringMVC、SpringCloud等基于Spring的Web应用的开发。</p><h2 id="springboot的自动配置原理如何实现">1.2.SpringBoot的自动配置原理（如何实现）？</h2><h3 id="springboot的自动配置是如何实现的">SpringBoot的自动配置是如何实现的？</h3><p>一般我们的SpringBoot项目启动类都会添加<code>@SpringBootApplication</code>注解，而这个注解的其中一个二级注解是<code>@EnableAutoConfiguration</code>注解。而<code>@EnableAutoConfiguration</code>注解通过<code>@Import</code>注解，以<code>ImportSelector</code>接口的方法来导入classpath下的<code>META-INF/spring.factories</code>文件，这些文件中会指定需要加载的一些类名称。</p><p>这些类一般都加了<code>@Configuration</code>注解，并且完成了对某框架（例如Redis、SpringMVC）的默认配置，当这些类符合条件时，就会被实例化，其中的配置生效，那么自动配置自然生效了。</p><a id="more"></a><h3 id="满足怎样的条件配置才会生效">满足怎样的条件配置才会生效？</h3><p>一般提供默认配置的类都会添加<code>@ConditionalOnXxx</code>这样的注解，例如：<code>@ConditionalOnClass</code>，<code>@ConditionalOnProperties</code>等。<code>@ConditionalOnClass</code>表示只有classpath中存在某些指定的类时，条件满足，此时该配置类才会生效。例如Redis的默认配置其实早就有了，但是只有你引入redis的starter依赖，才满足了条件，触发自动配置。</p><h3 id="那如果我需要覆盖这些默认配置呢">那如果我需要覆盖这些默认配置呢？</h3><p>有两种方式可以覆盖默认配置：</p><ul><li>SpringBoot提供默认配置时，会在提供的Bean上加注解@ConditionalOnMissingBean，意思是如果这个Bean不存在时条件满足，那么我们只要配置了相同的Bean，那么SpringBoot提供的默认配置就会失效</li><li>SpringBoot提供默认配置时，一些关键属性会通过读取application.yml或者application.properties文件来获取，因此我们可以通过覆盖任意一个文件中的属性来覆盖默认配置。</li></ul><h2 id="自定义springboot的stater">1.3 自定义SpringBoot的stater？</h2><p>项目中某些中间件的客户端（如Redis、ElasticSearch）会进行二次封装，并通过starter方式提供jar包，供大家使用。</p><p>一般定义starter包括下面几个子工程：</p><ul><li>xxx-spring-boot-starter：pom格式，管理当前starter中需要的各种依赖</li><li>xxx-spring-boot-autoconfigure：jar格式，自动配置的核心代码</li></ul><p>以elasticsearch为例来说说autoconfigure中包含哪些</p><ul><li>elasticsearch的工具类</li><li>属性加载的类，一般通过@ConfigurationProperties注解读取yaml文件中的es地址</li><li>添加了@Configuration的配置类，作用是初始化elasticsearch工具类，初始化elasticsearch客户端，初始化一些其它必备的实例。</li><li>resource下定义META-INF文件夹，并且文件夹下定义spring.factories文件，文件中是key-value形式:key是EnableAutoConfiguration这个注解的全路径名,value是我们自定义自动配置类（加了@Configuration的类），如果有多个以","隔开</li></ul><h2 id="springboot项目的启动流程">1.4 SpringBoot项目的启动流程</h2><p>SpringBoot项目启动第一步就是创建SpringApplication的实例，并且调用SpringApplication.run()这个方法。</p><p>创建SpringApplication实例主要完成三件事情：</p><ul><li>记录当前启动类字节码</li><li>判断当前项目类型，普通Servlet、响应式WebFlux、NONE</li><li>加载/META-INF/spring.factories文件，初始化ApplicationContextInitializer和ApplicationListener实例</li></ul><p>而后的run()方法则会创建spring容器，流程如下：</p><ul><li>准备监听器，监听Spring启动的各个过程</li><li>创建并配置环境参数Environment</li><li>创建ApplicationContext</li><li>prepareContext()：初始化ApplicationContext，准备运行环境</li><li>refreshContext(context)：准备Bean工厂，调用一个BeanDefinition和BeanFactory的后处理器，初始化各种Bean，初始化tomcat</li><li>afterRefresh()：拓展功能，目前为空</li><li>发布容器初始化完毕的事件</li></ul><h2 id="springboot的配置加载优先级">1.5 SpringBoot的配置加载优先级</h2><p>SpringBoot参数配置方式很多，比较常用参数配置方式按照优先级从高到低分别是：</p><ul><li>在命令行中传入的参数</li><li>java 的系统属性，可以通过System.getProperties()获得的内容</li><li>操作系统的环境变量</li><li>针对不同{profile}环境的配置文件内容，例如applicaiton-{profile}.yaml</li><li>application.yml或application.proerties文件</li><li>在@Configration注解修改的类中，通过@PropertySource注解定义的属性</li></ul><h1 id="springcloud">2 SpringCloud</h1><h2 id="springcloud和dubbo的区别">2.1 SpringCloud和Dubbo的区别</h2><p>两者都是现在主流的微服务框架，但却存在不少差异：</p><ul><li>初始定位不同：SpringCloud定位为微服务架构下的一站式解决方案；Dubbo是 SOA 时代的产物，它的关注点主要在于服务的调用和治理</li><li>生态环境不同：SpringCloud依托于Spring平台，具备更加完善的生态体系；而Dubbo一开始只是做RPC远程调用，生态相对匮乏，现在逐渐丰富起来。</li><li>调用方式：SpringCloud是采用Http协议做远程调用，接口一般是Rest风格，比较灵活；Dubbo是采用Dubbo协议，接口一般是Java的Service接口，格式固定。但调用时采用Netty的NIO方式，性能较好。</li><li>组件差异比较多，例如SpringCloud注册中心一般用Eureka，而Dubbo用的是Zookeeper</li></ul><p>SpringCloud生态丰富，功能完善，更像是品牌机，Dubbo则相对灵活，可定制性强，更像是组装机。</p><table><thead><tr class="header"><th>功能</th><th>Dubbo</th><th>SpringCloud</th></tr></thead><tbody><tr class="odd"><td>服务注册中心</td><td>Zookeeper</td><td>Eureka(主流）、Consul、zookeeper</td></tr><tr class="even"><td>服务调用方式</td><td>RPC基于Dubbo协议</td><td>REST API 基于Http协议</td></tr><tr class="odd"><td>服务监控</td><td>Dubbo-Monitor</td><td>Spring Boot Admin</td></tr><tr class="even"><td>熔断器</td><td>不完善</td><td>Spring Cloud Netflix Hystrix</td></tr><tr class="odd"><td>服务网关</td><td>无</td><td>Spring Cloud Netflix Zuul、Gateway</td></tr><tr class="even"><td>分布式配置</td><td>无</td><td>Spring Cloud Config</td></tr><tr class="odd"><td>服务跟踪</td><td>无</td><td>Spring Cloud Sleuth+Zipkin(一般)</td></tr><tr class="even"><td>数据流</td><td>无</td><td>Spring Cloud Stream</td></tr><tr class="odd"><td>批量任务</td><td>无</td><td>Spring Cloud Task</td></tr><tr class="even"><td>信息总线</td><td>无</td><td>Spring Cloud Bus</td></tr></tbody></table><hr><p>未完待续</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;springboot&quot;&gt;1. SpringBoot&lt;/h1&gt;
+&lt;h2 id=&quot;springboot的作用&quot;&gt;1.1 SpringBoot的作用&lt;/h2&gt;
+&lt;p&gt;SpringBoot是一个快速构建项目并简化项目配置的工具，内部集成了Tomcat及大多数第三方应用和Spring框架的默认配置。与我们学习的SpringMVC和SpringCloud并无冲突,SpringBoot提供的这些默认配置，大大简化了SpringMVC、SpringCloud等基于Spring的Web应用的开发。&lt;/p&gt;
+&lt;h2 id=&quot;springboot的自动配置原理如何实现&quot;&gt;1.2.SpringBoot的自动配置原理（如何实现）？&lt;/h2&gt;
+&lt;h3 id=&quot;springboot的自动配置是如何实现的&quot;&gt;SpringBoot的自动配置是如何实现的？&lt;/h3&gt;
+&lt;p&gt;一般我们的SpringBoot项目启动类都会添加&lt;code&gt;@SpringBootApplication&lt;/code&gt;注解，而这个注解的其中一个二级注解是&lt;code&gt;@EnableAutoConfiguration&lt;/code&gt;注解。而&lt;code&gt;@EnableAutoConfiguration&lt;/code&gt;注解通过&lt;code&gt;@Import&lt;/code&gt;注解，以&lt;code&gt;ImportSelector&lt;/code&gt;接口的方法来导入classpath下的&lt;code&gt;META-INF/spring.factories&lt;/code&gt;文件，这些文件中会指定需要加载的一些类名称。&lt;/p&gt;
+&lt;p&gt;这些类一般都加了&lt;code&gt;@Configuration&lt;/code&gt;注解，并且完成了对某框架（例如Redis、SpringMVC）的默认配置，当这些类符合条件时，就会被实例化，其中的配置生效，那么自动配置自然生效了。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="代码人生" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/"/>
+    
+    
+      <category term="SpringCloud" scheme="http://yoursite.com/tags/SpringCloud/"/>
+    
+      <category term="SpringBoot" scheme="http://yoursite.com/tags/SpringBoot/"/>
+    
+  </entry>
   
   <entry>
     <title>MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</title>
@@ -596,31 +627,6 @@ Fleet文档&lt;/a&gt;创建maven项目.&lt;/p&gt;
 &lt;code&gt;now()&lt;/code&gt;
 函数获取当前系统日期，然后利用&lt;code&gt;DATE_FORMAT()&lt;/code&gt;
 函数计算出当前年龄。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>处理MySQL使用concat()函数时遇到null值的问题</title>
-    <link href="http://yoursite.com/2022/10/21/%E5%A4%84%E7%90%86MySQL%E4%BD%BF%E7%94%A8concat-%E5%87%BD%E6%95%B0%E6%97%B6%E9%81%87%E5%88%B0null%E5%80%BC%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/</id>
-    <published>2022-10-21T05:43:23.000Z</published>
-    <updated>2023-02-21T07:19:13.550Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="问题描述">问题描述</h4><p>使用<code>CONCAT()</code>拼接结果是，当<code>CONCAT()</code>函数中的一个参数为<code>null</code>，那么不管其他字符串是否有值，最后返回的拼接结果总是<code>null</code>，如下所示：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>,</span><br><span class="line">address,</span><br><span class="line">nationality,</span><br><span class="line"><span class="keyword">CONCAT</span>(<span class="string">'my name is '</span>, <span class="keyword">name</span>, <span class="string">', to live in '</span>, address, <span class="string">', and i am from '</span>, nationality) <span class="keyword">as</span> <span class="keyword">str</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user2`</span></span><br></pre></td></tr></table></figure></p><a id="more"></a><img src="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/1.png"><p>MySQL 官方文档有句话</p><img src="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/2.png"><h4 id="解决办法">解决办法</h4><ol type="1"><li>使用 <code>COALESCE()</code> 函数转换null值</li></ol><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>,</span><br><span class="line">address,</span><br><span class="line">nationality,</span><br><span class="line"><span class="keyword">CONCAT</span>(<span class="string">'my name is '</span>, <span class="keyword">COALESCE</span>(<span class="keyword">name</span>, <span class="string">''</span>), <span class="string">', to live in '</span>, <span class="keyword">COALESCE</span>(address, <span class="string">''</span>), <span class="string">', and i am from '</span>, <span class="keyword">COALESCE</span>(nationality, <span class="string">''</span>)) <span class="keyword">as</span> <span class="keyword">str</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user2`</span></span><br></pre></td></tr></table></figure><img src="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/3.png"><ol start="2" type="1"><li>使用<code>IFNULL()</code> 函数转换null值 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>,</span><br><span class="line">address,</span><br><span class="line">nationality,</span><br><span class="line"><span class="keyword">CONCAT</span>(<span class="string">'my name is '</span>, <span class="keyword">ifnull</span>(<span class="keyword">name</span>, <span class="string">''</span>), <span class="string">', to live in '</span>, <span class="keyword">ifnull</span>(address, <span class="string">''</span>), <span class="string">', and i am from '</span>, <span class="keyword">ifnull</span>(nationality, <span class="string">''</span>)) <span class="keyword">as</span> <span class="keyword">str</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user2`</span></span><br></pre></td></tr></table></figure></li></ol><img src="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/4.png"><ol start="3" type="1"><li>尝试使用<code>CONCAT_WS()</code> 函数拼接字符串 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>,</span><br><span class="line">address,</span><br><span class="line">nationality,</span><br><span class="line"><span class="keyword">CONCAT_WS</span>(<span class="string">','</span>,<span class="keyword">name</span>,address,nationality) <span class="keyword">as</span> <span class="keyword">str</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user2`</span></span><br></pre></td></tr></table></figure></li></ol><img src="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/5.png"><hr><p>参考资料：</p><ol type="1"><li><p><a href="https://stackoverflow.com/questions/15741314/mysql-concat-returns-null-if-any-field-contain-null" target="_blank" rel="noopener">https://stackoverflow.com/questions/15741314/mysql-concat-returns-null-if-any-field-contain-null</a></p></li><li><p><a href="https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat" target="_blank" rel="noopener">12.8String Functions and Operators</a></p></li><li><p><a href="https://dev.mysql.com/doc/refman/8.0/en/flow-control-functions.html#function_ifnull" target="_blank" rel="noopener">12.5Flow Control Functions</a></p></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;问题描述&quot;&gt;问题描述&lt;/h4&gt;
-&lt;p&gt;使用&lt;code&gt;CONCAT()&lt;/code&gt;拼接结果是，当&lt;code&gt;CONCAT()&lt;/code&gt;函数中的一个参数为&lt;code&gt;null&lt;/code&gt;，那么不管其他字符串是否有值，最后返回的拼接结果总是&lt;code&gt;null&lt;/code&gt;，如下所示：
-&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;SELECT&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;name&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	address,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	nationality,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;CONCAT&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&#39;my name is &#39;&lt;/span&gt;, &lt;span class=&quot;keyword&quot;&gt;name&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;, to live in &#39;&lt;/span&gt;, address, &lt;span class=&quot;string&quot;&gt;&#39;, and i am from &#39;&lt;/span&gt;, nationality) &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;str&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;`user2`&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
     
     </summary>
     
