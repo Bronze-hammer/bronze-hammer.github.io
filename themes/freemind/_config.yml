@@ -66,7 +66,7 @@ google_analytics:
   enable: false
   siteid: UA-70812759-1
 baidu_tongji:
-  enable: false
+  enable: true
   siteid: 5d4268fe3f695d6111d5659760d4d452
 
 # search
