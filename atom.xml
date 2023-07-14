@@ -336,6 +336,12 @@ new
       <category term="代码人生" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/"/>
     
     
+      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="索引" scheme="http://yoursite.com/tags/%E7%B4%A2%E5%BC%95/"/>
+    
+      <category term="线程" scheme="http://yoursite.com/tags/%E7%BA%BF%E7%A8%8B/"/>
+    
       <category term="Ioc和AOP" scheme="http://yoursite.com/tags/Ioc%E5%92%8CAOP/"/>
     
       <category term="反射" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%B0%84/"/>
@@ -344,21 +350,15 @@ new
     
       <category term="异常" scheme="http://yoursite.com/tags/%E5%BC%82%E5%B8%B8/"/>
     
-      <category term="索引" scheme="http://yoursite.com/tags/%E7%B4%A2%E5%BC%95/"/>
-    
       <category term="Redis" scheme="http://yoursite.com/tags/Redis/"/>
     
       <category term="缓存" scheme="http://yoursite.com/tags/%E7%BC%93%E5%AD%98/"/>
-    
-      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
       <category term="Dubbo" scheme="http://yoursite.com/tags/Dubbo/"/>
     
       <category term="SpringCloud" scheme="http://yoursite.com/tags/SpringCloud/"/>
     
       <category term="序列化" scheme="http://yoursite.com/tags/%E5%BA%8F%E5%88%97%E5%8C%96/"/>
-    
-      <category term="线程" scheme="http://yoursite.com/tags/%E7%BA%BF%E7%A8%8B/"/>
     
       <category term="RocketMQ" scheme="http://yoursite.com/tags/RocketMQ/"/>
     
@@ -548,12 +548,12 @@ Google搜索了大量资料，问题是最终解决了，但是这其中的原�
   
   <entry>
     <title>根据JetBrains Fleet文档创建maven项目失败的解决办法</title>
-    <link href="http://yoursite.com/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains-Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
-    <id>http://yoursite.com/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/</id>
+    <link href="http://yoursite.com/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/</id>
     <published>2022-10-26T08:46:26.000Z</published>
     <updated>2022-10-26T09:24:04.204Z</updated>
     
-    <content type="html"><![CDATA[<p>打算尝试一下Fleet编辑器，根据<a href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace" target="_blank" rel="noopener">JetBrainsFleet文档</a>创建maven项目.</p><p>首选确认本地机器上已经安装并配置了maven</p><p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal窗口，在编辑器的下方</p><p>粘贴并执行<code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p><p>创建失败，提下如下</p><img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png"><a id="more"></a><p>然后google之，在stackoverflow上发现了这篇文章 <a href="https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom" target="_blank" rel="noopener">https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom</a></p><img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026170831.png"><img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/UFqqh.png"><p>简而言之：<em>必须用引号括起所有参数</em></p><p>于是重新修改了mvn命令并重新执行</p><p><code>mvn archetype:generate "-DgroupId=com.mycompany.app" "-DartifactId=my-app" "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.4" "-DinteractiveMode=false"</code></p><p>于是maven项目创建成功</p><img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026171206.png"><img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026171222.png">]]></content>
+    <content type="html"><![CDATA[<p>打算尝试一下Fleet编辑器，根据<a href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace" target="_blank" rel="noopener">JetBrainsFleet文档</a>创建maven项目.</p><p>首选确认本地机器上已经安装并配置了maven</p><p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal窗口，在编辑器的下方</p><p>粘贴并执行<code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p><p>创建失败，提下如下</p><img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png"><a id="more"></a><p>然后google之，在stackoverflow上发现了这篇文章 <a href="https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom" target="_blank" rel="noopener">https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom</a></p><img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170831.png"><img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/UFqqh.png"><p>简而言之：<em>必须用引号括起所有参数</em></p><p>于是重新修改了mvn命令并重新执行</p><p><code>mvn archetype:generate "-DgroupId=com.mycompany.app" "-DartifactId=my-app" "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.4" "-DinteractiveMode=false"</code></p><p>于是maven项目创建成功</p><img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171206.png"><img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171222.png">]]></content>
     
     <summary type="html">
     
@@ -565,7 +565,7 @@ Fleet文档&lt;/a&gt;创建maven项目.&lt;/p&gt;
 &lt;p&gt;粘贴并执行
 &lt;code&gt;mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;创建失败，提下如下&lt;/p&gt;
-&lt;img src=&quot;/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png&quot;&gt;
+&lt;img src=&quot;/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png&quot;&gt;
     
     </summary>
     

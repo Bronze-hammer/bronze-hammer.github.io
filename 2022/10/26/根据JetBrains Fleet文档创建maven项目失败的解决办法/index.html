@@ -45,17 +45,6 @@ mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -Darchety
 
   <!-- analytics -->
   
-  <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-  
 
 </head>
 </html>
@@ -140,17 +129,17 @@ Fleet文档</a>创建maven项目.</p>
 <p>粘贴并执行
 <code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p>
 <p>创建失败，提下如下</p>
-<img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png">
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png">
 <a id="more"></a>
 <p>然后google之，在stackoverflow上发现了这篇文章 <a href="https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom" target="_blank" rel="noopener">https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom</a></p>
-<img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026170831.png">
-<img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/UFqqh.png">
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170831.png">
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/UFqqh.png">
 <p>简而言之：<em>必须用引号括起所有参数</em></p>
 <p>于是重新修改了mvn命令并重新执行</p>
 <p><code>mvn archetype:generate "-DgroupId=com.mycompany.app" "-DartifactId=my-app" "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.4" "-DinteractiveMode=false"</code></p>
 <p>于是maven项目创建成功</p>
-<img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026171206.png">
-<img src="/2022/10/26/根据JetBrains-Fleet文档创建maven项目失败的解决办法/QQ截图20221026171222.png">
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171206.png">
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171222.png">
 	  
 	</div>
 
