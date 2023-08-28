@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>MySQL行转列函数 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="GROUP_CONCAT()函数
+创建表person_info，并插入数据
+12345678910111213141516CREATE TABLE `person_info` (  `id` bigint(20) NOT NULL AUTO_INCREMENT,  `name` varchar(100) DEFAULT NULL,  `family` varchar(100) DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;INSERT INTO niffler.person_info (name, family) VALUES(&#39;张三&#39;, &#39;张三爸&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;张三&#39;, &#39;张三妈&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;李四&#39;, &#39;李四爸&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;李四&#39;, &#39;李四妈&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;李四&#39;, &#39;李四大哥&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;王二&#39;, &#39;王二爷爷&#39;);INSERT INTO niffler.person_info (name, family) VALUES(&#39;王二&#39;, &#39;王二姐姐&#39;);">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="MySQL行转列函数">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> MySQL行转列函数</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="group_concat函数">GROUP_CONCAT()函数</h1>
+<p>创建表<code>person_info</code>，并插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`person_info`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`family`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">8</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四大哥'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二爷爷'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二姐姐'</span>);</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>name</th>
+<th>family</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>张三</td>
+<td>张三爸</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>张三</td>
+<td>张三妈</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>李四</td>
+<td>李四爸</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>李四</td>
+<td>李四妈</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>李四</td>
+<td>李四大哥</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>王二</td>
+<td>王二爷爷</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>王二</td>
+<td>王二姐姐</td>
+</tr>
+</tbody>
+</table>
+<p>语法： <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GROUP_CONCAT([DISTINCT] expr [,expr ...]</span><br><span class="line">             [ORDER BY &#123;unsigned_integer | col_name | expr&#125;</span><br><span class="line">                 [ASC | DESC] [,col_name ...]]</span><br><span class="line">             [SEPARATOR str_val])</span><br></pre></td></tr></table></figure></p>
+<p>示例： <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span>, <span class="keyword">GROUP_CONCAT</span>(family SEPARATOR <span class="string">'&amp;'</span>) <span class="keyword">AS</span> familys <span class="keyword">FROM</span> person_info <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">name</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：</p>
+<img src="/2023/08/25/MySQL行转列函数/微信截图_20230823102642.png">
+<p>可以看看我上篇写的关于GROUP_CONCAT()的文章<a href="https://blog.csdn.net/bronzehammer/article/details/132319248?spm=1001.2014.3001.5501" target="_blank" rel="noopener">【笔记】MySQL数据库GROUP_CONCAT()
+函数输出结果的长度限制</a></p>
+<h1 id="case函数">CASE函数</h1>
+<p>MySQL中的CASE表达式不是行转列函数。它是一种条件表达式，用于根据条件对数据进行选择、计算和转换。</p>
+<p>然而，你可以使用CASE表达式来实现行转列的效果。通过在CASE表达式中定义不同的条件和相应的结果，你可以将行的数据按照不同的条件拆分到不同的列中。</p>
+<p>创建表<code>person_grade</code>，并插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`person_grade`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`subject`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`mark`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">5</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_grade (<span class="keyword">name</span>, subject, mark) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'数学'</span>, <span class="number">66</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_grade (<span class="keyword">name</span>, subject, mark) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'语文'</span>, <span class="number">99</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_grade (<span class="keyword">name</span>, subject, mark) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'数学'</span>, <span class="number">77</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_grade (<span class="keyword">name</span>, subject, mark) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'政治'</span>, <span class="number">80</span>);</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>name</th>
+<th>subject</th>
+<th>mark</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>张三</td>
+<td>数学</td>
+<td>66</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>张三</td>
+<td>语文</td>
+<td>99</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>李四</td>
+<td>数学</td>
+<td>77</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>李四</td>
+<td>政治</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+<p>以subject列为表头，展示每个人的成绩</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> , </span><br><span class="line">	(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'数学'</span> ,</span><br><span class="line">	(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'语文'</span> ,</span><br><span class="line">	(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'政治'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'政治'</span> </span><br><span class="line"><span class="keyword">from</span> person_grade;</span><br></pre></td></tr></table></figure>
+<p>结果</p>
+<img src="/2023/08/25/MySQL行转列函数/微信截图_20230823132128.png">
+<p>确实是按照subject列作为表头展示了成绩，但是每条成绩都占用一行，那么如何把同一个人的成绩都在一行展示呢？</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> , </span><br><span class="line">	<span class="keyword">MAX</span>(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'数学'</span> ,</span><br><span class="line">	<span class="keyword">MAX</span>(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'语文'</span> ,</span><br><span class="line">	<span class="keyword">MAX</span>(<span class="keyword">case</span> subject <span class="keyword">when</span> <span class="string">'政治'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'政治'</span> </span><br><span class="line"><span class="keyword">from</span> person_grade</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">name</span> ;</span><br></pre></td></tr></table></figure>
+<p>结果</p>
+<img src="/2023/08/25/MySQL行转列函数/微信截图_20230823132414.png">
+<blockquote>
+<p>上面的脚本，把MAX函数换成SUM函数，效果一样；除了CASE函数，也可使用IF函数实现行转列的效果。</p>
+</blockquote>
+<h1 id="group_concat和case结合实现动态行转列">GROUP_CONCAT()和CASE()结合实现动态行转列</h1>
+<p>通过CASE()函数的例子可以看到，表头行字段<code>数学</code>、<code>语文</code>、<code>政治</code>都是我们提前已经知晓并且手动指定的，那么如果我们事先不知道有哪些表头字段，怎么办呢？</p>
+<p>可以通过下面的脚本实现：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> @<span class="keyword">sql</span> = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">  <span class="keyword">GROUP_CONCAT</span>(<span class="keyword">DISTINCT</span></span><br><span class="line">    <span class="keyword">CONCAT</span>(</span><br><span class="line">      <span class="string">'max(case when subject = '''</span>,</span><br><span class="line">      subject,</span><br><span class="line">      <span class="string">''' then mark end) '</span>,</span><br><span class="line">      subject</span><br><span class="line">    )</span><br><span class="line">  ) <span class="keyword">INTO</span> @<span class="keyword">sql</span></span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">  Meeting;</span><br><span class="line"><span class="keyword">SET</span> @<span class="keyword">sql</span> = <span class="keyword">CONCAT</span>(<span class="string">'SELECT Meeting_id, '</span>, @<span class="keyword">sql</span>, <span class="string">' </span></span><br><span class="line"><span class="string">                  FROM Meeting </span></span><br><span class="line"><span class="string">                   GROUP BY Meeting_id'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">PREPARE</span> stmt <span class="keyword">FROM</span> @<span class="keyword">sql</span>;</span><br><span class="line"><span class="keyword">EXECUTE</span> stmt;</span><br><span class="line"><span class="keyword">DEALLOCATE</span> <span class="keyword">PREPARE</span> stmt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义预处理语句</span></span><br><span class="line"><span class="comment"># PREPARE stmt_name FROM preparable_stmt;</span></span><br><span class="line"><span class="comment"># 执行预处理语句</span></span><br><span class="line"><span class="comment"># EXECUTE stmt_name [USING @var_name [, @var_name] ...];</span></span><br><span class="line"><span class="comment"># 删除(释放)定义</span></span><br><span class="line"><span class="comment"># &#123;DEALLOCATE | DROP&#125; PREPARE stmt_name;</span></span><br></pre></td></tr></table></figure>
+<p>先来看看这句的执行的效果：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">  <span class="keyword">GROUP_CONCAT</span>(<span class="keyword">DISTINCT</span></span><br><span class="line">    <span class="keyword">CONCAT</span>(</span><br><span class="line">      <span class="string">'max(case when subject = '''</span>,</span><br><span class="line">      subject,</span><br><span class="line">      <span class="string">''' then mark end) as '</span>,</span><br><span class="line">      subject</span><br><span class="line">    )</span><br><span class="line">  ) </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">  Meeting;</span><br></pre></td></tr></table></figure>
+<p>执行结果： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max(case when subject = &apos;政治&apos; then mark end) as 政治,max(case when subject = &apos;数学&apos; then mark end) as 数学,max(case when subject = &apos;语文&apos; then mark end) as 语文</span><br></pre></td></tr></table></figure></p>
+<p>是不是已经看出来了，就是为了动态得到行，不是由我们手动指定的，而是通过脚本自动生成、拼接而来。</p>
+<p>然后把拼接后的结果 <code>INTO @sql</code></p>
+<p>再通过</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> @<span class="keyword">sql</span> = <span class="keyword">CONCAT</span>(<span class="string">'SELECT name, '</span>, @<span class="keyword">sql</span>, <span class="string">' </span></span><br><span class="line"><span class="string">                  FROM person_grade </span></span><br><span class="line"><span class="string">                   GROUP BY name'</span>);</span><br></pre></td></tr></table></figure>
+<p>拼成完整的SQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span>,</span><br><span class="line">	<span class="keyword">max</span>(<span class="keyword">case</span> <span class="keyword">when</span> subject = <span class="string">'政治'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> 政治,</span><br><span class="line">	<span class="keyword">max</span>(<span class="keyword">case</span> <span class="keyword">when</span> subject = <span class="string">'数学'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> 数学,</span><br><span class="line">	<span class="keyword">max</span>(<span class="keyword">case</span> <span class="keyword">when</span> subject = <span class="string">'语文'</span> <span class="keyword">then</span> mark <span class="keyword">end</span>) <span class="keyword">as</span> 语文</span><br><span class="line"><span class="keyword">FROM</span> person_grade </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">name</span></span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/08/25/判断两个相同类型对象的值是否相等/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/08/25/经典Integer对象赋值128问题/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-08-25 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/MySQL/">MySQL<span>8</span></a> <a href="/tags/group-concat/">group_concat<span>2</span></a> <a href="/tags/行转列/">行转列<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#group_concat函数"><span class="toc-article-text">GROUP_CONCAT()函数</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#case函数"><span class="toc-article-text">CASE函数</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#group_concat和case结合实现动态行转列"><span class="toc-article-text">GROUP_CONCAT()和CASE()结合实现动态行转列</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

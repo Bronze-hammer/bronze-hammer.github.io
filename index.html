@@ -131,6 +131,164 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/08/28/泛型以及如何绕过泛型定义/">泛型以及如何绕过泛型定义</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="泛型定义以及其带来的好处">泛型定义以及其带来的好处</h1>
+<p>泛型使类型（类和接口）能够在定义类、接口和方法时成为参数。与方法声明中使用的更熟悉的形式参数非常相似，类型参数为您提供了一种通过不同输入重复使用相同代码的方法。区别在于形式参数的输入是值，而类型参数的输入是类型。</p>
+<p>使用泛型的代码比非泛型代码有很多好处：</p>
+<ol type="1">
+<li>编译时更强的类型检查。 Java
+编译器对泛型代码应用强类型检查，如果代码违反类型安全，则会发出错误。修复编译时错误比修复运行时错误更容易，后者很难发现。</li>
+</ol>
+	
+	</div>
+  <a type="button" href="/2023/08/28/泛型以及如何绕过泛型定义/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/08/25/判断两个相同类型对象的值是否相等/">判断两个相同类型对象的值是否相等</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="double类型">1.Double类型</h1>
+<p>在Java中，将两个double值转换为String类型，然后使用equals方法进行比较是一个常见的做法，但是这种方法并不是完全可靠，特别是在涉及浮点数的精度时仍然可能会遇到问题。</p>
+<p>浮点数在内部以二进制表示，有时会存在舍入误差，这可能会导致两个在数值上非常接近的浮点数在转换为字符串后变得稍有不同。因此，尽管你可以使用字符串比较来避免直接比较浮点数时的精度问题，但这种方法并不是绝对可靠的。</p>
+	
+	</div>
+  <a type="button" href="/2023/08/25/判断两个相同类型对象的值是否相等/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/08/25/MySQL行转列函数/">MySQL行转列函数</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="group_concat函数">GROUP_CONCAT()函数</h1>
+<p>创建表<code>person_info</code>，并插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`person_info`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`family`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">8</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四大哥'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二爷爷'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二姐姐'</span>);</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2023/08/25/MySQL行转列函数/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/08/25/经典Integer对象赋值128问题/">经典Integer对象赋值128问题</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>Integer经典面试问题：两个Integer对象都赋值为128，这两个对象比较是否相同？为什么？</p>
+<p>回答这个问题，首先我们要知道，在Java中，当你写<code>Integer a = 1;</code>
+实际上是调用了Java的自动装箱功能。这会将整数 1
+自动装箱为Integer对象，然后将这个对象赋值给变量a。</p>
+<p>自动装箱功能是由编译器自动插入的，实际上它相当于执行了如下的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer a = Integer.valueOf(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>这里的valueOf方法是Integer类的一个静态方法，它的作用就是将传入的参数（通常是基本数据类型）自动转换为对应的包装类对象。对于Integer类来说，就是将整数值转换为Integer对象。</p>
+	
+	</div>
+  <a type="button" href="/2023/08/25/经典Integer对象赋值128问题/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/08/24/MySQL数据库InnoDB存储引擎/">【翻译】MySQL数据库InnoDB存储引擎</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-24  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>InnoDB is a general-purpose storage engine that balances high
+reliability and high performance. In MySQL 8.0, InnoDB is the default
+MySQL storage engine. Unless you have configured a different default
+storage engine, issuing a CREATE TABLE statement without an ENGINE
+clause creates an InnoDB table.</p>
+<p>InnoDB是一种平衡高可靠性和高性能的通用存储引擎。在MySQL
+8.0中，InnoDB是MySQL默认的存储引擎。除非您配置了不同的默认存储引擎，否则发出不带
+ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
+	
+	</div>
+  <a type="button" href="/2023/08/24/MySQL数据库InnoDB存储引擎/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/">MySQL数据库GROUP_CONCAT()函数输出结果的长度限制</a>
 		</h3>
 		</div>
@@ -301,174 +459,6 @@ supertype of the runtime type of every element in this list
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/06/12/读取jar包中指定资源文件的内容/">读取jar包中指定资源文件的内容</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-06-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>背景描述：SpringBoot项目构建打包生成的jar包，在资源文件夹下有个普通txt文件，路径：<code>/templates/content.txt</code></p>
-<h2 id="方式一">方式一：</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(ResourceUtils.getURL(<span class="string">"classpath:"</span>).getPath());</span><br><span class="line">File templateFile = <span class="keyword">new</span> File(file, <span class="string">"/templates/content.txt"</span>);</span><br><span class="line">BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">StringBuffer sbf = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">    String tempStr;</span><br><span class="line">    <span class="keyword">while</span> ((tempStr = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        sbf.append(tempStr);</span><br><span class="line">    &#125;</span><br><span class="line">    reader.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            reader.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e1) &#123;</span><br><span class="line">            e1.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sbf.toString();</span><br></pre></td></tr></table></figure>
-	
-	</div>
-  <a type="button" href="/2023/06/12/读取jar包中指定资源文件的内容/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/">Convert Image File to Base64 String or Base64 String to Image File in Java</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-06-07  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="add-maven-dependency">Add Maven Dependency</h2>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="image-file-convert-base64-string">Image File Convert Base64
-String</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] fileContent = FileUtils.readFileToByteArray(<span class="keyword">new</span> File(filePath));</span><br><span class="line">String encodedString = Base64.getEncoder().encodeToString(fileContent);</span><br></pre></td></tr></table></figure>
-<h2 id="base64-string-convert-image-file">Base64 String Convert Image
-File</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] decodedBytes = Base64.getDecoder().decode(encodedString);</span><br><span class="line">FileUtils.writeByteArrayToFile(<span class="keyword">new</span> File(outputFileName), decodedBytes);</span><br></pre></td></tr></table></figure>
-
-	
-	</div>
-  <a type="button" href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/">SpringBoot项目下实践设计模式之工厂模式</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-23  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/"><img src="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/微信截图_20230423164322.png" alt="SpringBoot项目下实践设计模式之工厂模式" class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<h2 id="示例结构红框内的">示例结构（红框内的）</h2>
-<p>工厂模式（Factory Pattern）是 Java
-中最常用的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
-<p>作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过
-new
-就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/20/单点登录解决方案/">单点登录解决方案</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-20  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/20/单点登录解决方案/"><img src="/2023/04/20/单点登录解决方案/single-sign-on.png" alt="单点登录解决方案" class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<p>单点登录 (SSO)
-是一种身份验证过程，在该过程中，用户仅使用一组登录凭据即可访问多个应用程序或网站，这避免了用户分别登录不同应用程序需要输入不同验证信息的麻烦。用户凭据和其他识别信息由称为身份提供者(IdP)的集中式系统存储和管理。身份提供者是一个受信任的系统，可以提供对其他网站和应用程序的访问。基于单点登录
-(SSO)
-的身份验证系统通常用于员工需要访问其组织的多个应用程序的企业环境中。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/20/单点登录解决方案/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/17/ArrayList去重方式总结/">ArrayList去重方式总结</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-17  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/17/ArrayList去重方式总结/"><img src="/2023/04/17/ArrayList去重方式总结/title.png" alt="ArrayList去重方式总结" class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<p>我在日常工作中常用Stream方式去重，满足了工作上业务的需求即可，并没有深入了解和尝试其他方式的去重操作，这对于个人的成长是很有局限性的，遂借此机会整理ArrayList的去重方法。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/17/ArrayList去重方式总结/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -522,7 +512,7 @@ new
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -532,7 +522,7 @@ new
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>9</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
 		
@@ -547,48 +537,48 @@ new
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
-		
-			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
-		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
-		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>6</span></a></li>
-		
 			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
 		
-			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
-		
-			<li><a href="/tags/优化/">优化<span>1</span></a></li>
-		
-			<li><a href="/tags/MySQL/">MySQL<span>6</span></a></li>
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
 		
 			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
 		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+			<li><a href="/tags/反射/">反射<span>1</span></a></li>
 		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
 		
-			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
-			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
 		
-			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
 		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
+			<li><a href="/tags/ConcurrentHashMap/">ConcurrentHashMap<span>1</span></a></li>
 		
-			<li><a href="/tags/SpringCloud/">SpringCloud<span>2</span></a></li>
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
 		
-			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
+		
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
+		
+			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+		
+			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
+		
+			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+		
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+		
+			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+		
+			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
+		
+			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>54</span></a></li>
+		   <li><a href="/tags">...<span>59</span></a></li>
 		 
 		</ul>
 	</div>
@@ -601,23 +591,23 @@ new
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/"><i class="fa fa-file-o"></i>MySQL数据库GROUP_CONCAT()函数输出结...</a>
+        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
       </li>
     
       <li>
-        <a href="/2023/07/14/SpringBoot与SpringCloud/"><i class="fa fa-file-o"></i>SpringBoot与SpringCloud</a>
+        <a href="/2023/08/25/判断两个相同类型对象的值是否相等/"><i class="fa fa-file-o"></i>判断两个相同类型对象的值是否相等</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/"><i class="fa fa-file-o"></i>MyBatis配置allowMultiQueries=...</a>
+        <a href="/2023/08/25/MySQL行转列函数/"><i class="fa fa-file-o"></i>MySQL行转列函数</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/Flowable工作流重启已经结束的流程/"><i class="fa fa-file-o"></i>Flowable工作流重启已经结束的流程</a>
+        <a href="/2023/08/25/经典Integer对象赋值128问题/"><i class="fa fa-file-o"></i>经典Integer对象赋值128问题</a>
       </li>
     
       <li>
-        <a href="/2023/06/13/List＜String＞集合转Long-数组/"><i class="fa fa-file-o"></i>List＜String＞集合转Long[]数组</a>
+        <a href="/2023/08/24/MySQL数据库InnoDB存储引擎/"><i class="fa fa-file-o"></i>【翻译】MySQL数据库InnoDB存储引擎</a>
       </li>
     
   </ul>

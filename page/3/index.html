@@ -131,6 +131,178 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/02/08/日常工作中Java-Stream流操作汇总/">日常工作中Java.Stream流操作汇总</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-02-08  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>Java 8
+API添加了一个新的抽象称为流Stream，以一种声明的方式处理数据。Stream
+使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java
+集合运算和表达的高阶抽象。Stream
+API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。这种风格将要处理的元素集合看作一种流，
+流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选，
+排序，聚合等。元素流在管道中经过中间操作（intermediate
+operation）的处理，最后由最终操作(terminal
+operation)得到前面处理的结果。</p>
+<p>————《菜鸟教程》</p>
+<p>本片文章记录了工作中常用的Stream流操作，方便之后回顾。</p>
+	
+	</div>
+  <a type="button" href="/2023/02/08/日常工作中Java-Stream流操作汇总/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/">处理SpringCloudConfig客户端启动无法读取到配置参数</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-02-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>自己部署了一个Spring Cloud微服务项目，实践Spring Cloud
+Config分布式配置组件，按照Spring Cloud Config 资料<a href="http://c.biancheng.net/springcloud/config.html" target="_blank" rel="noopener">Config：Spring
+Cloud分布式配置组件</a> 先后创建了Eureka注册中心服务、 Spring Cloud
+Config Server服务、 Spring Cloud Config Client客户端，在最后启动 Spring
+Client Config Client 客户端时，客户端始终无法访问 Config
+Server服务，读取上传在Gitee上的配置文件的内容。</p>
+<p>在Baidu、
+Google搜索了大量资料，问题是最终解决了，但是这其中的原因，还需要继续探讨。</p>
+	
+	</div>
+  <a type="button" href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/">Arrays.asList()生成的对象不能执行add()的操作</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-01-12  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>之前项目上，有使用 Arrays.asList()
+创建一个List集合，并在后续的操作中使用之前创建的List集合继续 add()
+添加元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>);</span><br><span class="line">list.add(<span class="string">"five"</span>);</span><br></pre></td></tr></table></figure>
+<p>运行项目却在 list.add("five"); 处报错： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.UnsupportedOperationException</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:148)</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:108)</span><br><span class="line">	...</span><br></pre></td></tr></table></figure></p>
+<p>网上搜索资料得知， Arrays.asList() 生成的 ArrayList 对象是 Arrays
+自己的内部类对象</p>
+	
+	</div>
+  <a type="button" href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/">关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2022-11-03  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<img src="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/微信截图_20221103111026.png">
+<p>如图所示，在备考软件设计师时，有遇到关于 构件图 的题目，官方给的
+<code>-（</code> 是供接口，<code>O-</code>
+是需接口，就像官方教程上展示的这样。但是发现有其他人说 <code>-（</code>
+是需接口，<code>O-</code>
+是供接口。这就很懵圈了，然后我搜索国内的资料，也都是说：
+<code>-（</code> 是需接口，<code>O-</code> 是供接口</p>
+	
+	</div>
+  <a type="button" href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/">根据JetBrains Fleet文档创建maven项目失败的解决办法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2022-10-26  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>打算尝试一下Fleet编辑器，根据<a href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace" target="_blank" rel="noopener">JetBrains
+Fleet文档</a>创建maven项目.</p>
+<p>首选确认本地机器上已经安装并配置了maven</p>
+<p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal
+窗口，在编辑器的下方</p>
+<p>粘贴并执行
+<code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p>
+<p>创建失败，提下如下</p>
+<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png">
+	
+	</div>
+  <a type="button" href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2022/10/21/MySQL根据出生日期计算当前年龄/">MySQL根据出生日期计算当前年龄</a>
 		</h3>
 		</div>
@@ -281,164 +453,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/">面试官邪魅一笑：MySQL千万级别大表，你要如何优化？</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-04-09  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>当MySQL单表记录数过大时，增删改查性能都会急剧下降，可以参考以下步骤来优化：</p>
-	
-	</div>
-  <a type="button" href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/04/02/vsftpd配置文件详解/">vsftpd配置文件详解</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-04-02  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>yum安装的vsftpd配置文件如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure></p>
-<p>1）以“#”字符开始的行是注释行。每一行为一个选项设置，格式为“option=value”，注意“=”号两边不能留空白符。
-2）除了这个主配置文件外，还可以给特定用户设定个人配置文件</p>
-	
-	</div>
-  <a type="button" href="/2020/04/02/vsftpd配置文件详解/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/">不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-03-26  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<blockquote>
-<p>文章来自 <a href="http://www.hollischuang.com/archives/4057" target="_blank" rel="noopener">Hollis</a></p>
-</blockquote>
-<p>数据库查询相信很多人都不陌生，所有经常有人调侃程序员就是CRUD专员，这所谓的CRUD指的就是数据库的增删改查。</p>
-<p>在数据库的增删改查操作中，使用最频繁的就是查询操作。而在所有查询操作中，统计数量操作更是经常被用到。</p>
-	
-	</div>
-  <a type="button" href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/03/23/Oracle索引/">Oracle索引</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-03-23  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。</p>
-<p>在没有创建索引之前，如果要按照用户名字段username全表查询一条用户数据，就要必须在全表都搜索一遍；在username上创建索引，Oracle会对全表进行一次搜索，将每条记录的username按照顺序排序，然后构建索引条目（name和rowid），存储到索引段中。在接下来查找username等于某个值时即可直接查找到相应的地方。</p>
-	
-	</div>
-  <a type="button" href="/2020/03/23/Oracle索引/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/05/28/理解线程安全/">理解线程安全</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-05-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2019/05/28/理解线程安全/"><img src="/2019/05/28/理解线程安全/threadsafety.png" alt="理解线程安全" class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<h1 id="不是线程的安全">不是线程的安全</h1>
-<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
-<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
-<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
-<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
-<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
-<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
-<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
-<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
-<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
-<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
-<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
-	
-	</div>
-  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -492,7 +506,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -502,7 +516,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>9</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
 		
@@ -517,48 +531,48 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
-		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
-		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
-		
-			<li><a href="/tags/group-concat/">group_concat<span>1</span></a></li>
-		
-			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
-		
-			<li><a href="/tags/MySQL/">MySQL<span>6</span></a></li>
-		
-			<li><a href="/tags/File/">File<span>1</span></a></li>
-		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
-		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
-		
-			<li><a href="/tags/String/">String<span>1</span></a></li>
-		
-			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
-		
-			<li><a href="/tags/Long/">Long<span>1</span></a></li>
-		
-			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
-		
-			<li><a href="/tags/UML/">UML<span>1</span></a></li>
-		
-			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
-		
-			<li><a href="/tags/ConcurrentHashMap/">ConcurrentHashMap<span>1</span></a></li>
-		
-			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
-		
 			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
 		
-			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
+			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+		
+			<li><a href="/tags/List/">List<span>1</span></a></li>
+		
+			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
+		
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
+		
+			<li><a href="/tags/Double-String/">Double - String<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
+		
+			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+		
+			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
 		
 			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
 		
+			<li><a href="/tags/Integer/">Integer<span>1</span></a></li>
 		
-		   <li><a href="/tags">...<span>54</span></a></li>
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
+		
+			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+		
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
+		
+			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+		
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
+		
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+		
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+		
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
 		 
 		</ul>
 	</div>
@@ -571,23 +585,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/"><i class="fa fa-file-o"></i>MySQL数据库GROUP_CONCAT()函数输出结...</a>
+        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
       </li>
     
       <li>
-        <a href="/2023/07/14/SpringBoot与SpringCloud/"><i class="fa fa-file-o"></i>SpringBoot与SpringCloud</a>
+        <a href="/2023/08/25/判断两个相同类型对象的值是否相等/"><i class="fa fa-file-o"></i>判断两个相同类型对象的值是否相等</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/"><i class="fa fa-file-o"></i>MyBatis配置allowMultiQueries=...</a>
+        <a href="/2023/08/25/MySQL行转列函数/"><i class="fa fa-file-o"></i>MySQL行转列函数</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/Flowable工作流重启已经结束的流程/"><i class="fa fa-file-o"></i>Flowable工作流重启已经结束的流程</a>
+        <a href="/2023/08/25/经典Integer对象赋值128问题/"><i class="fa fa-file-o"></i>经典Integer对象赋值128问题</a>
       </li>
     
       <li>
-        <a href="/2023/06/13/List＜String＞集合转Long-数组/"><i class="fa fa-file-o"></i>List＜String＞集合转Long[]数组</a>
+        <a href="/2023/08/24/MySQL数据库InnoDB存储引擎/"><i class="fa fa-file-o"></i>【翻译】MySQL数据库InnoDB存储引擎</a>
       </li>
     
   </ul>

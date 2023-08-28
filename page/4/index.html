@@ -131,6 +131,164 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/">面试官邪魅一笑：MySQL千万级别大表，你要如何优化？</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>当MySQL单表记录数过大时，增删改查性能都会急剧下降，可以参考以下步骤来优化：</p>
+	
+	</div>
+  <a type="button" href="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/04/02/vsftpd配置文件详解/">vsftpd配置文件详解</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>yum安装的vsftpd配置文件如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure></p>
+<p>1）以“#”字符开始的行是注释行。每一行为一个选项设置，格式为“option=value”，注意“=”号两边不能留空白符。
+2）除了这个主配置文件外，还可以给特定用户设定个人配置文件</p>
+	
+	</div>
+  <a type="button" href="/2020/04/02/vsftpd配置文件详解/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/">不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-26  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>文章来自 <a href="http://www.hollischuang.com/archives/4057" target="_blank" rel="noopener">Hollis</a></p>
+</blockquote>
+<p>数据库查询相信很多人都不陌生，所有经常有人调侃程序员就是CRUD专员，这所谓的CRUD指的就是数据库的增删改查。</p>
+<p>在数据库的增删改查操作中，使用最频繁的就是查询操作。而在所有查询操作中，统计数量操作更是经常被用到。</p>
+	
+	</div>
+  <a type="button" href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/23/Oracle索引/">Oracle索引</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-23  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。</p>
+<p>在没有创建索引之前，如果要按照用户名字段username全表查询一条用户数据，就要必须在全表都搜索一遍；在username上创建索引，Oracle会对全表进行一次搜索，将每条记录的username按照顺序排序，然后构建索引条目（name和rowid），存储到索引段中。在接下来查找username等于某个值时即可直接查找到相应的地方。</p>
+	
+	</div>
+  <a type="button" href="/2020/03/23/Oracle索引/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/05/28/理解线程安全/">理解线程安全</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+           
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2019/05/28/理解线程安全/"><img src="/2019/05/28/理解线程安全/threadsafety.png" alt="理解线程安全" class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<h1 id="不是线程的安全">不是线程的安全</h1>
+<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
+<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
+<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
+<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
+<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
+<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
+<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
+<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
+<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
+<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
+<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
+	
+	</div>
+  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2019/04/28/单例模式的7种写法/">单例模式的7种写法</a>
 		</h3>
 		</div>
@@ -290,7 +448,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -300,7 +458,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>9</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
 		
@@ -315,48 +473,48 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/反射/">反射<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>6</span></a></li>
+		
+			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
+		
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+		
+			<li><a href="/tags/InnoDB/">InnoDB<span>1</span></a></li>
 		
 			<li><a href="/tags/优化/">优化<span>1</span></a></li>
 		
+			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+		
+			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
+		
 			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
-		
-			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
-		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
-		
-			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
-		
-			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
-		
-			<li><a href="/tags/UML/">UML<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>6</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
-			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
-		
-			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
 		
 			<li><a href="/tags/异常/">异常<span>1</span></a></li>
 		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
 		
-			<li><a href="/tags/MySQL/">MySQL<span>6</span></a></li>
+			<li><a href="/tags/String/">String<span>1</span></a></li>
 		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
 		
-			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
-		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
-		
-			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
 		
 			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
-		   <li><a href="/tags">...<span>54</span></a></li>
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+		
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
+		
+			<li><a href="/tags/File/">File<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
 		 
 		</ul>
 	</div>
@@ -369,23 +527,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/"><i class="fa fa-file-o"></i>MySQL数据库GROUP_CONCAT()函数输出结...</a>
+        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
       </li>
     
       <li>
-        <a href="/2023/07/14/SpringBoot与SpringCloud/"><i class="fa fa-file-o"></i>SpringBoot与SpringCloud</a>
+        <a href="/2023/08/25/判断两个相同类型对象的值是否相等/"><i class="fa fa-file-o"></i>判断两个相同类型对象的值是否相等</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/"><i class="fa fa-file-o"></i>MyBatis配置allowMultiQueries=...</a>
+        <a href="/2023/08/25/MySQL行转列函数/"><i class="fa fa-file-o"></i>MySQL行转列函数</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/Flowable工作流重启已经结束的流程/"><i class="fa fa-file-o"></i>Flowable工作流重启已经结束的流程</a>
+        <a href="/2023/08/25/经典Integer对象赋值128问题/"><i class="fa fa-file-o"></i>经典Integer对象赋值128问题</a>
       </li>
     
       <li>
-        <a href="/2023/06/13/List＜String＞集合转Long-数组/"><i class="fa fa-file-o"></i>List＜String＞集合转Long[]数组</a>
+        <a href="/2023/08/24/MySQL数据库InnoDB存储引擎/"><i class="fa fa-file-o"></i>【翻译】MySQL数据库InnoDB存储引擎</a>
       </li>
     
   </ul>

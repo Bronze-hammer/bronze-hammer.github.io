@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>判断两个相同类型对象的值是否相等 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="1.Double类型
+在Java中，将两个double值转换为String类型，然后使用equals方法进行比较是一个常见的做法，但是这种方法并不是完全可靠，特别是在涉及浮点数的精度时仍然可能会遇到问题。
+浮点数在内部以二进制表示，有时会存在舍入误差，这可能会导致两个在数值上非常接近的浮点数在转换为字符串后变得稍有不同。因此，尽管你可以使用字符串比较来避免直接比较浮点数时的精度问题，但这种方法并不是绝对可靠的。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="判断两个相同类型对象的值是否相等">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 判断两个相同类型对象的值是否相等</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="double类型">1.Double类型</h1>
+<p>在Java中，将两个double值转换为String类型，然后使用equals方法进行比较是一个常见的做法，但是这种方法并不是完全可靠，特别是在涉及浮点数的精度时仍然可能会遇到问题。</p>
+<p>浮点数在内部以二进制表示，有时会存在舍入误差，这可能会导致两个在数值上非常接近的浮点数在转换为字符串后变得稍有不同。因此，尽管你可以使用字符串比较来避免直接比较浮点数时的精度问题，但这种方法并不是绝对可靠的。</p>
+<a id="more"></a>
+<p>以下是一个示例，展示了使用字符串比较来判断两个double值是否相等：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DoubleStringComparison</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> x = <span class="number">0.1</span> + <span class="number">0.2</span>;</span><br><span class="line">        <span class="keyword">double</span> y = <span class="number">0.3</span>;</span><br><span class="line"></span><br><span class="line">        String xStr = Double.toString(x);</span><br><span class="line">        String yStr = Double.toString(y);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (xStr.equals(yStr)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"They are equal."</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"They are not equal."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然这种方法可以避免直接比较浮点数时的精度问题，但是需要注意的是，由于字符串表示法可能会引入额外的舍入或转换误差，因此在某些情况下，仍然可能会得到错误的结果。</p>
+<p>在许多编程语言中，使用浮点数（例如double类型）进行相等性比较时可能会遇到精度问题。由于浮点数的存储方式和精度表示的特性，直接比较两个浮点数是否相等可能会导致意外的结果。因此，在判断两个double类型的值是否相等时，应该使用一些容忍误差的方法。</p>
+<p>一种常见的方法是使用一个很小的阈值（epsilon）来比较两个浮点数的差异，如果它们的差异小于这个阈值，则认为它们是相等的。这个阈值通常取决于你的应用场景和需要的精度。</p>
+<p>以下是一个Java示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DoubleComparison</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">areEqual</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> epsilon)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Math.abs(a - b) &lt; epsilon;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> x = <span class="number">0.1</span> + <span class="number">0.2</span>;</span><br><span class="line">        <span class="keyword">double</span> y = <span class="number">0.3</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">double</span> epsilon = <span class="number">1e-9</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (areEqual(x, y, epsilon)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"They are equal."</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"They are not equal."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意，epsilon
+的值取决于你的具体情况，你可能需要根据浮点数的大小范围和精度需求来调整这个值。这个方法可以帮助你避免由于浮点数的精度问题而产生的误判。在其他编程语言中也可以使用类似的方法来进行浮点数的相等性比较。</p>
+<h1 id="string类型">2.String类型</h1>
+<p>判断两个字符串是否相同，可用于判断一个字段在逻辑处理前后，值是否有变化。</p>
+<p>其中重点是要考虑两个字符串是否有为null的情况，如果其中一个，或者两个都为空，用<code>str1.equals(str2)</code>直接判断，就会报<code>NullPointerException</code>的错误。</p>
+<p>所以可用采用下面方法进行判断：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">areEqual</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str1 == <span class="keyword">null</span> &amp;&amp; str2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (str1 == <span class="keyword">null</span> || str2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> str1.equals(str2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果两个字符串同时为null，可以认为两个字符串是一样的，或者字符串的值没有变化；</li>
+<li>排除两个字符串都为null的情况，如果其中一个字符串为null，那么两个字符串的值就不一致；</li>
+<li>最后在确定两个字符串都不为null，那么就可以使用<code>equals()</code>进行判断。</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/08/28/泛型以及如何绕过泛型定义/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/08/25/MySQL行转列函数/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-08-25 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/Double-String/">Double - String<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#double类型"><span class="toc-article-text">1.Double类型</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#string类型"><span class="toc-article-text">2.String类型</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

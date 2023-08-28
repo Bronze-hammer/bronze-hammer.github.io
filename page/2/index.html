@@ -131,6 +131,174 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/06/12/读取jar包中指定资源文件的内容/">读取jar包中指定资源文件的内容</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-06-12  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>背景描述：SpringBoot项目构建打包生成的jar包，在资源文件夹下有个普通txt文件，路径：<code>/templates/content.txt</code></p>
+<h2 id="方式一">方式一：</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(ResourceUtils.getURL(<span class="string">"classpath:"</span>).getPath());</span><br><span class="line">File templateFile = <span class="keyword">new</span> File(file, <span class="string">"/templates/content.txt"</span>);</span><br><span class="line">BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">StringBuffer sbf = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">    String tempStr;</span><br><span class="line">    <span class="keyword">while</span> ((tempStr = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        sbf.append(tempStr);</span><br><span class="line">    &#125;</span><br><span class="line">    reader.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            reader.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e1) &#123;</span><br><span class="line">            e1.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sbf.toString();</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2023/06/12/读取jar包中指定资源文件的内容/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/">Convert Image File to Base64 String or Base64 String to Image File in Java</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-06-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="add-maven-dependency">Add Maven Dependency</h2>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="image-file-convert-base64-string">Image File Convert Base64
+String</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] fileContent = FileUtils.readFileToByteArray(<span class="keyword">new</span> File(filePath));</span><br><span class="line">String encodedString = Base64.getEncoder().encodeToString(fileContent);</span><br></pre></td></tr></table></figure>
+<h2 id="base64-string-convert-image-file">Base64 String Convert Image
+File</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] decodedBytes = Base64.getDecoder().decode(encodedString);</span><br><span class="line">FileUtils.writeByteArrayToFile(<span class="keyword">new</span> File(outputFileName), decodedBytes);</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+  <a type="button" href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/">SpringBoot项目下实践设计模式之工厂模式</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-04-23  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+           
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/"><img src="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/微信截图_20230423164322.png" alt="SpringBoot项目下实践设计模式之工厂模式" class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<h2 id="示例结构红框内的">示例结构（红框内的）</h2>
+<p>工厂模式（Factory Pattern）是 Java
+中最常用的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
+<p>作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过
+new
+就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
+	
+	</div>
+  <a type="button" href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/04/20/单点登录解决方案/">单点登录解决方案</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-04-20  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+           
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/20/单点登录解决方案/"><img src="/2023/04/20/单点登录解决方案/single-sign-on.png" alt="单点登录解决方案" class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>单点登录 (SSO)
+是一种身份验证过程，在该过程中，用户仅使用一组登录凭据即可访问多个应用程序或网站，这避免了用户分别登录不同应用程序需要输入不同验证信息的麻烦。用户凭据和其他识别信息由称为身份提供者(IdP)的集中式系统存储和管理。身份提供者是一个受信任的系统，可以提供对其他网站和应用程序的访问。基于单点登录
+(SSO)
+的身份验证系统通常用于员工需要访问其组织的多个应用程序的企业环境中。</p>
+	
+	</div>
+  <a type="button" href="/2023/04/20/单点登录解决方案/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/04/17/ArrayList去重方式总结/">ArrayList去重方式总结</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-04-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+           
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/17/ArrayList去重方式总结/"><img src="/2023/04/17/ArrayList去重方式总结/title.png" alt="ArrayList去重方式总结" class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>我在日常工作中常用Stream方式去重，满足了工作上业务的需求即可，并没有深入了解和尝试其他方式的去重操作，这对于个人的成长是很有局限性的，遂借此机会整理ArrayList的去重方法。</p>
+	
+	</div>
+  <a type="button" href="/2023/04/17/ArrayList去重方式总结/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/04/14/总结学习HashMap和HashTable/">总结学习HashMap和HashTable</a>
 		</h3>
 		</div>
@@ -267,178 +435,6 @@ not recommended .
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/02/08/日常工作中Java-Stream流操作汇总/">日常工作中Java.Stream流操作汇总</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-02-08  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Java 8
-API添加了一个新的抽象称为流Stream，以一种声明的方式处理数据。Stream
-使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java
-集合运算和表达的高阶抽象。Stream
-API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。这种风格将要处理的元素集合看作一种流，
-流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选，
-排序，聚合等。元素流在管道中经过中间操作（intermediate
-operation）的处理，最后由最终操作(terminal
-operation)得到前面处理的结果。</p>
-<p>————《菜鸟教程》</p>
-<p>本片文章记录了工作中常用的Stream流操作，方便之后回顾。</p>
-	
-	</div>
-  <a type="button" href="/2023/02/08/日常工作中Java-Stream流操作汇总/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/">处理SpringCloudConfig客户端启动无法读取到配置参数</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-02-01  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>自己部署了一个Spring Cloud微服务项目，实践Spring Cloud
-Config分布式配置组件，按照Spring Cloud Config 资料<a href="http://c.biancheng.net/springcloud/config.html" target="_blank" rel="noopener">Config：Spring
-Cloud分布式配置组件</a> 先后创建了Eureka注册中心服务、 Spring Cloud
-Config Server服务、 Spring Cloud Config Client客户端，在最后启动 Spring
-Client Config Client 客户端时，客户端始终无法访问 Config
-Server服务，读取上传在Gitee上的配置文件的内容。</p>
-<p>在Baidu、
-Google搜索了大量资料，问题是最终解决了，但是这其中的原因，还需要继续探讨。</p>
-	
-	</div>
-  <a type="button" href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/">Arrays.asList()生成的对象不能执行add()的操作</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-01-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>之前项目上，有使用 Arrays.asList()
-创建一个List集合，并在后续的操作中使用之前创建的List集合继续 add()
-添加元素。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>);</span><br><span class="line">list.add(<span class="string">"five"</span>);</span><br></pre></td></tr></table></figure>
-<p>运行项目却在 list.add("five"); 处报错： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.UnsupportedOperationException</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:148)</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:108)</span><br><span class="line">	...</span><br></pre></td></tr></table></figure></p>
-<p>网上搜索资料得知， Arrays.asList() 生成的 ArrayList 对象是 Arrays
-自己的内部类对象</p>
-	
-	</div>
-  <a type="button" href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/">关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2022-11-03  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<img src="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/微信截图_20221103111026.png">
-<p>如图所示，在备考软件设计师时，有遇到关于 构件图 的题目，官方给的
-<code>-（</code> 是供接口，<code>O-</code>
-是需接口，就像官方教程上展示的这样。但是发现有其他人说 <code>-（</code>
-是需接口，<code>O-</code>
-是供接口。这就很懵圈了，然后我搜索国内的资料，也都是说：
-<code>-（</code> 是需接口，<code>O-</code> 是供接口</p>
-	
-	</div>
-  <a type="button" href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/">根据JetBrains Fleet文档创建maven项目失败的解决办法</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2022-10-26  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>打算尝试一下Fleet编辑器，根据<a href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace" target="_blank" rel="noopener">JetBrains
-Fleet文档</a>创建maven项目.</p>
-<p>首选确认本地机器上已经安装并配置了maven</p>
-<p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal
-窗口，在编辑器的下方</p>
-<p>粘贴并执行
-<code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p>
-<p>创建失败，提下如下</p>
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png">
-	
-	</div>
-  <a type="button" href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -492,7 +488,7 @@ Fleet文档</a>创建maven项目.</p>
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -502,7 +498,7 @@ Fleet文档</a>创建maven项目.</p>
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
 		
-			<li><a href="/categories/数据库/">数据库<span>9</span></a></li>
+			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
 		
@@ -517,48 +513,48 @@ Fleet文档</a>创建maven项目.</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
 		
 			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
 		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
 		
-			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
 		
 			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
 		
-			<li><a href="/tags/反射/">反射<span>1</span></a></li>
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
 		
-			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+			<li><a href="/tags/List/">List<span>1</span></a></li>
 		
-			<li><a href="/tags/jar/">jar<span>1</span></a></li>
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+		
+			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
 		
 			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
-			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+			<li><a href="/tags/索引/">索引<span>2</span></a></li>
 		
-			<li><a href="/tags/File/">File<span>1</span></a></li>
+			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+		
+			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
+		
+			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+		
+			<li><a href="/tags/异常/">异常<span>1</span></a></li>
+		
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
 		
 			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
-			<li><a href="/tags/MySQL/">MySQL<span>6</span></a></li>
+			<li><a href="/tags/货币/">货币<span>1</span></a></li>
 		
-			<li><a href="/tags/索引/">索引<span>2</span></a></li>
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
 			<li><a href="/tags/Long/">Long<span>1</span></a></li>
 		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
 		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
-		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
-		
-			<li><a href="/tags/String/">String<span>1</span></a></li>
-		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
-		
-		
-		   <li><a href="/tags">...<span>54</span></a></li>
+		   <li><a href="/tags">...<span>59</span></a></li>
 		 
 		</ul>
 	</div>
@@ -571,23 +567,23 @@ Fleet文档</a>创建maven项目.</p>
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/"><i class="fa fa-file-o"></i>MySQL数据库GROUP_CONCAT()函数输出结...</a>
+        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
       </li>
     
       <li>
-        <a href="/2023/07/14/SpringBoot与SpringCloud/"><i class="fa fa-file-o"></i>SpringBoot与SpringCloud</a>
+        <a href="/2023/08/25/判断两个相同类型对象的值是否相等/"><i class="fa fa-file-o"></i>判断两个相同类型对象的值是否相等</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/"><i class="fa fa-file-o"></i>MyBatis配置allowMultiQueries=...</a>
+        <a href="/2023/08/25/MySQL行转列函数/"><i class="fa fa-file-o"></i>MySQL行转列函数</a>
       </li>
     
       <li>
-        <a href="/2023/06/30/Flowable工作流重启已经结束的流程/"><i class="fa fa-file-o"></i>Flowable工作流重启已经结束的流程</a>
+        <a href="/2023/08/25/经典Integer对象赋值128问题/"><i class="fa fa-file-o"></i>经典Integer对象赋值128问题</a>
       </li>
     
       <li>
-        <a href="/2023/06/13/List＜String＞集合转Long-数组/"><i class="fa fa-file-o"></i>List＜String＞集合转Long[]数组</a>
+        <a href="/2023/08/24/MySQL数据库InnoDB存储引擎/"><i class="fa fa-file-o"></i>【翻译】MySQL数据库InnoDB存储引擎</a>
       </li>
     
   </ul>

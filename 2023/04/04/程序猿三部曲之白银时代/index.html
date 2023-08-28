@@ -252,6 +252,32 @@ pool的问题。例如，在下面的语句中创建了多少个字符串对象�
 <p>首先在堆空间创建一个“Cat”对象，在栈内存创建str，并指向堆空间的“Cat”对象;然后检查堆空间中的字符串池中查看是否存在“Cat”对象，如果存在，则将new出来的“Cat”对象与字符串池中的“Cat”对象联系起来。若不存在，则在字符串池中创建“Cat”对象，并将堆中的“Cat”对象与之关联起来。</p>
 <p>资料：<a href="https://www.digitalocean.com/community/tutorials/what-is-java-string-pool" target="_blank" rel="noopener">What
 is Java String Pool?</a></p>
+<h1 id="io和nio的区别">6. IO和NIO的区别</h1>
+<p>NIO是为了弥补IO操作的不足而诞生的，NIO的特性包括：非阻塞I/O，选择器，缓冲以及管道。其中管道（Channel）、缓冲（Buffer）、选择器（Selector）是NIO的三大主要特征。</p>
+<ul>
+<li><p>管道（Channel）：它就像传统IO中的流，到任何目的地（或来自任何地方）的所有数据都必须通过一个Channel对象。</p></li>
+<li><p>缓存（Buffer）：一个Buffer实际上就是一个容器对象。Java的每一种基本类型都有一种缓冲区类型：</p></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">byte----ByteBuffer</span><br><span class="line">char----CharBuffer</span><br><span class="line">shotr----ShortBuffer</span><br><span class="line">int----IntBuffer</span><br><span class="line">long----LongBuffer</span><br><span class="line">float----FloatBuffer</span><br><span class="line">double----DoubleBuffer</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择器（Selector）：用于监听多个管道（Channel）的事件，使用传统的阻塞IO时我们可以方便的知道什么时候可以进行读写，而使用NIO非阻塞通道，我们需要一些方法来知道什么时候通道准备好了，选择器证实为这个需要而诞生的。</li>
+</ul>
+<p>IO和NIO的主要区别：</p>
+<ol type="1">
+<li>IO是面向流的，NIO是面向快（缓冲区）的。</li>
+</ol>
+<p>IO面向流的操作是一次一个字节的处理数据。一个输入流产生一个字节，一个输出流消耗一个字节，这样的操作就导致了IO对数据的读取和写入效率低下。</p>
+<p>NIO面向块的操作是一次产生或消耗一个数据块。这样按照数据块进行数据处理就明显比按照字节处理数据快得多，同时数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性。总的来说，NIO采取了“预读”的方式，当你读取某一部分数据时，他就会猜测你下一步可能会读取的数据而预先缓冲下来。</p>
+<ol start="2" type="1">
+<li>IO是阻塞的，NIO是非阻塞的。</li>
+</ol>
+<p>传统的IO中一个线程调用read()或write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再做任何事情。</p>
+<p>而NIO使用的是一个线程发送读取数据请求，没有得到响应之前，线程是空闲的，此时的线程可以去执行别的任务，不会像IO中的线程那样只能等待响应完。</p>
+<p>虽然从上面可以看出NIO是为了弥补IO读取数据效率慢这个缺点而诞生的，但是NIO也有其自身的缺陷，NIO是面向缓冲区的操作，这样的话就必须考虑一个问题，NIO在对缓冲区的数据进行处理之前必须对缓冲区数据的完整性进行判断，如果数据不完整的话，NIO的读取就不存在任何意义，因此NIO每次数据处理之前都要检测缓冲区数据的完整性。</p>
+<blockquote>
+<p>如果管理的是成千上万个连接，但是这些连接每次只是发送少量的数据，例如我们常用的聊天服务器，这时候选择NIO处理数据可能是个很好的选择;
+如果是少量连接，而这些连接每次都要发送大量的数据，这时候就应该选择IO对数据进行操作。</p>
+</blockquote>
 <hr>
 <p>未完，待续...</p>
 	  
@@ -305,7 +331,7 @@ is Java String Pool?</a></p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>13</span></a></li>
+    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
   
 
     </ul>
@@ -333,7 +359,7 @@ is Java String Pool?</a></p>
 HashMap和ConcurrentHashMap有什么区别？</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#synchronized关键字"><span class="toc-article-text">2 synchronized关键字</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#volatile关键字"><span class="toc-article-text">3 volatile关键字</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile原理"><span class="toc-article-text">3.1 volatile原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#当一个变量定义为volatile之后将具备两种特性"><span class="toc-article-text">3.2
 当一个变量定义为volatile之后，将具备两种特性</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile-性能"><span class="toc-article-text">3.3 volatile 性能：</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#堆和栈的区别堆中存放的是什么栈中存放的是什么"><span class="toc-article-text">4
 堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#堆空间"><span class="toc-article-text">4.1 堆空间</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#栈内存"><span class="toc-article-text">4.2 栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#栈和堆申请空间后系统的响应"><span class="toc-article-text">4.3 栈和堆申请空间后系统的响应</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java-程序中的堆和栈内存"><span class="toc-article-text">4.4 Java 程序中的堆和栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java堆空间和栈内存的区别"><span class="toc-article-text">4.5 Java堆空间和栈内存的区别</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#字符串池"><span class="toc-article-text">5 字符串池</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java中的字符串池"><span class="toc-article-text">5.1 Java中的字符串池</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#在字符串池中创建了多少字符串对象"><span class="toc-article-text">5.2
-在字符串池中创建了多少字符串对象？</span></a></li></ol></li></ol>
+在字符串池中创建了多少字符串对象？</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#io和nio的区别"><span class="toc-article-text">6. IO和NIO的区别</span></a></li></ol>
 		</div>
 	
 	</div>

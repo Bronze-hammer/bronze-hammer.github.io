@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>【翻译】MySQL数据库InnoDB存储引擎 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="InnoDB is a general-purpose storage engine that balances high
+reliability and high performance. In MySQL 8.0, InnoDB is the default
+MySQL storage engine. Unless you have configured a different default
+storage engine, issuing a CREATE TABLE statement without an ENGINE
+clause creates an InnoDB table.
+InnoDB是一种平衡高可靠性和高性能的通用存储引擎。在MySQL
+8.0中，InnoDB是MySQL默认的存储引擎。除非您配置了不同的默认存储引擎，否则发出不带
+ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="【翻译】MySQL数据库InnoDB存储引擎">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 【翻译】MySQL数据库InnoDB存储引擎</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>InnoDB is a general-purpose storage engine that balances high
+reliability and high performance. In MySQL 8.0, InnoDB is the default
+MySQL storage engine. Unless you have configured a different default
+storage engine, issuing a CREATE TABLE statement without an ENGINE
+clause creates an InnoDB table.</p>
+<p>InnoDB是一种平衡高可靠性和高性能的通用存储引擎。在MySQL
+8.0中，InnoDB是MySQL默认的存储引擎。除非您配置了不同的默认存储引擎，否则发出不带
+ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
+<a id="more"></a>
+<h1 id="key-advantages-of-innodb-innodb的主要优势">Key Advantages of
+InnoDB InnoDB的主要优势</h1>
+<p>Its DML operations follow the ACID model, with transactions featuring
+commit, rollback, and crash-recovery capabilities to protect user
+data.</p>
+<p>其DML操作遵循ACID模型，事务具有提交、回滚和崩溃恢复功能，以保护用户数据</p>
+<p>Row-level locking and Oracle-style consistent reads increase
+multi-user concurrency and performance.</p>
+<p>行级锁定和 Oracle 风格的一致性读取提高了多用户并发性和性能</p>
+<p>InnoDB tables arrange your data on disk to optimize queries based on
+primary keys. Each InnoDB table has a primary key index called the
+clustered index that organizes the data to minimize I/O for primary key
+lookups.</p>
+<p>InnoDB 表在磁盘上排列数据以根据主键优化查询。每个 InnoDB
+表都有一个称为聚集索引的主键索引，用于组织数据以最大程度地减少主键查找的
+I/O。</p>
+<p>To maintain data integrity, InnoDB supports FOREIGN KEY constraints.
+With foreign keys, inserts, updates, and deletes are checked to ensure
+they do not result in inconsistencies across related tables</p>
+<p>为了保持数据完整性，InnoDB 支持 FOREIGN KEY
+约束。使用外键，检查插入、更新和删除，以确保它们不会导致相关表之间的不一致。</p>
+<h1 id="acid">ACID</h1>
+<p>An acronym standing for atomicity, consistency, isolation, and
+durability. These properties are all desirable in a database system, and
+are all closely tied to the notion of a transaction. The transactional
+features of InnoDB adhere to the ACID principles.</p>
+<p>ACID代表原子性、一致性、隔离性和持久性的缩写。这些属性都是数据库系统所需要的，并且都与事务的概念密切相关。
+InnoDB 的事务特性遵循 ACID 原则。</p>
+<p>Transactions are atomic units of work that can be committed or rolled
+back. When a transaction makes multiple changes to the database, either
+all the changes succeed when the transaction is committed, or all the
+changes are undone when the transaction is rolled back.</p>
+<p>事务是可以提交或回滚的原子工作单元。当一个事务对数据库进行多次更改时，要么在事务提交时所有更改都成功，要么在事务回滚时所有更改都被撤消。</p>
+<p>The database remains in a consistent state at all times — after each
+commit or rollback, and while transactions are in progress. If related
+data is being updated across multiple tables, queries see either all old
+values or all new values, not a mix of old and new values.</p>
+<p>数据库始终保持一致的状态——每次提交或回滚之后以及事务正在进行时。如果跨多个表更新相关数据，则查询会看到所有旧值或所有新值，而不是新旧值的混合。</p>
+<p>Transactions are protected (isolated) from each other while they are
+in progress; they cannot interfere with each other or see each other's
+uncommitted data. This isolation is achieved through the locking
+mechanism. Experienced users can adjust the isolation level, trading off
+less protection in favor of increased performance and concurrency, when
+they can be sure that the transactions really do not interfere with each
+other.</p>
+<p>交易在进行过程中相互保护（隔离）；他们不能互相干扰或看到彼此未提交的数据。这种隔离是通过锁定机制实现的。当有经验的用户可以确定事务确实不会相互干扰时，他们可以调整隔离级别，以减少保护来提高性能和并发性。</p>
+<p>The results of transactions are durable: once a commit operation
+succeeds, the changes made by that transaction are safe from power
+failures, system crashes, race conditions, or other potential dangers
+that many non-database applications are vulnerable to. Durability
+typically involves writing to disk storage, with a certain amount of
+redundancy to protect against power failures or software crashes during
+write operations. (In InnoDB, the doublewrite buffer assists with
+durability.)</p>
+<p>事务的结果是持久的：一旦提交操作成功，该事务所做的更改就不会受到电源故障、系统崩溃、竞争条件或许多非数据库应用程序容易遭受的其他潜在危险的影响。
+持久性通常涉及写入磁盘存储，并具有一定量的冗余，以防止写入操作期间发生电源故障或软件崩溃。
+（在 InnoDB 中，双写缓冲区有助于提高耐用性。）</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/08/25/经典Integer对象赋值128问题/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-08-24 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/MySQL/">MySQL<span>8</span></a> <a href="/tags/InnoDB/">InnoDB<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#key-advantages-of-innodb-innodb的主要优势"><span class="toc-article-text">Key Advantages of
+InnoDB InnoDB的主要优势</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#acid"><span class="toc-article-text">ACID</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
