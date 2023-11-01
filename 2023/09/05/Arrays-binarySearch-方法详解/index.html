@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Arrays.binarySearch()方法详解 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="背景：我想校验一个指定的String字符串，是否存在于另一个String数组中，选择Arrays.binarySearch()方法实现，代码如下：
+123456String[] item = &amp;#123;&#34;0&#34;,&#34;1&#34;,&#34;16&#34;,&#34;1591&#34;,&#34;1594&#34;,&#34;1596&#34;&amp;#125;;if (Arrays.binarySearch(item, &#34;1591&#34;) &amp;gt; 0) &amp;#123;    System.out.println(&#34;exists&#34;);&amp;#125; else &amp;#123;    System.out.println(&#34;not exists&#34;);&amp;#125;
+运行结果：
+1not exists
+很直观的能看到item数组里面存在字符串1591，为什么程序运行的结果却是找不到该元素呢？">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Arrays.binarySearch()方法详解">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Arrays.binarySearch()方法详解</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>背景：我想校验一个指定的String字符串，是否存在于另一个String数组中，选择<code>Arrays.binarySearch()</code>方法实现，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String[] item = &#123;<span class="string">"0"</span>,<span class="string">"1"</span>,<span class="string">"16"</span>,<span class="string">"1591"</span>,<span class="string">"1594"</span>,<span class="string">"1596"</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (Arrays.binarySearch(item, <span class="string">"1591"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    System.out.println(<span class="string">"exists"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">"not exists"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not exists</span><br></pre></td></tr></table></figure>
+<p>很直观的能看到item数组里面存在字符串<code>1591</code>，为什么程序运行的结果却是找不到该元素呢？</p>
+<a id="more"></a>
+<p>首先来看一下源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Searches the specified array for the specified object using the binary</span></span><br><span class="line"><span class="comment"> * search algorithm. The array must be sorted into ascending order</span></span><br><span class="line"><span class="comment"> * according to the</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@linkplain</span> Comparable natural ordering&#125;</span></span><br><span class="line"><span class="comment"> * of its elements (as by the</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@link</span> #sort(Object[])&#125; method) prior to making this call.</span></span><br><span class="line"><span class="comment"> * If it is not sorted, the results are undefined.</span></span><br><span class="line"><span class="comment"> * (If the array contains elements that are not mutually comparable (for</span></span><br><span class="line"><span class="comment"> * example, strings and integers), it &lt;i&gt;cannot&lt;/i&gt; be sorted according</span></span><br><span class="line"><span class="comment"> * to the natural ordering of its elements, hence results are undefined.)</span></span><br><span class="line"><span class="comment"> * If the array contains multiple</span></span><br><span class="line"><span class="comment"> * elements equal to the specified object, there is no guarantee which</span></span><br><span class="line"><span class="comment"> * one will be found.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> a the array to be searched</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> key the value to be searched for</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> index of the search key, if it is contained in the array;</span></span><br><span class="line"><span class="comment"> *         otherwise, &lt;tt&gt;(-(&lt;i&gt;insertion point&lt;/i&gt;) - 1)&lt;/tt&gt;.  The</span></span><br><span class="line"><span class="comment"> *         &lt;i&gt;insertion point&lt;/i&gt; is defined as the point at which the</span></span><br><span class="line"><span class="comment"> *         key would be inserted into the array: the index of the first</span></span><br><span class="line"><span class="comment"> *         element greater than the key, or &lt;tt&gt;a.length&lt;/tt&gt; if all</span></span><br><span class="line"><span class="comment"> *         elements in the array are less than the specified key.  Note</span></span><br><span class="line"><span class="comment"> *         that this guarantees that the return value will be &amp;gt;= 0 if</span></span><br><span class="line"><span class="comment"> *         and only if the key is found.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ClassCastException if the search key is not comparable to the</span></span><br><span class="line"><span class="comment"> *         elements of the array.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(Object[] a, Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> binarySearch0(a, <span class="number">0</span>, a.length, key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，注释上提到了两个重点：</p>
+<ol type="1">
+<li>使用二分查找算法在指定数组中搜索指定对象；</li>
+<li>在调用此方法之前，必须根据元素的自然顺序(如通过sort(Object[])方法)将数组按升序排序。</li>
+</ol>
+<p>也就是说，数组不是遍历每一个元素，与目标值做对比，校验是否相同，而是通过二分查找算法，先找到数组中间的元素，与目标值做比较：如果目标值大于中间值，则继续比较数组后半部分的元素；如果目标值小于中间值，则继续比较数组前半部分的元素；如果等于，那么就直接返回中间元素的数组下标。因此在调用此方法之前，要先对数组进行升序排序。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">binarySearch0</span><span class="params">(Object[] a, <span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex,</span></span></span><br><span class="line"><span class="function"><span class="params">                                     Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> low = fromIndex;</span><br><span class="line">    <span class="keyword">int</span> high = toIndex - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = (low + high) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">        Comparable midVal = (Comparable)a[mid];</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">        <span class="keyword">int</span> cmp = midVal.compareTo(key);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</span><br><span class="line">            low = mid + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)</span><br><span class="line">            high = mid - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> mid; <span class="comment">// key found</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -(low + <span class="number">1</span>);  <span class="comment">// key not found.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源码中，是中间值通过<code>(low + high) &gt;&gt;&gt; 1</code>
+的方式获取的。</p>
+<p>这是一个在二分查找算法中常见的代码片段。low 和 high
+通常表示搜索范围的下界和上界。mid 是下界和上界的中间值，通过 (low +
+high) &gt;&gt;&gt; 1 计算得出。</p>
+<p>这是由于在Java中，+
+运算符对于整数是按照整数算术运算（即舍去小数点）来执行的。这可能会导致整数的溢出。例如，如果
+low 是 -1000000000，而 high 是 1000000000，那么 low + high 的结果将会是
+-999999999 + 1000000000，这将导致整数溢出。</p>
+<p>而使用
+&gt;&gt;&gt;（无符号右移运算符）则可以避免这个问题。位运算中，右移运算符
+&gt;&gt;
+对于负数会将移位后的左侧填充部分填充为该数的符号位（即负数的话填充为1，正数的话填充为0）。而
+&gt;&gt;&gt;
+是无符号右移运算符，无论该数是正数还是负数，都会将左侧填充部分填充为0。</p>
+<p>所以 (low + high) &gt;&gt;&gt; 1 的结果就是 low + high
+的值除以2的整数部分，无论 low 和 high 的值是多少。</p>
+<p>拿到数组的中间元素后，通过<code>int cmp = midVal.compareTo(key)</code>的方法比较中间元素和目标值。</p>
+<p>compareTo() 方法按字典顺序比较两个字符串（比较基于字符串中每个字符的
+Unicode 值）。</p>
+<p>接下来回到最开始的问题中，通过调试发现，中间元素<code>16</code>与目标值<code>1591</code>比较，结果cmp=1，也就是说比较的结果居然是<code>16</code>大于<code>1591</code>。</p>
+<img src="/2023/09/05/Arrays-binarySearch-方法详解/微信截图_20230905182124.png">
+<p>由于比较的结果大于0，因此
+<code>mid-1</code>，接下来会拿数组左边部分的值与目标值做对比，而<code>16</code>左边的几个元素不存在<code>1591</code>，因此最终结果是在数组中找不到与目标值一致的元素。</p>
+<p>这是因为，<code>16</code>和<code>1591</code>都是字符串类型，而非数值类型，字符串类型通过<code>compareTo()</code>
+方法进行比较，是比较两个字符串相应位置字符的Unicode值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Compares two strings lexicographically.</span></span><br><span class="line"><span class="comment"> * The comparison is based on the Unicode value of each character in</span></span><br><span class="line"><span class="comment"> * the strings. The character sequence represented by this</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> String&#125; object is compared lexicographically to the</span></span><br><span class="line"><span class="comment"> * character sequence represented by the argument string. The result is</span></span><br><span class="line"><span class="comment"> * a negative integer if this &#123;<span class="doctag">@code</span> String&#125; object</span></span><br><span class="line"><span class="comment"> * lexicographically precedes the argument string. The result is a</span></span><br><span class="line"><span class="comment"> * positive integer if this &#123;<span class="doctag">@code</span> String&#125; object lexicographically</span></span><br><span class="line"><span class="comment"> * follows the argument string. The result is zero if the strings</span></span><br><span class="line"><span class="comment"> * are equal; &#123;<span class="doctag">@code</span> compareTo&#125; returns &#123;<span class="doctag">@code</span> 0&#125; exactly when</span></span><br><span class="line"><span class="comment"> * the &#123;<span class="doctag">@link</span> #equals(Object)&#125; method would return &#123;<span class="doctag">@code</span> true&#125;.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * This is the definition of lexicographic ordering. If two strings are</span></span><br><span class="line"><span class="comment"> * different, then either they have different characters at some index</span></span><br><span class="line"><span class="comment"> * that is a valid index for both strings, or their lengths are different,</span></span><br><span class="line"><span class="comment"> * or both. If they have different characters at one or more index</span></span><br><span class="line"><span class="comment"> * positions, let &lt;i&gt;k&lt;/i&gt; be the smallest such index; then the string</span></span><br><span class="line"><span class="comment"> * whose character at position &lt;i&gt;k&lt;/i&gt; has the smaller value, as</span></span><br><span class="line"><span class="comment"> * determined by using the &amp;lt; operator, lexicographically precedes the</span></span><br><span class="line"><span class="comment"> * other string. In this case, &#123;<span class="doctag">@code</span> compareTo&#125; returns the</span></span><br><span class="line"><span class="comment"> * difference of the two character values at position &#123;<span class="doctag">@code</span> k&#125; in</span></span><br><span class="line"><span class="comment"> * the two string -- that is, the value:</span></span><br><span class="line"><span class="comment"> * &lt;blockquote&gt;&lt;pre&gt;</span></span><br><span class="line"><span class="comment"> * this.charAt(k)-anotherString.charAt(k)</span></span><br><span class="line"><span class="comment"> * &lt;/pre&gt;&lt;/blockquote&gt;</span></span><br><span class="line"><span class="comment"> * If there is no index position at which they differ, then the shorter</span></span><br><span class="line"><span class="comment"> * string lexicographically precedes the longer string. In this case,</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> compareTo&#125; returns the difference of the lengths of the</span></span><br><span class="line"><span class="comment"> * strings -- that is, the value:</span></span><br><span class="line"><span class="comment"> * &lt;blockquote&gt;&lt;pre&gt;</span></span><br><span class="line"><span class="comment"> * this.length()-anotherString.length()</span></span><br><span class="line"><span class="comment"> * &lt;/pre&gt;&lt;/blockquote&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   anotherString   the &#123;<span class="doctag">@code</span> String&#125; to be compared.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>  the value &#123;<span class="doctag">@code</span> 0&#125; if the argument string is equal to</span></span><br><span class="line"><span class="comment"> *          this string; a value less than &#123;<span class="doctag">@code</span> 0&#125; if this string</span></span><br><span class="line"><span class="comment"> *          is lexicographically less than the string argument; and a</span></span><br><span class="line"><span class="comment"> *          value greater than &#123;<span class="doctag">@code</span> 0&#125; if this string is</span></span><br><span class="line"><span class="comment"> *          lexicographically greater than the string argument.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(String anotherString)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len1 = value.length;</span><br><span class="line">    <span class="keyword">int</span> len2 = anotherString.value.length;</span><br><span class="line">    <span class="keyword">int</span> lim = Math.min(len1, len2);</span><br><span class="line">    <span class="keyword">char</span> v1[] = value;</span><br><span class="line">    <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (k &lt; lim) &#123;</span><br><span class="line">        <span class="keyword">char</span> c1 = v1[k];</span><br><span class="line">        <span class="keyword">char</span> c2 = v2[k];</span><br><span class="line">        <span class="keyword">if</span> (c1 != c2) &#123;</span><br><span class="line">            <span class="keyword">return</span> c1 - c2;</span><br><span class="line">        &#125;</span><br><span class="line">        k++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> len1 - len2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>引申：但是要注意的是，这只适用于两个字符都属于基本字母或数字的情况。如果字符包含其他字符（比如特殊字符、标点符号等），或者涉及非数字字符，那么结果可能不会如你所预期。例如，如果'A'和'中'（Unicode值为65296）进行相减，结果将会是-38321，这显然不是我们期望的结果。因此，在进行这种操作时，一定要确保字符的取值范围和你的预期相符。</p>
+</blockquote>
+<p>至此，文章开头 <code>1591</code>为什么在目标数组中
+<code>{"0","1","16","1591","1594","1596"}</code>
+匹配不到的问题，原因就是如此。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/08/28/泛型以及如何绕过泛型定义/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-09-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2023 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
