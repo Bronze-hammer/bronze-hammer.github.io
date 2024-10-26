@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Minio文件服务器：安装 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="目前，云中有许多文件存储选项，如 Aws S3、Google Storage
+等。而且，很少有人有预算购买云服务，只是为了在云上保存文件。因此，在本教程中，我们将在
+Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
+服务器和您的应用程序">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Minio文件服务器：安装">
+  <meta property="og:site_name" content="徐子辉的个人站点">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Minio文件服务器：安装</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>目前，云中有许多文件存储选项，如 Aws S3、Google Storage
+等。而且，很少有人有预算购买云服务，只是为了在云上保存文件。因此，在本教程中，我们将在
+Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
+服务器和您的应用程序</p>
+<a id="more"></a>
+<h2 id="安装">安装</h2>
+<p>首先在 Centos 7 上为 minio 添加一些用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># useradd -s /sbin/nologin -d /opt/minio minio</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026160606ebabbfa3555d8f14.jpeg"></p>
+<p>并为 minio 应用程序和配置文件创建一些文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[centos@server~]# mkdir -p /opt/minio/bin</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.picgo.net/2024/10/26/_2024102616071144a7aa8997205fae.jpeg"></p>
+<p>创建文件夹后，现在下载 minio 二进制文件并将其放入我们之前创建的 minio
+文件夹中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># wget https://dl.minio.io/server/minio/release/linux-amd64/minio -O /opt/minio/bin/minio</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026161000bd2b7ceaa08ca171.jpeg"></p>
+<p>修改权限文件以便 minio 二进制文件可以执行 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># chmod +x /opt/minio/bin/minio</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://img.picgo.net/2024/10/26/_2024102616132534159224cdfa9dc8.jpeg"></p>
+<p>现在我们为minio创建配置文件以便于配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /opt/minio/minio.conf</span><br></pre></td></tr></table></figure>
+<p>在配置文件中我们放置了端口、访问密钥和密钥等环境信息 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://img.picgo.net/2024/10/26/_202410261615141a2e611bf8cc6138.jpeg"></p>
+<p>之后我们为 minio
+存储文件创建一些文件夹，并确保我们使用的路径文件夹与我们放在配置文件
+(/opt/minio/minio.conf) 上的路径文件夹相同，并将所有者更改为 minio
+用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /var/www/minio_storage/ </span><br><span class="line"># chown -R minio:minio /var/www/minio_storage/</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026161641e10e03c5213e1575.jpeg"></p>
+<p>现在我们创建系统文件服务，以便 minio 可以作为后台服务运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/systemd/system/minio.service</span><br></pre></td></tr></table></figure>
+<p>并将脚本服务放在该文件上，像这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Minio</span><br><span class="line">Documentation=https://docs.minio.io</span><br><span class="line">Wants=network-online.target</span><br><span class="line">After=network-online.target</span><br><span class="line">AssertFileIsExecutable=/opt/minio/bin/minio</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/opt/minio</span><br><span class="line">User=minio</span><br><span class="line">Group=minio</span><br><span class="line">PermissionsStartOnly=true</span><br><span class="line">EnvironmentFile=-/opt/minio/minio.conf</span><br><span class="line">ExecStartPre=/bin/bash -c &quot;[ -n \&quot;$&#123;MINIO_VOLUMES&#125;\&quot; ] || echo \&quot;Variable MINIO_VOLUMES not set in /opt/minio/minio.conf\&quot;&quot;</span><br><span class="line">ExecStart=/opt/minio/bin/minio server $MINIO_OPTS $MINIO_VOLUMES</span><br><span class="line">StandardOutput=journal</span><br><span class="line">StandardError=inherit</span><br><span class="line"># Specifies the maximum file descriptor number that can be opened by this process</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"># Disable timeout logic and wait until process is stopped</span><br><span class="line">TimeoutStopSec=0</span><br><span class="line"># SIGTERM signal is used to stop Minio</span><br><span class="line">KillSignal=SIGTERM</span><br><span class="line">SendSIGKILL=no</span><br><span class="line">SuccessExitStatus=0</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>使用以下方法在 Centos 7 上重新加载系统守护进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+<p>现在启动并启用 minio 服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start minio </span><br><span class="line"># systemctl enable minio</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026164329f7deae00ee883032.jpeg"></p>
+<p>这就是在 Centos 7 上安装和设置 minio 应用程序的方法。</p>
+<h2 id="访问">访问</h2>
+<p>打开浏览器，<code>访问 localhost:9100</code>（或者自己本机的ip:9100）</p>
+<blockquote>
+<p>当访问<code>localhost:9100</code>，minio会自动重定向到<code>localhost:43755</code></p>
+</blockquote>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026164526e6bf5678d438d02f.jpeg"></p>
+<p>创建一个Bucket</p>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026165243cf915068b7db5b5f.jpeg"></p>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026165316f9b603218d87209a.jpeg"></p>
+<p>并且设置访问权限为<code>public</code></p>
+<p><img src="https://img.picgo.net/2024/10/26/_20241026165405a242600d198385d7.jpeg"></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/09/05/Arrays-binarySearch-方法详解/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-10-26 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#安装"><span class="toc-article-text">安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#访问"><span class="toc-article-text">访问</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2024 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

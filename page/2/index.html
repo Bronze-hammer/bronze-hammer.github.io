@@ -36,6 +36,17 @@
 
   <!-- analytics -->
   
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
 
 </head>
 </html>
@@ -113,6 +124,48 @@
 		<div class="mypage">
 		
 		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/06/30/Flowable工作流重启已经结束的流程/">Flowable工作流重启已经结束的流程</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-06-30  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2>
+<p>在Flowable中，已终止的流程实例不能通过<code>RuntimeService</code>接口直接查询到。相反，你需要使用<code>HistoryService</code>接口来查询历史流程实例，并从中筛选出已终止的实例。以下是正确的步骤：</p>
+<ol type="1">
+<li><p>确保你的应用程序连接到正确的Flowable流程引擎实例。你需要使用Flowable的API来执行后续的操作。</p></li>
+<li><p>使用<code>HistoryService</code>接口的<code>createHistoricProcessInstanceQuery()</code>方法构建查询，设置适当的条件来筛选已终止的流程实例。</p></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">		.finished();</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>执行查询并获取已终止的流程实例列表。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;HistoricProcessInstance&gt; terminatedInstances = query.list();</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li><p>根据需要选择要重启的流程实例。你可以根据流程实例的ID或其他属性进行选择。</p></li>
+<li><p>如果你需要将已终止的流程实例重新激活，可以创建一个新的流程实例，或者使用历史流程实例中的数据进行修复。请注意，这取决于你的业务需求和流程定义的复杂性。</p></li>
+</ol>
+<p>请注意，已终止的流程实例是历史数据，因此无法直接重新激活。你需要根据业务需求进行相应的处理。使用<code>HistoryService</code>接口可以提供有关已终止流程实例的详细信息，但不能直接操作它们。</p>
+	
+	</div>
+  <a type="button" href="/2023/06/30/Flowable工作流重启已经结束的流程/#more" class="btn btn-default more">Read More</a>
+</div>
+
 		
 			
 	
@@ -406,34 +459,6 @@ new
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/03/09/ArrayList-retainAll-方法解析/">ArrayList.retainAll()方法解析</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-03-09  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>在工作中，用java.util.ArrayList.retainAll(Collection&lt;?&gt;)方法判断两个list集合是否有交集（两个list是否有相同的元素）。如果两个集合有相同元素，那么retainAll返回true。但是如果两个集合的元素完全相同，返回的结果却是false,而如果两个list集合的元素都不一样，retainAll却返回true。
-这是怎么回事呢？</p>
-	
-	</div>
-  <a type="button" href="/2023/03/09/ArrayList-retainAll-方法解析/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -512,45 +537,45 @@ new
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
-		
-			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
-		
-			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
-		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
-		
-			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
-		
-			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
-		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
-		
-			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
-		
 			<li><a href="/tags/File/">File<span>1</span></a></li>
 		
-			<li><a href="/tags/ConcurrentHashMap/">ConcurrentHashMap<span>1</span></a></li>
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
 		
 			<li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
 		
-			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
-		
-			<li><a href="/tags/异常/">异常<span>1</span></a></li>
-		
-			<li><a href="/tags/String/">String<span>1</span></a></li>
-		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
+			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
 		
 			<li><a href="/tags/jar/">jar<span>1</span></a></li>
 		
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+		
 			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+		
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+		
+			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
+		
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+		
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
 		
 			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
 		
-			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+		
+			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
+		
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+		
+			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
+		
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
+		
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
+		
+			<li><a href="/tags/Stream/">Stream<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>59</span></a></li>
@@ -566,6 +591,10 @@ new
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2024/10/26/Minio文件服务器：安装/"><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
+      </li>
+    
+      <li>
         <a href="/2023/09/05/Arrays-binarySearch-方法详解/"><i class="fa fa-file-o"></i>Arrays.binarySearch()方法详解</a>
       </li>
     
@@ -579,10 +608,6 @@ new
     
       <li>
         <a href="/2023/08/25/MySQL行转列函数/"><i class="fa fa-file-o"></i>MySQL行转列函数</a>
-      </li>
-    
-      <li>
-        <a href="/2023/08/25/经典Integer对象赋值128问题/"><i class="fa fa-file-o"></i>经典Integer对象赋值128问题</a>
       </li>
     
   </ul>
@@ -613,7 +638,7 @@ new
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2023 xuzh
+  &copy; 2024 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
      <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
