@@ -138,7 +138,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># useradd -s /sbin/nologin -d /opt/minio minio</span><br></pre></td></tr></table></figure>
 <p><img src="https://img.picgo.net/2024/10/26/_20241026160606ebabbfa3555d8f14.jpeg"></p>
 <p>并为 minio 应用程序和配置文件创建一些文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[centos@server~]# mkdir -p /opt/minio/bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /opt/minio/bin</span><br></pre></td></tr></table></figure>
 <p><img src="https://img.picgo.net/2024/10/26/_2024102616071144a7aa8997205fae.jpeg"></p>
 <p>创建文件夹后，现在下载 minio 二进制文件并将其放入我们之前创建的 minio
 文件夹中</p>
@@ -186,7 +186,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
@@ -223,8 +223,27 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/文件服务器/">文件服务器<span>2</span></a></li>
+  
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/mini/">mini<span>1</span></a>
+    </ul>
+	</div>
 		
 
 	<!-- toc -->
