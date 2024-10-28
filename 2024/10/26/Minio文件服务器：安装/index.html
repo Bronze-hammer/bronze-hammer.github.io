@@ -177,6 +177,13 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <p><img src="https://img.picgo.net/2024/10/26/_20241026165316f9b603218d87209a.jpeg"></p>
 <p>并且设置访问权限为<code>public</code></p>
 <p><img src="https://img.picgo.net/2024/10/26/_20241026165405a242600d198385d7.jpeg"></p>
+<h2 id="年10月28日-补充">2024年10月28日 补充：</h2>
+<p><code>/opt/minio/minio.conf</code>的配置中，设置了<code>MINIO_OPTS="--address:9100"</code>，代表MinIO服务的监听端口和Minio服务UI界面的访问端口都是<code>9100</code>，需要注意的是，当在浏览器输入<code>localhost:9100</code>访问Minio服务的UI界面时，Minio服务会通知浏览器重定向到<code>localhost:45750</code>(重定向后的端口号不固定，可能之后的访问会重定向到<code>45755</code>、或者其他端口号)。</p>
+<p><img src="https://img.picgo.net/2024/10/28/_202410281258444ae432a47c278dbd.jpeg"></p>
+<p>所以可以更改一下<code>/opt/minio/minio.conf</code>的配置，分别设置Minio服务的监听端口和Minio服务UI界面的访问端口.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100 --console-address:43755&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure>
+<p>重启minio应用，再次访问<code>localhost:9100</code>，浏览器会固定重定向到<code>localhost:43755</code>，并且之后不管什么时候再次访问，重定向后端的端口一直会是<code>43755</code></p>
+<p><img src="https://img.picgo.net/2024/10/28/_2024102813102977d819dd54719606.jpeg"></p>
 	  
 	</div>
 
@@ -252,7 +259,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#安装"><span class="toc-article-text">安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#访问"><span class="toc-article-text">访问</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#安装"><span class="toc-article-text">安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#访问"><span class="toc-article-text">访问</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#年10月28日-补充"><span class="toc-article-text">2024年10月28日 补充：</span></a></li></ol>
 		</div>
 	
 	</div>
