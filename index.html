@@ -131,6 +131,41 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/">Tomcat10.1.x使用JSTL标签库</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-11-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>IDEA创建Java EE项目，使用Spring + Spring MVC +
+MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
+<ul>
+<li>Tomat 10.1.28</li>
+<li>Maven 3.6.3</li>
+<li>JDK 17</li>
+</ul>
+<p>项目的功能：读取数据库的report表中的数据，返回一个List集合对象<code>reportList</code>在JSP页面上，使用EL表达式+JSTL标签库，遍历集合，显示每一条report信息。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;%@ taglib prefix=<span class="string">"c"</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;欢迎登录，$&#123;sessionScope.get("user").name&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;table&gt;</span><br><span class="line">            &lt;c:forEach items=<span class="string">"$&#123;reportList&#125;"</span> <span class="keyword">var</span>=<span class="string">"report"</span>&gt;</span><br><span class="line">                &lt;tr&gt;</span><br><span class="line">                    &lt;td&gt;报告编号：&lt;/td&gt;&lt;td&gt;$&#123;report.id&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告名称：&lt;/td&gt;&lt;td&gt;$&#123;report.reportName&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告内容：&lt;/td&gt;&lt;td&gt;$&#123;report.reportContext&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告截止提交日期：&lt;/td&gt;&lt;td&gt;$&#123;report.deadlineTime&#125;&lt;/td&gt;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">            &lt;/c:forEach&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/">Minio文件服务器：SpringBoot实现文件上传</a>
 		</h3>
 		</div>
@@ -399,39 +434,6 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/07/14/SpringBoot与SpringCloud/">SpringBoot与SpringCloud</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-07-14  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="springboot">1. SpringBoot</h1>
-<h2 id="springboot的作用">1.1 SpringBoot的作用</h2>
-<p>SpringBoot是一个快速构建项目并简化项目配置的工具，内部集成了Tomcat及大多数第三方应用和Spring框架的默认配置。与我们学习的SpringMVC和SpringCloud并无冲突,SpringBoot提供的这些默认配置，大大简化了SpringMVC、SpringCloud等基于Spring的Web应用的开发。</p>
-<h2 id="springboot的自动配置原理如何实现">1.2.SpringBoot的自动配置原理（如何实现）？</h2>
-<h3 id="springboot的自动配置是如何实现的">SpringBoot的自动配置是如何实现的？</h3>
-<p>一般我们的SpringBoot项目启动类都会添加<code>@SpringBootApplication</code>注解，而这个注解的其中一个二级注解是<code>@EnableAutoConfiguration</code>注解。而<code>@EnableAutoConfiguration</code>注解通过<code>@Import</code>注解，以<code>ImportSelector</code>接口的方法来导入classpath下的<code>META-INF/spring.factories</code>文件，这些文件中会指定需要加载的一些类名称。</p>
-<p>这些类一般都加了<code>@Configuration</code>注解，并且完成了对某框架（例如Redis、SpringMVC）的默认配置，当这些类符合条件时，就会被实例化，其中的配置生效，那么自动配置自然生效了。</p>
-	
-	</div>
-  <a type="button" href="/2023/07/14/SpringBoot与SpringCloud/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -512,48 +514,48 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/SpringCloud/">SpringCloud<span>2</span></a></li>
+			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
 		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
+			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
 		
-			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>6</span></a></li>
 		
-			<li><a href="/tags/Integer/">Integer<span>1</span></a></li>
-		
-			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
-		
-			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
-			<li><a href="/tags/InnoDB/">InnoDB<span>1</span></a></li>
-		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
-		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+			<li><a href="/tags/group-concat/">group_concat<span>2</span></a></li>
 		
 			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
 		
+			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+		
+			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
+		
+			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+		
+			<li><a href="/tags/File/">File<span>1</span></a></li>
+		
+			<li><a href="/tags/mini/">mini<span>1</span></a></li>
+		
 			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
 		
-			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+		
+			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+		
+			<li><a href="/tags/minio/">minio<span>1</span></a></li>
 		
 			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
-			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
 		
-			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
 		
-			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
+			<li><a href="/tags/List/">List<span>1</span></a></li>
 		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
 		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
-		
-			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
+			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>62</span></a></li>
+		   <li><a href="/tags">...<span>64</span></a></li>
 		 
 		</ul>
 	</div>
@@ -564,6 +566,10 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/"><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
+      </li>
     
       <li>
         <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/"><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
@@ -579,10 +585,6 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
     
       <li>
         <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
-      </li>
-    
-      <li>
-        <a href="/2023/08/25/判断两个相同类型对象的值是否相等/"><i class="fa fa-file-o"></i>判断两个相同类型对象的值是否相等</a>
       </li>
     
   </ul>
